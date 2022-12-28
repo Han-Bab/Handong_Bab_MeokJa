@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>51248158804-9nu3icm0dmq3d2tfs6o48sq7eoaihp7n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.51248158804-9nu3icm0dmq3d2tfs6o48sq7eoaihp7n</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAN6TmxgIwPL7AxQbgQDYsaLsgjSP0kuiQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>51248158804</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.hanBab</string>
+	<key>PROJECT_ID</key>
+	<string>handongbabmookja</string>
+	<key>STORAGE_BUCKET</key>
+	<string>handongbabmookja.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:51248158804:ios:c17a532eb6830d4b68f5c1</string>
+</dict>
+</plist>

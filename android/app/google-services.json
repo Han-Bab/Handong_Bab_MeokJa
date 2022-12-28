@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "51248158804",
+    "project_id": "handongbabmookja",
+    "storage_bucket": "handongbabmookja.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51248158804:android:b69078fb2d7dddcd68f5c1",
+        "android_client_info": {
+          "package_name": "com.example.han_bab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51248158804-bm67krn13gcpmdshca10n85dbl5q9959.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwuPOALAP-8BChiOrr9qR7dYZTDYxYDGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51248158804-bm67krn13gcpmdshca10n85dbl5q9959.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
