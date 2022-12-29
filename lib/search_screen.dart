@@ -32,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 6,
                   child: TextField(
                     focusNode: focusNode,
+<<<<<<< Updated upstream
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -48,6 +49,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 )
+=======
+                  ),)
+>>>>>>> Stashed changes
             ],),
           )
         ],
