@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:han_bab/screens/main/home_page.dart';
+import 'package:han_bab/screens/main/chatList_screen.dart';
+
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -25,9 +27,7 @@ class _MainScreenState extends State<MainScreen> {
       body: IndexedStack(
         index: _bottomSelectedIndex,
         children: [
-          Container(
-            color: Colors.accents[1],
-          ),
+          ChatList(),
           Container(
             color: Colors.accents[4],
           ),

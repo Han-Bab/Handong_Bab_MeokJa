@@ -19,43 +19,40 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(30)),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 6,
-                  child: TextField(
-                    focusNode: focusNode,
-<<<<<<< Updated upstream
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                    autofocus: true,
-                    controller: _filter,
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white12,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.white60,
-                          size: 20,
+        child: Column(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(30)),
+              Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                  child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 6,
+                          child: TextField(
+                            focusNode: focusNode,
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                            autofocus: true,
+                            controller: _filter,
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white12,
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.white60,
+                                  size: 20,
+                                )
+                            ),
+                          ),
                         )
-                    ),
-                  ),
-                )
-=======
-                  ),)
->>>>>>> Stashed changes
-            ],),
-          )
-        ],
-      ),
+                      ]
+                  )
+              )
+            ]
+        )
     );
   }
 }
