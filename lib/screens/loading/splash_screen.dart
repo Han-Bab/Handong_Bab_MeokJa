@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             ExtendedImage.asset('assets/images/p_logo1.jpg'),
             CircularProgressIndicator(
-              color: Colors.purple,
+              color: Colors.black87,
             )
           ],
         ),

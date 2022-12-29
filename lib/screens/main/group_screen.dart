@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
-
 import 'main_screen.dart';
 
 List _data = [
@@ -13,8 +12,8 @@ List _data = [
     'user': 'aa',
     'date': '2023/01/02',
     'time': '17:00',
-    'curr_people' : 1,
-    'max_people' : 4
+    'curr_people': 1,
+    'max_people': 4
   },
   {
     'id': 2,
@@ -23,8 +22,8 @@ List _data = [
     'user': 'bb',
     'date': '2022/12/28',
     'time': '13:00',
-    'curr_people' : 2,
-    'max_people' : 4
+    'curr_people': 2,
+    'max_people': 4
   },
   {
     'id': 3,
@@ -33,8 +32,8 @@ List _data = [
     'user': 'cc',
     'date': '2023/01/01',
     'time': '17:00',
-    'curr_people' : 4,
-    'max_people' : 4
+    'curr_people': 4,
+    'max_people': 4
   },
   {
     'id': 4,
@@ -43,8 +42,8 @@ List _data = [
     'user': 'dd',
     'date': '2022/12/11',
     'time': '17:00',
-    'curr_people' : 3,
-    'max_people' : 4
+    'curr_people': 3,
+    'max_people': 4
   },
   {
     'id': 5,
@@ -53,8 +52,8 @@ List _data = [
     'user': 'ee',
     'date': '2022/11/01',
     'time': '17:00',
-    'curr_people' : 2,
-    'max_people' : 3
+    'curr_people': 2,
+    'max_people': 3
   },
   {
     'id': 6,
@@ -63,8 +62,8 @@ List _data = [
     'user': 'ff',
     'date': '2022/12/19',
     'time': '17:00',
-    'curr_people' : 1,
-    'max_people' : 2
+    'curr_people': 1,
+    'max_people': 2
   },
   {
     'id': 7,
@@ -73,8 +72,8 @@ List _data = [
     'user': 'gg',
     'date': '2022/12/20',
     'time': '17:00',
-    'curr_people' : 2,
-    'max_people' : 4
+    'curr_people': 2,
+    'max_people': 4
   },
   {
     'id': 8,
@@ -83,8 +82,8 @@ List _data = [
     'user': 'hh',
     'date': '2022/12/14',
     'time': '17:00',
-    'curr_people' : 1,
-    'max_people' : 4
+    'curr_people': 1,
+    'max_people': 4
   },
   {
     'id': 9,
@@ -93,8 +92,8 @@ List _data = [
     'user': 'ii',
     'date': '2022/10/02',
     'time': '17:00',
-    'curr_people' : 1,
-    'max_people' : 4
+    'curr_people': 1,
+    'max_people': 4
   },
   {
     'id': 10,
@@ -103,8 +102,8 @@ List _data = [
     'user': 'jj',
     'date': '2022/10/10',
     'time': '17:00',
-    'curr_people' : 1,
-    'max_people' : 4
+    'curr_people': 1,
+    'max_people': 4
   },
 ];
 
@@ -309,14 +308,15 @@ class GroupListViewDemo extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.only(left: 8, right: 5),
-                                      child: Row(
-                                          children: [
-                                            const Icon(CupertinoIcons.person),
-                                            Text('${item['curr_people']}/${item['max_people']}'),
-                                          ],
-                                        ),
-                                      ),
+                                    padding: EdgeInsets.only(left: 8, right: 5),
+                                    child: Row(
+                                      children: [
+                                        const Icon(CupertinoIcons.person),
+                                        Text(
+                                            '${item['curr_people']}/${item['max_people']}'),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               )
                             ],

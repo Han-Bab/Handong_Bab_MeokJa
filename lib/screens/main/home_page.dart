@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../chat/chatRoom_screen.dart';
 import 'main_screen.dart';
-import 'model.dart';
+import '../chat/model.dart';
 
 // List _data = [
 //   {
@@ -98,7 +98,18 @@ import 'model.dart';
 //   },
 // ];
 
-final List<String> userList = ['aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii', 'jj'];
+final List<String> userList = [
+  'aa',
+  'bb',
+  'cc',
+  'dd',
+  'ee',
+  'ff',
+  'gg',
+  'hh',
+  'ii',
+  'jj'
+];
 final List<String> nameList = [
   '류앤돈까스',
   '동궁찜닭',
@@ -123,7 +134,18 @@ final List<String> time = [
   '13:00',
   '12:00'
 ];
-final List<String> date = ['2023/01/02', '2022/12/28', '2023/01/01', '2022/12/11', '2022/11/01', '2022/12/19', '2022/12/20', '2022/12/14', '2022/10/02', '2022/10/10'];
+final List<String> date = [
+  '2023/01/02',
+  '2022/12/28',
+  '2023/01/01',
+  '2022/12/11',
+  '2022/11/01',
+  '2022/12/19',
+  '2022/12/20',
+  '2022/12/14',
+  '2022/10/02',
+  '2022/10/10'
+];
 final List<int> currPeople = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
 final List<int> maxPeople = [3, 4, 3, 4, 3, 4, 3, 4, 3, 4];
 final List<String> imageList = [
@@ -139,16 +161,36 @@ final List<String> imageList = [
   'assets/images/10.jpg'
 ];
 
-final List<Chat> chatData = List.generate(imageList.length, (index) =>
-    Chat(imageList[index], userList[index], nameList[index], date[index], time[index], currPeople[index], maxPeople[index]));
+final List<Chat> chatData = List.generate(
+    imageList.length,
+    (index) => Chat(imageList[index], userList[index], nameList[index],
+        date[index], time[index], currPeople[index], maxPeople[index]));
+
+DateTime now = DateTime.now();
+String currHour = DateFormat("HH").format(now);
+String currMinute = DateFormat("mm").format(now);
+
+
+var flag1 = List.empty(growable: true);
+int j=0;
+int TimeOutCount () {
+  int count = 0;
+  for(int i=0; i<chatData.length; i++) {
+    if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour))||
+        ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
+      count++;
+    }
+  }
+  return count;
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           Flexible(
             child: Card(
@@ -166,7 +208,7 @@ class HomePage extends StatelessWidget {
                 label: Text("Search"),
                 style: OutlinedButton.styleFrom(
                   alignment: Alignment.centerLeft,
-                  primary: Colors.blue,
+                  foregroundColor: Colors.blue,
                   textStyle: TextStyle(fontSize: 20),
                   minimumSize: Size(420, 0),
                   side: BorderSide(
@@ -184,15 +226,54 @@ class HomePage extends StatelessWidget {
         elevation: 0, //appbar 경계선
       ),
       body: ListView.builder(
-        itemCount: chatData.length,
+        itemCount: TimeOutCount(),
         itemBuilder: (context, index) {
+          for(int i=0; i<chatData.length; i++) {
+            if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour))||
+                ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
+              flag1.add(i);
+            }
+          }
+          index = flag1[j];
+          //print("index ${index}");
+          j++;
           return GestureDetector(
             onTap: () {
+<<<<<<< Updated upstream
               debugPrint(nameList[index]);
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatRoom(chat: chatData[index],)));
+                  builder: (context) => ChatRoom(
+                        chat: chatData[index],
+                      )));
+=======
+              if(chatData[index].currPeople != chatData[index].maxPeople) {
+                  debugPrint(chatData[index].name);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ChatRoom(chat: chatData[index],)));
+              }else{
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext ctx){
+                      return AlertDialog(
+                        title: Text("정원초과"),
+                        content: Text("인원이 마감되었습니다."),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("확인"),
+                          ),
+                        ],
+                      );
+                    }
+                );
+              }
+>>>>>>> Stashed changes
             },
             child: Card(
+              color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
               child: Row(
                 children: [
                   SizedBox(
@@ -218,9 +299,9 @@ class HomePage extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.account_circle_sharp,
-                                  color: Colors.grey,
+                                  color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
                                   size: 16,
                                 ),
                                 const SizedBox(
@@ -228,8 +309,10 @@ class HomePage extends StatelessWidget {
                                 ),
                                 Text(
                                   chatData[index].user,
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
@@ -255,13 +338,22 @@ class HomePage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
-                            const Text(
-                              " ❯",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red),
-                            ),
+                            if(chatData[index].currPeople != chatData[index].maxPeople)
+                              const Text(
+                                " ❯",
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              )
+                            else
+                              const Text(
+                                " ❯",
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
                           ],
                         ),
                         const SizedBox(
@@ -275,7 +367,22 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     const Icon(CupertinoIcons.person),
-                                    Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+<<<<<<< Updated upstream
+                                    Text(
+                                        '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+=======
+                                    if(chatData[index].currPeople != chatData[index].maxPeople)
+                                        Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
+                                    else
+                                      Text(
+                                        '${chatData[index].currPeople}/${chatData[index].maxPeople}',
+                                        style: const TextStyle(
+                                            decoration: TextDecoration.lineThrough,
+                                            decorationColor: Colors.red,
+                                            decorationThickness: 3
+                                        ),
+                                      ),
+>>>>>>> Stashed changes
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -315,15 +422,20 @@ class MySearchDelegate extends SearchDelegate {
             color: Colors.blue,
           ),
           onPressed: () {
+<<<<<<< Updated upstream
+            if (query == "") {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MainScreen())); //close searchbar
+=======
             if (query=="") {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => MainScreen()));//close searchbar
+              Navigator.of(context).pop();//close searchbar
+>>>>>>> Stashed changes
             } else {
               showSearch(
                 context: context,
                 delegate: MySearchDelegate(),
               );
-              query="";
+              query = "";
             }
           },
         ),
@@ -331,48 +443,91 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(   // close searchbar
-          Icons.arrow_back,
-          color: Colors.blue,
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => MainScreen()));
-        }
-  );
+      icon: const Icon(
+        // close searchbar
+        Icons.arrow_back,
+        color: Colors.blue,
+      ),
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MainScreen()));
+      });
 
   int itemCnt() {
     int count = 0;
     for (int i = 0; i < chatData.length; i++) {
       if (chatData[i].name.contains(query)) {
-        count++;
+        if ((int.parse(chatData[i].time.substring(0, 2)) >
+            int.parse(currHour)) ||
+            ((int.parse(chatData[i].time.substring(0, 2)) ==
+                int.parse(currHour)) &&
+                (int.parse(chatData[i].time.substring(3, 5)) >
+                    int.parse(currMinute)))) {
+          count++;
+        }
       }
     }
     return count;
   }
 
-  int flag = -1;
+  var flag = List.empty(growable: true);
+  int j=0;
   @override
   Widget buildResults(BuildContext context) => Center(
         child: ListView.builder(
           itemCount: itemCnt(),
           itemBuilder: (context, index) {
-            for (int i = 0; i < chatData.length; i++) {
+            for(int i=0; i<chatData.length; i++) {
               if (chatData[i].name.contains(query)) {
-                if (flag != i) {
-                  index = i;
-                  flag = i;
-                  break;
+                if ((int.parse(chatData[i].time.substring(0, 2)) >
+                    int.parse(currHour)) ||
+                    ((int.parse(chatData[i].time.substring(0, 2)) ==
+                        int.parse(currHour)) &&
+                        (int.parse(chatData[i].time.substring(3, 5)) >
+                            int.parse(currMinute)))) {
+                  flag.add(i);
                 }
               }
             }
+            index = flag[j];
+            j++;
             return GestureDetector(
               onTap: () {
+<<<<<<< Updated upstream
                 debugPrint(nameList[index]);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatRoom(chat: chatData[index],)));
+                    builder: (context) => ChatRoom(
+                          chat: chatData[index],
+                        )));
+=======
+                if(chatData[index].currPeople != chatData[index].maxPeople) {
+                  debugPrint(chatData[index].name);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ChatRoom(chat: chatData[index],)));
+                }else{
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext ctx){
+                        return AlertDialog(
+                          title: Text("정원초과"),
+                          content: Text("인원이 마감되었습니다."),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("확인"),
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                }
+>>>>>>> Stashed changes
               },
               child: Card(
+                color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
                 child: Row(
                   children: [
                     SizedBox(
@@ -398,9 +553,9 @@ class MySearchDelegate extends SearchDelegate {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.account_circle_sharp,
-                                    color: Colors.grey,
+                                    color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
                                     size: 16,
                                   ),
                                   const SizedBox(
@@ -408,8 +563,10 @@ class MySearchDelegate extends SearchDelegate {
                                   ),
                                   Text(
                                     chatData[index].user,
-                                    style: const TextStyle(
-                                        fontSize: 15, color: Colors.grey),
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -435,13 +592,22 @@ class MySearchDelegate extends SearchDelegate {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                              const Text(
-                                " ❯",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red),
-                              ),
+                              if(chatData[index].currPeople != chatData[index].maxPeople)
+                                const Text(
+                                  " ❯",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
+                                )
+                              else
+                                const Text(
+                                  " ❯",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
                             ],
                           ),
                           const SizedBox(
@@ -455,7 +621,22 @@ class MySearchDelegate extends SearchDelegate {
                                   child: Row(
                                     children: [
                                       const Icon(CupertinoIcons.person),
-                                      Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+<<<<<<< Updated upstream
+                                      Text(
+                                          '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+=======
+                                      if(chatData[index].currPeople != chatData[index].maxPeople)
+                                        Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
+                                      else
+                                        Text(
+                                          '${chatData[index].currPeople}/${chatData[index].maxPeople}',
+                                          style: const TextStyle(
+                                              decoration: TextDecoration.lineThrough,
+                                              decorationColor: Colors.red,
+                                              decorationThickness: 3
+                                          ),
+                                        ),
+>>>>>>> Stashed changes
                                       const SizedBox(
                                         width: 5,
                                       ),
