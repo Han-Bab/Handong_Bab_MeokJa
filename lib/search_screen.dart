@@ -32,7 +32,22 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 6,
                   child: TextField(
                     focusNode: focusNode,
-                  ),)
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                    autofocus: true,
+                    controller: _filter,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white12,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.white60,
+                          size: 20,
+                        )
+                    ),
+                  ),
+                )
             ],),
           )
         ],
