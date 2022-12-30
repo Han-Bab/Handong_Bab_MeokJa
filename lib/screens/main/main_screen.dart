@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/screens/main/chatList_screen.dart';
-import 'package:han_bab/screens/main/home_page.dart';
-import 'package:han_bab/search_screen.dart';
+
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
