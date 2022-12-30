@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Object>(
+    return FutureBuilder<Object>( //퓨처 함수로 로딩 구현
         future: Future.delayed(Duration(seconds: 3), () => 100),
         builder: (context, snapshot) {
           return AnimatedSwitcher(
