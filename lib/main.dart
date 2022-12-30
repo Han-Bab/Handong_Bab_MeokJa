@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart'; //안드로이드 디자인
-import 'package:flutter/cupertino.dart'; //IOS 디자인
-import 'home/home_screen.dart'; //홈 화면 함수 불러오기
+import 'package:flutter/cupertino.dart'; //IOS 디자인홈 화면 함수 불러오기
 import 'loading/splash_screen.dart'; //로딩 함수 불러오기
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:han_bab/screens/login/login_page.dart';
+import 'package:han_bab/screens/main/main_screen.dart';
+import 'firebase_options.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -12,19 +17,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Object>( //퓨처 함수로 로딩 구현
-        future: Future.delayed(Duration(seconds: 3), () => 100),
-        builder: (context, snapshot) {
-          return AnimatedSwitcher(
-            duration: Duration(milliseconds: 900),  //페이드인아웃 효과
-            child: _splashLodingWidget(snapshot),   //스냅샷실행 위젯지정
-          );
-        }
+    return MaterialApp(
+      home: LoginPage(),
     );
-  }
-  StatelessWidget _splashLodingWidget(AsyncSnapshot<Object> snapshot) {
-    if(snapshot.hasError) {print('에러가 발생하였습니다.'); return Text('Error');} //에러발생
-    else if(snapshot.hasData) {return HomeScreen();} //정상
-    else{return SplashScreen();} //그외
   }
 }
