@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:han_bab/screens/main/chatList_screen.dart';
-
-
+import 'package:han_bab/screens/main/home_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -16,18 +14,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "홈 스크린",
-          style: TextStyle(color: Colors.grey),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
       body: IndexedStack(
         index: _bottomSelectedIndex,
         children: [
-          ChatList(),
+          HomePage(),
           Container(
             color: Colors.accents[4],
           ),
