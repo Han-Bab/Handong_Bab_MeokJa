@@ -39,6 +39,8 @@ dependencies:
   firebase_core: ^2.4.0
   extended_image: ^4.1.0
   logger: ^1.1.0
+  grouped_list: ^5.1.2
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/screens/main/home_page.dart';
 
+import 'group.screen.dart';
+import 'mychat_screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -24,9 +27,7 @@ class _MainScreenState extends State<MainScreen> {
           Container(
             color: Colors.accents[7],
           ),
-          Container(
-            color: Colors.accents[10],
-          ),
+          GroupListViewDemo(),
           Container(
             color: Colors.accents[12],
           ),

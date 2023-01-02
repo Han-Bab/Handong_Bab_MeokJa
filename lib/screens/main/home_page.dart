@@ -1,6 +1,99 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+List _data = [
+  {
+    'id': 1,
+    'user': 'aa',
+    'image': 'assets/images/1.jpg',
+    'name': '류앤돈까스',
+    'time': '17:00',
+    'curr_people': 1,
+    'max_people': 4
+  },
+  {
+    'id': 2,
+    'user': 'bb',
+    'image': 'assets/images/2.jpg',
+    'name': '동굼찜닭',
+    'time': '13:00',
+    'currPeople': 2,
+    'maxPeople': 4
+  },
+  {
+    'id': 3,
+    'user': 'cc',
+    'image': 'assets/images/3.jpg',
+    'name': '꼬꼬뽀끼',
+    'time': '17:00',
+    'currPeople': 4,
+    'maxPeople': 4
+  },
+  {
+    'id': 4,
+    'user': 'dd',
+    'image': 'assets/images/4.jpg',
+    'name': 'bbq',
+    'time': '17:00',
+    'currPeople': 3,
+    'maxPeople': 4
+  },
+  {
+    'id': 5,
+    'user': 'ee',
+    'image': 'assets/images/5.jpg',
+    'name': '행복한 마라탕',
+    'time': '17:00',
+    'currPeople': 2,
+    'maxPeople': 3
+  },
+  {
+    'id': 6,
+    'user': 'ff',
+    'image': 'assets/images/6.jpg',
+    'name': '삼촌네',
+    'time': '17:00',
+    'currPeople': 1,
+    'maxPeople': 2
+  },
+  {
+    'id': 7,
+    'user': 'gg',
+    'image': 'assets/images/7.jpg',
+    'name': '신전 떡볶이',
+    'time': '17:00',
+    'currPeople': 2,
+    'maxPeople': 4
+  },
+  {
+    'id': 8,
+    'user': 'hh',
+    'image': 'assets/images/8.jpg',
+    'name': '명성',
+    'time': '17:00',
+    'currPeople': 1,
+    'maxPeople': 4
+  },
+  {
+    'id': 9,
+    'user': 'ii',
+    'image': 'assets/images/9.jpg',
+    'name': '땅땅치킨',
+    'time': '17:00',
+    'currPeople': 1,
+    'maxPeople': 4
+  },
+  {
+    'id': 10,
+    'user': 'jj',
+    'image': 'assets/images/10.jpg',
+    'name': '행복한 마라탕',
+    'time': '17:00',
+    'currPeople': 1,
+    'maxPeople': 4
+  },
+];
+
 final userList = ['aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii', 'jj'];
 final nameList = [
   '류앤돈까스',
@@ -67,41 +160,48 @@ void nextPage(context, title, image, description) {
       });
 }
 
-int person = 0;
-int max_people = 4;
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.6;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '검색',
-          style: TextStyle(color: Colors.grey),
-        ),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
+          OutlinedButton.icon(
             onPressed: () {
               showSearch(
                 context: context,
                 delegate: MySearchDelegate(),
               );
             },
-          )
+            icon: const Icon(
+              Icons.search,
+              color: Colors.blue,
+            ),
+            label: Text("Search"),
+            style: OutlinedButton.styleFrom(
+              alignment: Alignment.centerLeft,
+              primary: Colors.blue,
+              textStyle: TextStyle(fontSize: 20),
+              minimumSize: Size(420, 0),
+              side: BorderSide(
+                color: Colors.transparent,
+              ),
+              // shape: const RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.all(Radius.circular(15))
+              // )
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
         ],
         backgroundColor: Colors.white70,
         elevation: 0, //appbar 경계선
       ),
       body: ListView.builder(
-        itemCount: nameList.length,
+        itemCount: _data.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -133,10 +233,22 @@ class HomePage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              userList[index],
-                              style: const TextStyle(
-                                  fontSize: 15, color: Colors.grey),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.account_circle_sharp,
+                                  color: Colors.grey,
+                                  size: 16,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  userList[index],
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
+                              ],
                             ),
                             Row(
                               children: [
@@ -151,12 +263,23 @@ class HomePage extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          nameList[index],
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                        Row(
+                          children: [
+                            Text(
+                              nameList[index],
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              " ❯",
+                              style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 15,
@@ -169,7 +292,7 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     const Icon(CupertinoIcons.person),
-                                    Text('$person/$max_people'),
+                                    Text(description[index]),
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -294,17 +417,6 @@ class MySearchDelegate extends SearchDelegate {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              // SizedBox(
-                              //   width: width,
-                              //   child: Text(
-                              //     description[index],
-                              //     style: TextStyle(
-                              //         fontSize: 15, color: Colors.grey[500]),
-                              //   ),
-                              // )
                             ],
                           ),
                         ],
@@ -336,7 +448,6 @@ class MySearchDelegate extends SearchDelegate {
           title: Text(suggestion),
           onTap: () {
             query = suggestion;
-
             showResults(context);
           },
         );
