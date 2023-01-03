@@ -1,113 +1,117 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-List _data = [
-  {
-    'id': 1,
-    'user': 'aa',
-    'image': 'assets/images/1.jpg',
-    'name': '류앤돈까스',
-    'time': '17:00',
-    'curr_people': 1,
-    'max_people': 4
-  },
-  {
-    'id': 2,
-    'user': 'bb',
-    'image': 'assets/images/2.jpg',
-    'name': '동굼찜닭',
-    'time': '13:00',
-    'currPeople': 2,
-    'maxPeople': 4
-  },
-  {
-    'id': 3,
-    'user': 'cc',
-    'image': 'assets/images/3.jpg',
-    'name': '꼬꼬뽀끼',
-    'time': '17:00',
-    'currPeople': 4,
-    'maxPeople': 4
-  },
-  {
-    'id': 4,
-    'user': 'dd',
-    'image': 'assets/images/4.jpg',
-    'name': 'bbq',
-    'time': '17:00',
-    'currPeople': 3,
-    'maxPeople': 4
-  },
-  {
-    'id': 5,
-    'user': 'ee',
-    'image': 'assets/images/5.jpg',
-    'name': '행복한 마라탕',
-    'time': '17:00',
-    'currPeople': 2,
-    'maxPeople': 3
-  },
-  {
-    'id': 6,
-    'user': 'ff',
-    'image': 'assets/images/6.jpg',
-    'name': '삼촌네',
-    'time': '17:00',
-    'currPeople': 1,
-    'maxPeople': 2
-  },
-  {
-    'id': 7,
-    'user': 'gg',
-    'image': 'assets/images/7.jpg',
-    'name': '신전 떡볶이',
-    'time': '17:00',
-    'currPeople': 2,
-    'maxPeople': 4
-  },
-  {
-    'id': 8,
-    'user': 'hh',
-    'image': 'assets/images/8.jpg',
-    'name': '명성',
-    'time': '17:00',
-    'currPeople': 1,
-    'maxPeople': 4
-  },
-  {
-    'id': 9,
-    'user': 'ii',
-    'image': 'assets/images/9.jpg',
-    'name': '땅땅치킨',
-    'time': '17:00',
-    'currPeople': 1,
-    'maxPeople': 4
-  },
-  {
-    'id': 10,
-    'user': 'jj',
-    'image': 'assets/images/10.jpg',
-    'name': '행복한 마라탕',
-    'time': '17:00',
-    'currPeople': 1,
-    'maxPeople': 4
-  },
-];
+import '../chat/chatRoom_screen.dart';
+import 'main_screen.dart';
+import 'model.dart';
 
-final userList = ['aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii', 'jj'];
-final nameList = [
+// List _data = [
+//   {
+//     'id': 1,
+//     'user': 'aa',
+//     'image': 'assets/images/1.jpg',
+//     'name': '류앤돈까스',
+//     'time': '17:00',
+//     'curr_people': 1,
+//     'max_people': 4
+//   },
+//   {
+//     'id': 2,
+//     'user': 'bb',
+//     'image': 'assets/images/2.jpg',
+//     'name': '동굼찜닭',
+//     'time': '13:00',
+//     'currPeople': 2,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 3,
+//     'user': 'cc',
+//     'image': 'assets/images/3.jpg',
+//     'name': '꼬꼬뽀끼',
+//     'time': '17:00',
+//     'currPeople': 4,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 4,
+//     'user': 'dd',
+//     'image': 'assets/images/4.jpg',
+//     'name': 'bbq',
+//     'time': '17:00',
+//     'currPeople': 3,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 5,
+//     'user': 'ee',
+//     'image': 'assets/images/5.jpg',
+//     'name': '행복한 마라탕',
+//     'time': '17:00',
+//     'currPeople': 2,
+//     'maxPeople': 3
+//   },
+//   {
+//     'id': 6,
+//     'user': 'ff',
+//     'image': 'assets/images/6.jpg',
+//     'name': '삼촌네',
+//     'time': '17:00',
+//     'currPeople': 1,
+//     'maxPeople': 2
+//   },
+//   {
+//     'id': 7,
+//     'user': 'gg',
+//     'image': 'assets/images/7.jpg',
+//     'name': '신전 떡볶이',
+//     'time': '17:00',
+//     'currPeople': 2,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 8,
+//     'user': 'hh',
+//     'image': 'assets/images/8.jpg',
+//     'name': '명성',
+//     'time': '17:00',
+//     'currPeople': 1,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 9,
+//     'user': 'ii',
+//     'image': 'assets/images/9.jpg',
+//     'name': '땅땅치킨',
+//     'time': '17:00',
+//     'currPeople': 1,
+//     'maxPeople': 4
+//   },
+//   {
+//     'id': 10,
+//     'user': 'jj',
+//     'image': 'assets/images/10.jpg',
+//     'name': '행복한 마라탕',
+//     'time': '17:00',
+//     'currPeople': 1,
+//     'maxPeople': 4
+//   },
+// ];
+
+final List<String> userList = ['aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii', 'jj'];
+final List<String> nameList = [
   '류앤돈까스',
   '동궁찜닭',
   '꼬꼬뽀끼',
   'bbq',
   '행복한 마라탕',
-  '삼촌네?',
+  '삼촌네',
   '신전 떡볶이',
   '명성',
   '땅땅치킨',
   '행복한 마라탕'
 ];
-final time = [
+final List<String> time = [
   '17:00',
   '14:00',
   '13:20',
@@ -119,19 +123,10 @@ final time = [
   '13:00',
   '12:00'
 ];
-final description = [
-  '1/4',
-  '2/4',
-  '3/4',
-  '4/4',
-  '1/4',
-  '2/4',
-  '3/4',
-  '4/4',
-  '1/2',
-  '1/3'
-];
-final imageList = [
+final List<String> date = ['2023/01/02', '2022/12/28', '2023/01/01', '2022/12/11', '2022/11/01', '2022/12/19', '2022/12/20', '2022/12/14', '2022/10/02', '2022/10/10'];
+final List<int> currPeople = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
+final List<int> maxPeople = [3, 4, 3, 4, 3, 4, 3, 4, 3, 4];
+final List<String> imageList = [
   'assets/images/1.jpg',
   'assets/images/2.jpg',
   'assets/images/3.jpg',
@@ -144,21 +139,8 @@ final imageList = [
   'assets/images/10.jpg'
 ];
 
-void nextPage(context, title, image, description) {
-  // 상세 페이지 넘겨주기
-  showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: 380,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.white),
-          ),
-        );
-      });
-}
+final List<Chat> chatData = List.generate(imageList.length, (index) =>
+    Chat(imageList[index], userList[index], nameList[index], date[index], time[index], currPeople[index], maxPeople[index]));
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -168,29 +150,30 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          OutlinedButton.icon(
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: MySearchDelegate(),
-              );
-            },
-            icon: const Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
-            label: Text("Search"),
-            style: OutlinedButton.styleFrom(
-              alignment: Alignment.centerLeft,
-              primary: Colors.blue,
-              textStyle: TextStyle(fontSize: 20),
-              minimumSize: Size(420, 0),
-              side: BorderSide(
-                color: Colors.transparent,
+          Flexible(
+            child: Card(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: MySearchDelegate(),
+                  );
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.blue,
+                ),
+                label: Text("Search"),
+                style: OutlinedButton.styleFrom(
+                  alignment: Alignment.centerLeft,
+                  primary: Colors.blue,
+                  textStyle: TextStyle(fontSize: 20),
+                  minimumSize: Size(420, 0),
+                  side: BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
               ),
-              // shape: const RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.all(Radius.circular(15))
-              // )
             ),
           ),
           const SizedBox(
@@ -201,13 +184,13 @@ class HomePage extends StatelessWidget {
         elevation: 0, //appbar 경계선
       ),
       body: ListView.builder(
-        itemCount: _data.length,
+        itemCount: chatData.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               debugPrint(nameList[index]);
-              nextPage(context, nameList[index], imageList[index],
-                  description[index]);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatRoom(chat: chatData[index],)));
             },
             child: Card(
               child: Row(
@@ -235,7 +218,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.account_circle_sharp,
                                   color: Colors.grey,
                                   size: 16,
@@ -244,7 +227,7 @@ class HomePage extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Text(
-                                  userList[index],
+                                  chatData[index].user,
                                   style: const TextStyle(
                                       fontSize: 15, color: Colors.grey),
                                 ),
@@ -252,7 +235,7 @@ class HomePage extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Text(time[index]),
+                                Text(chatData[index].time),
                                 const SizedBox(
                                   width: 5,
                                 ),
@@ -266,15 +249,15 @@ class HomePage extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              nameList[index],
+                              chatData[index].name,
                               style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
-                            Text(
+                            const Text(
                               " ❯",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red),
@@ -292,7 +275,7 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     const Icon(CupertinoIcons.person),
-                                    Text(description[index]),
+                                    Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -332,10 +315,15 @@ class MySearchDelegate extends SearchDelegate {
             color: Colors.blue,
           ),
           onPressed: () {
-            if (query.isEmpty) {
-              close(context, null); //close searchbar
+            if (query=="") {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => MainScreen()));//close searchbar
             } else {
-              query = '';
+              showSearch(
+                context: context,
+                delegate: MySearchDelegate(),
+              );
+              query="";
             }
           },
         ),
@@ -343,17 +331,20 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(
+        icon: const Icon(   // close searchbar
           Icons.arrow_back,
           color: Colors.blue,
         ),
-        onPressed: () => close(context, null), // close searchbar
-      );
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => MainScreen()));
+        }
+  );
 
   int itemCnt() {
     int count = 0;
-    for (int i = 0; i < nameList.length; i++) {
-      if (nameList[i].contains(query)) {
+    for (int i = 0; i < chatData.length; i++) {
+      if (chatData[i].name.contains(query)) {
         count++;
       }
     }
@@ -366,8 +357,8 @@ class MySearchDelegate extends SearchDelegate {
         child: ListView.builder(
           itemCount: itemCnt(),
           itemBuilder: (context, index) {
-            for (int i = 0; i < nameList.length; i++) {
-              if (nameList[i].contains(query)) {
+            for (int i = 0; i < chatData.length; i++) {
+              if (chatData[i].name.contains(query)) {
                 if (flag != i) {
                   index = i;
                   flag = i;
@@ -378,8 +369,8 @@ class MySearchDelegate extends SearchDelegate {
             return GestureDetector(
               onTap: () {
                 debugPrint(nameList[index]);
-                nextPage(context, nameList[index], imageList[index],
-                    description[index]);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChatRoom(chat: chatData[index],)));
               },
               child: Card(
                 child: Row(
@@ -394,31 +385,86 @@ class MySearchDelegate extends SearchDelegate {
                           fit: BoxFit.cover,
                         ),
                       ),
+                    ), //image
+                    const SizedBox(
+                      width: 16,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.account_circle_sharp,
+                                    color: Colors.grey,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    chatData[index].user,
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(chatData[index].time),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
                             children: [
                               Text(
-                                userList[index],
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                nameList[index],
+                                chatData[index].name,
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
+                              const Text(
+                                " ❯",
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
                             ],
                           ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                child: FittedBox(
+                                  child: Row(
+                                    children: [
+                                      const Icon(CupertinoIcons.person),
+                                      Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -435,7 +481,6 @@ class MySearchDelegate extends SearchDelegate {
     List<String> suggestions = searchResults.where((searchResult) {
       final result = searchResult.toLowerCase();
       final input = query.toLowerCase();
-
       return result.contains(input);
     }).toList();
 
@@ -443,7 +488,6 @@ class MySearchDelegate extends SearchDelegate {
       itemCount: suggestions.length,
       itemBuilder: (context, index) {
         final suggestion = suggestions[index];
-
         return ListTile(
           title: Text(suggestion),
           onTap: () {
