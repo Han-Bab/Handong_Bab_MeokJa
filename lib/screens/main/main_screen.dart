@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:han_bab/screens/chat/add_chat_room.dart';
 import 'package:han_bab/screens/main/home_page.dart';
 
+import 'group.screen.dart';
+import 'mychat_screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -22,10 +25,10 @@ class _MainScreenState extends State<MainScreen> {
           Container(
             color: Colors.accents[4],
           ),
-          HomePage(),
           Container(
-            color: Colors.accents[10],
+            color: Colors.accents[7],
           ),
+          GroupListViewDemo(),
           Container(
             color: Colors.accents[12],
           ),
