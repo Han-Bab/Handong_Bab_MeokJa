@@ -8,9 +8,9 @@ import 'main_screen.dart';
 List _data = [
   {
     'id': 1,
-    'title': '류앤돈까스',
+    'name': '류앤돈까스',
     'image': 'assets/images/1.jpg',
-    'author': 'aa',
+    'user': 'aa',
     'date': '2023/01/02',
     'time': '17:00',
     'curr_people' : 1,
@@ -18,9 +18,9 @@ List _data = [
   },
   {
     'id': 2,
-    'title': '동궁찜닭',
+    'name': '동궁찜닭',
     'image': 'assets/images/2.jpg',
-    'author': 'bb',
+    'user': 'bb',
     'date': '2022/12/28',
     'time': '13:00',
     'curr_people' : 2,
@@ -28,9 +28,9 @@ List _data = [
   },
   {
     'id': 3,
-    'title': '꼬꼬뽀끼',
+    'name': '꼬꼬뽀끼',
     'image': 'assets/images/3.jpg',
-    'author': 'cc',
+    'user': 'cc',
     'date': '2023/01/01',
     'time': '17:00',
     'curr_people' : 4,
@@ -38,9 +38,9 @@ List _data = [
   },
   {
     'id': 4,
-    'title': 'bbq',
+    'name': 'bbq',
     'image': 'assets/images/4.jpg',
-    'author': 'dd',
+    'user': 'dd',
     'date': '2022/12/11',
     'time': '17:00',
     'curr_people' : 3,
@@ -48,9 +48,9 @@ List _data = [
   },
   {
     'id': 5,
-    'title': '행복한 마라탕',
+    'name': '행복한 마라탕',
     'image': 'assets/images/5.jpg',
-    'author': 'ee',
+    'user': 'ee',
     'date': '2022/11/01',
     'time': '17:00',
     'curr_people' : 2,
@@ -58,9 +58,9 @@ List _data = [
   },
   {
     'id': 6,
-    'title': '삼촌네',
+    'name': '삼촌네',
     'image': 'assets/images/6.jpg',
-    'author': 'ff',
+    'user': 'ff',
     'date': '2022/12/19',
     'time': '17:00',
     'curr_people' : 1,
@@ -68,9 +68,9 @@ List _data = [
   },
   {
     'id': 7,
-    'title': '신전 떡볶이',
+    'name': '신전 떡볶이',
     'image': 'assets/images/7.jpg',
-    'author': 'gg',
+    'user': 'gg',
     'date': '2022/12/20',
     'time': '17:00',
     'curr_people' : 2,
@@ -78,9 +78,9 @@ List _data = [
   },
   {
     'id': 8,
-    'title': '명성',
+    'name': '명성',
     'image': 'assets/images/8.jpg',
-    'author': 'hh',
+    'user': 'hh',
     'date': '2022/12/14',
     'time': '17:00',
     'curr_people' : 1,
@@ -88,9 +88,9 @@ List _data = [
   },
   {
     'id': 9,
-    'title': '땅땅치킨',
+    'name': '땅땅치킨',
     'image': 'assets/images/9.jpg',
-    'author': 'ii',
+    'user': 'ii',
     'date': '2022/10/02',
     'time': '17:00',
     'curr_people' : 1,
@@ -98,9 +98,9 @@ List _data = [
   },
   {
     'id': 10,
-    'title': '행복한 마라탕',
+    'name': '행복한 마라탕',
     'image': 'assets/images/10.jpg',
-    'author': 'jj',
+    'user': 'jj',
     'date': '2022/10/10',
     'time': '17:00',
     'curr_people' : 1,
@@ -108,7 +108,7 @@ List _data = [
   },
 ];
 
-void nextPage(context, title, image, description) {
+void nextPage(context, user, image, description) {
   // 상세 페이지 넘겨주기
   showDialog(
       context: context,
@@ -207,8 +207,8 @@ class GroupListViewDemo extends StatelessWidget {
         itemBuilder: (context, item) {
           return GestureDetector(
             onTap: () {
-              debugPrint(item['title']);
-              nextPage(context, item['title'], item['image'], item['author']);
+              debugPrint(item['name']);
+              nextPage(context, item['name'], item['image'], item['user']);
             },
             child: Card(
               elevation: 8.0,
@@ -248,7 +248,7 @@ class GroupListViewDemo extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(left: 8, right: 8),
                                     child: Text(
-                                      item['title'],
+                                      item['name'],
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
@@ -280,7 +280,7 @@ class GroupListViewDemo extends StatelessWidget {
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(left: 8),
-                                      child: Text('${item['author']}'),
+                                      child: Text('${item['user']}'),
                                     )
                                   ],
                                 ),
