@@ -98,7 +98,18 @@ import 'model.dart';
 //   },
 // ];
 
-final List<String> userList = ['aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii', 'jj'];
+final List<String> userList = [
+  'aa',
+  'bb',
+  'cc',
+  'dd',
+  'ee',
+  'ff',
+  'gg',
+  'hh',
+  'ii',
+  'jj'
+];
 final List<String> nameList = [
   '류앤돈까스',
   '동궁찜닭',
@@ -123,7 +134,18 @@ final List<String> time = [
   '13:00',
   '12:00'
 ];
-final List<String> date = ['2023/01/02', '2022/12/28', '2023/01/01', '2022/12/11', '2022/11/01', '2022/12/19', '2022/12/20', '2022/12/14', '2022/10/02', '2022/10/10'];
+final List<String> date = [
+  '2023/01/02',
+  '2022/12/28',
+  '2023/01/01',
+  '2022/12/11',
+  '2022/11/01',
+  '2022/12/19',
+  '2022/12/20',
+  '2022/12/14',
+  '2022/10/02',
+  '2022/10/10'
+];
 final List<int> currPeople = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
 final List<int> maxPeople = [3, 4, 3, 4, 3, 4, 3, 4, 3, 4];
 final List<String> imageList = [
@@ -139,8 +161,10 @@ final List<String> imageList = [
   'assets/images/10.jpg'
 ];
 
-final List<Chat> chatData = List.generate(imageList.length, (index) =>
-    Chat(imageList[index], userList[index], nameList[index], date[index], time[index], currPeople[index], maxPeople[index]));
+final List<Chat> chatData = List.generate(
+    imageList.length,
+    (index) => Chat(imageList[index], userList[index], nameList[index],
+        date[index], time[index], currPeople[index], maxPeople[index]));
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -166,7 +190,7 @@ class HomePage extends StatelessWidget {
                 label: Text("Search"),
                 style: OutlinedButton.styleFrom(
                   alignment: Alignment.centerLeft,
-                  primary: Colors.blue,
+                  foregroundColor: Colors.blue,
                   textStyle: TextStyle(fontSize: 20),
                   minimumSize: Size(420, 0),
                   side: BorderSide(
@@ -190,7 +214,9 @@ class HomePage extends StatelessWidget {
             onTap: () {
               debugPrint(nameList[index]);
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatRoom(chat: chatData[index],)));
+                  builder: (context) => ChatRoom(
+                        chat: chatData[index],
+                      )));
             },
             child: Card(
               child: Row(
@@ -275,7 +301,8 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     const Icon(CupertinoIcons.person),
-                                    Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+                                    Text(
+                                        '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -315,15 +342,15 @@ class MySearchDelegate extends SearchDelegate {
             color: Colors.blue,
           ),
           onPressed: () {
-            if (query=="") {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => MainScreen()));//close searchbar
+            if (query == "") {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MainScreen())); //close searchbar
             } else {
               showSearch(
                 context: context,
                 delegate: MySearchDelegate(),
               );
-              query="";
+              query = "";
             }
           },
         ),
@@ -331,15 +358,15 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(   // close searchbar
-          Icons.arrow_back,
-          color: Colors.blue,
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => MainScreen()));
-        }
-  );
+      icon: const Icon(
+        // close searchbar
+        Icons.arrow_back,
+        color: Colors.blue,
+      ),
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MainScreen()));
+      });
 
   int itemCnt() {
     int count = 0;
@@ -370,7 +397,9 @@ class MySearchDelegate extends SearchDelegate {
               onTap: () {
                 debugPrint(nameList[index]);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatRoom(chat: chatData[index],)));
+                    builder: (context) => ChatRoom(
+                          chat: chatData[index],
+                        )));
               },
               child: Card(
                 child: Row(
@@ -455,7 +484,8 @@ class MySearchDelegate extends SearchDelegate {
                                   child: Row(
                                     children: [
                                       const Icon(CupertinoIcons.person),
-                                      Text('${chatData[index].currPeople}/${chatData[index].maxPeople}'),
+                                      Text(
+                                          '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
                                       const SizedBox(
                                         width: 5,
                                       ),

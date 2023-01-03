@@ -18,22 +18,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "LoginPage",
+          "한동 밥 묵자",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          ),
-        ],
       ),
       // SingleChildScrollView: 키보드가 밀고올라와서 스크린 영역을 침범할때
       // 침범한 영역만큼 스크롤할 수 있게 하는 역할
