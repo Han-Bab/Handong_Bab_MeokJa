@@ -78,7 +78,6 @@ class _LoginPageState extends State<LoginPage> {
                         TextField(
                           controller: _idController,
                           decoration: InputDecoration(
-                            labelText: 'ID',
                             hintText: '아이디를 입력하세요',
                             labelStyle: Theme.of(context)
                                 .inputDecorationTheme
@@ -92,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                         TextField(
                           controller: _pwController,
                           decoration: InputDecoration(
-                            labelText: 'PW',
                             hintText: '비밀번호를 입력하세요',
                             labelStyle: Theme.of(context)
                                 .inputDecorationTheme
