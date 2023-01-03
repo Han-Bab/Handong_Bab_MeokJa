@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:han_bab/screens/chat/add_chat_room.dart';
 import 'package:han_bab/screens/main/home_page.dart';
 
 class MainScreen extends StatefulWidget {
@@ -21,9 +22,7 @@ class _MainScreenState extends State<MainScreen> {
           Container(
             color: Colors.accents[4],
           ),
-          Container(
-            color: Colors.accents[7],
-          ),
+          HomePage(),
           Container(
             color: Colors.accents[10],
           ),
@@ -39,6 +38,11 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             _bottomSelectedIndex = index;
+            if (_bottomSelectedIndex == 2) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddChatRoom()));
+              _bottomSelectedIndex = 0;
+            }
           });
         },
         type: BottomNavigationBarType.fixed,
