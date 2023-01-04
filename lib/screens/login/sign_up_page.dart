@@ -34,7 +34,6 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text("회원 가입"),
         centerTitle: true,
-        automaticallyImplyLeading: false,
       ),
       body: Form(
         key: _formKey,
