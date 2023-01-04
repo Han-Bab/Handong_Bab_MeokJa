@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:han_bab/screens/login/sign_up_page.dart';
 import 'package:han_bab/screens/main/main_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -65,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TextField(
+                        TextFormField(
                           controller: _idController,
                           decoration: InputDecoration(
                             hintText: '아이디를 입력하세요',
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           keyboardType: TextInputType.emailAddress,
                         ),
-                        TextField(
+                        TextFormField(
                           controller: _pwController,
                           decoration: InputDecoration(
                             hintText: '비밀번호를 입력하세요',
@@ -145,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               child: const Text("회원가입"),
                               onTap: () {
-                                debugPrint("회원가입");
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SignUpPage()));
                               },
                             ),
                             GestureDetector(
