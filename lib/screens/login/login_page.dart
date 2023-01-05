@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/screens/login/sign_up_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,22 +32,29 @@ class _LoginPageState extends State<LoginPage> {
   final _authentication = FirebaseAuth.instance;
 
   // 구글 간편 로그인
-  Future<UserCredential> signInWithGoogle() async {
+  Future signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    if (googleUser!.email.contains('@handong.ac.kr')) {
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      print("한동 계정임으로 로그인 성공");
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } else {
+      print("한동 계정 아님으로 로그인 실패");
+      showToast();
+      return await FirebaseAuth.instance.signOut();
+    }
   }
 
   @override
@@ -218,7 +226,13 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               // 구글 로그인
                               onPressed: () {
+                                setState(() {
+                                  showSpinner = true;
+                                });
                                 signInWithGoogle();
+                                setState(() {
+                                  showSpinner = false;
+                                });
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -279,4 +293,15 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+void showToast() {
+  Fluttertoast.showToast(
+    msg: '한동 구글 계정만 로그인 가능합니다',
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: Colors.blue,
+    fontSize: 15,
+    textColor: Colors.white,
+    toastLength: Toast.LENGTH_SHORT,
+  );
 }

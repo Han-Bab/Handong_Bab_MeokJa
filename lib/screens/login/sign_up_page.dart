@@ -258,12 +258,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                 });
 
                                 if (newUser.user != null) {
+                                  _authentication.signOut();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => LoginPage()));
                                 }
-
                                 setState(() {
                                   showSpinner = false;
                                 });

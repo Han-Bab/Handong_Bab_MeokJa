@@ -6,7 +6,6 @@ import 'package:han_bab/screens/loading/splash_screen.dart';
 import 'package:han_bab/screens/login/login_page.dart';
 import 'package:han_bab/screens/main/main_screen.dart';
 import 'firebase_options.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
