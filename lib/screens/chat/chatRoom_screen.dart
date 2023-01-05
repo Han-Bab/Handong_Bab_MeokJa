@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:han_bab/screens/chat/new_message.dart';
 import '../main/main_screen.dart';
 import 'model.dart';
-<<<<<<< Updated upstream
-=======
 import 'message.dart';
-
->>>>>>> Stashed changes
 
 class ChatRoom extends StatelessWidget {
   const ChatRoom({Key? key, required this.chat}) : super(key: key);

@@ -239,13 +239,6 @@ class HomePage extends StatelessWidget {
           j++;
           return GestureDetector(
             onTap: () {
-<<<<<<< Updated upstream
-              debugPrint(nameList[index]);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatRoom(
-                        chat: chatData[index],
-                      )));
-=======
               if(chatData[index].currPeople != chatData[index].maxPeople) {
                   debugPrint(chatData[index].name);
                   Navigator.of(context).push(MaterialPageRoute(
@@ -270,7 +263,6 @@ class HomePage extends StatelessWidget {
                     }
                 );
               }
->>>>>>> Stashed changes
             },
             child: Card(
               color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
@@ -367,10 +359,6 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     const Icon(CupertinoIcons.person),
-<<<<<<< Updated upstream
-                                    Text(
-                                        '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
-=======
                                     if(chatData[index].currPeople != chatData[index].maxPeople)
                                         Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
                                     else
@@ -382,7 +370,6 @@ class HomePage extends StatelessWidget {
                                             decorationThickness: 3
                                         ),
                                       ),
->>>>>>> Stashed changes
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -422,14 +409,8 @@ class MySearchDelegate extends SearchDelegate {
             color: Colors.blue,
           ),
           onPressed: () {
-<<<<<<< Updated upstream
-            if (query == "") {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MainScreen())); //close searchbar
-=======
             if (query=="") {
               Navigator.of(context).pop();//close searchbar
->>>>>>> Stashed changes
             } else {
               showSearch(
                 context: context,
@@ -493,13 +474,6 @@ class MySearchDelegate extends SearchDelegate {
             j++;
             return GestureDetector(
               onTap: () {
-<<<<<<< Updated upstream
-                debugPrint(nameList[index]);
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatRoom(
-                          chat: chatData[index],
-                        )));
-=======
                 if(chatData[index].currPeople != chatData[index].maxPeople) {
                   debugPrint(chatData[index].name);
                   Navigator.of(context).push(MaterialPageRoute(
@@ -524,7 +498,6 @@ class MySearchDelegate extends SearchDelegate {
                       }
                   );
                 }
->>>>>>> Stashed changes
               },
               child: Card(
                 color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
@@ -621,10 +594,6 @@ class MySearchDelegate extends SearchDelegate {
                                   child: Row(
                                     children: [
                                       const Icon(CupertinoIcons.person),
-<<<<<<< Updated upstream
-                                      Text(
-                                          '${chatData[index].currPeople}/${chatData[index].maxPeople}'),
-=======
                                       if(chatData[index].currPeople != chatData[index].maxPeople)
                                         Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
                                       else
@@ -636,7 +605,6 @@ class MySearchDelegate extends SearchDelegate {
                                               decorationThickness: 3
                                           ),
                                         ),
->>>>>>> Stashed changes
                                       const SizedBox(
                                         width: 5,
                                       ),
