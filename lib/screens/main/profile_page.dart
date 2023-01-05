@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                 onTap: () {
                   print("logout");
                   _authentication.signOut();
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
               ),
             ),
