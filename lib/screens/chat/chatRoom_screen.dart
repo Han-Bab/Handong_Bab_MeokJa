@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main/main_screen.dart';
-import '../main/model.dart';
+import 'model.dart';
 
 class ChatRoom extends StatelessWidget {
   const ChatRoom({Key? key, required this.chat}) : super(key: key);

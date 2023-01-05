@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/screens/chat/add_chat_room.dart';
 import 'package:han_bab/screens/main/home_page.dart';
+import 'package:han_bab/screens/main/profile_page.dart';
 import 'group_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,7 +14,31 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+
+  // 새로운 유저가 채팅방으로 이동을 할 때 이 유저의 이메일 주소를 출력해보기 위한
+  // state가 매번 초기화 될 때 이 과정을 진행하면 좋을 거 같아서 initState
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   int _bottomSelectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +53,7 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.accents[7],
           ),
           GroupListViewDemo(),
-          Container(
-            color: Colors.accents[12],
-          ),
+          ProfilePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:han_bab/screens/login/login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -9,15 +12,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   final TextEditingController _pwConfirmController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _certNumController = TextEditingController();
-  String userID = '';
+  // validation 기능 구현을 위한 세 개의 string 변수
   String userPW = '';
   String userEmail = '';
+  String userName = '';
   bool emailValidation = true;
   FocusNode emailFocusNode = FocusNode();
 
@@ -47,67 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("아이디"),
-                  TextFormField(
-                    controller: _idController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "아이디를 입력해주세요";
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      userID = value!;
-                    },
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text("비밀번호"),
-                  TextFormField(
-                    controller: _pwController,
-                    validator: (value) {
-                      if (value!.isEmpty || value!.length < 6) {
-                        return "비밀번호는 최소 7자 이상 입력해주세요";
-                      }
-                      return null;
-                    },
-                    obscureText: true,
-                    onSaved: (value) {
-                      userPW = value!;
-                    },
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text(
-                    "비밀번호 확인",
-                  ),
-                  TextFormField(
-                    controller: _pwConfirmController,
-                    obscureText: true,
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text("이름"),
-                  TextFormField(
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text("전화번호"),
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
                   const Text(
                     "한동 계정 이메일",
                   ),
@@ -115,19 +57,19 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          key: const ValueKey(1),
                           controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "이메일을 입력해주세요";
-                            }
-                            if (!value!.contains("@handong.ac.kr")) {
-                              return "한동 계정을 입력해주세요";
                             }
                             return null;
                           },
                           onSaved: (value) {
                             userEmail = value!;
+                          },
+                          onChanged: (value) {
+                            userEmail = value;
                           },
                           focusNode: emailFocusNode,
                           onTap: () {},
@@ -137,6 +79,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               errorText:
                                   emailValidation ? null : "한동 계정을 입력해주세요"),
                         ),
+                      ),
+                      const SizedBox(
+                        width: 10,
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -162,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(horizontal: 1),
                         ),
-                        child: const Text("인증번호 받기"),
+                        child: const Text("인증"),
                       )
                     ],
                   ),
@@ -173,11 +118,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: _certNumController,
                           keyboardType: TextInputType.number,
                           inputFormatters: [MaskedInputFormatter("000000")],
                           onTap: () {},
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "인증번호를 입력하세요",
                             hintStyle: TextStyle(fontSize: 13),
                           ),
@@ -186,11 +130,61 @@ class _SignUpPageState extends State<SignUpPage> {
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 1),
+                          padding: const EdgeInsets.symmetric(horizontal: 1),
                         ),
-                        child: const Text("인증"),
+                        child: const Text("확인"),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text("비밀번호"),
+                  TextFormField(
+                    controller: _pwController,
+                    validator: (value) {
+                      if (value!.isEmpty || value!.length < 6) {
+                        return "비밀번호는 최소 6자 이상 입력해주세요";
+                      }
+                      return null;
+                    },
+                    obscureText: true,
+                    onSaved: (value) {
+                      userPW = value!;
+                    },
+                    onChanged: (value) {
+                      userPW = value;
+                    },
+                    onTap: () {},
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text(
+                    "비밀번호 확인",
+                  ),
+                  TextFormField(
+                    controller: _pwConfirmController,
+                    obscureText: true,
+                    onTap: () {},
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text("이름"),
+                  TextFormField(
+                    onChanged: (value) {
+                      userName = value;
+                    },
+                    onTap: () {},
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text("전화번호"),
+                  TextFormField(
+                    keyboardType: TextInputType.phone,
+                    onTap: () {},
                   ),
                   const SizedBox(
                     height: 30,
@@ -203,7 +197,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                           child: const Text("취소"),
                         ),
                       ),
@@ -212,8 +208,30 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             _tryValidation();
+
+                            try {
+                              final newUser = await _authentication
+                                  .createUserWithEmailAndPassword(
+                                email: userEmail,
+                                password: userPW,
+                              );
+
+                              if (newUser.user != null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()));
+                              }
+                            } catch (e) {
+                              print(e);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('$e'),
+                                backgroundColor: Colors.blue,
+                              ));
+                            }
                           },
                           child: const Text("가입"),
                         ),

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/screens/login/sign_up_page.dart';
 import 'package:han_bab/screens/main/main_screen.dart';
 
@@ -10,9 +12,40 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   // textfield에 입력한 내용을 관리하기 위함
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
+  String userPW = '';
+  String userEmail = '';
+
+  void _tryValidation() {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+    }
+  }
+
+  final _authentication = FirebaseAuth.instance;
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -45,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Form(
+                key: _formKey,
                 child: Theme(
                   // ThemeData 안에서 전체 정보입력 양식의 세부적인 디자인을 지정할 수 있음
                   data: ThemeData(
@@ -68,8 +102,18 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextFormField(
                           controller: _idController,
+                          validator: (value) {
+                            if (value!.isEmpty ||
+                                !value!.contains("@handong.ac.kr")) {
+                              return "한동 이메일을 입력해주세요";
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            userEmail = value!;
+                          },
                           decoration: InputDecoration(
-                            hintText: '아이디를 입력하세요',
+                            hintText: '한동이메일을 입력하세요',
                             labelStyle: Theme.of(context)
                                 .inputDecorationTheme
                                 .labelStyle,
@@ -81,6 +125,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextFormField(
                           controller: _pwController,
+                          validator: (value) {
+                            if (value!.isEmpty || value!.length < 6) {
+                              return "비밀번호는 최소 6자 이상 입력해주세요";
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            userPW = value!;
+                          },
                           decoration: InputDecoration(
                             hintText: '비밀번호를 입력하세요',
                             labelStyle: Theme.of(context)
@@ -101,40 +154,76 @@ class _LoginPageState extends State<LoginPage> {
                           minWidth: 100,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (_idController.text == 'admin' &&
-                                  _pwController.text == '1234') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainScreen()),
+                            onPressed: () async {
+                              // 로그인 버튼 기능 구현
+                              _tryValidation();
+                              try {
+                                final currUser = await _authentication
+                                    .signInWithEmailAndPassword(
+                                  email: userEmail,
+                                  password: userPW,
                                 );
-                              } else if (_idController.text == 'admin' &&
-                                  _pwController.text != '1234') {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text('비밀번호를 잘못 입력하셨습니다.'),
-                                  duration: Duration(seconds: 3),
-                                ));
-                              } else if (_idController.text != 'admin' &&
-                                  _pwController.text == '1234') {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text('아이디를 잘못 입력하셨습니다.'),
-                                  duration: Duration(seconds: 3),
-                                ));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text('정보를 잘못 입력하셨습니다.'),
-                                  duration: Duration(seconds: 3),
-                                ));
+                                if (currUser.user != null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MainScreen()));
+                                }
+                              } catch (e) {
+                                print(e);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("$e")));
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orangeAccent,
                             ),
-                            child: const Text("로그인"),
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                        ButtonTheme(
+                          minWidth: 100,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            // 구글 로그인
+                            onPressed: () {
+                              signInWithGoogle();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Flexible(
+                                  child: Image.asset(
+                                    'assets/images/glogo.png',
+                                  ),
+                                ),
+                                const Text(
+                                  'Login with Google',
+                                  style: TextStyle(
+                                      color: Colors.black87, fontSize: 15),
+                                ),
+                                Flexible(
+                                  child: Opacity(
+                                    opacity: 0.0,
+                                    child:
+                                        Image.asset('assets/images/glogo.png'),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../chat/chatRoom_screen.dart';
 import 'main_screen.dart';
-import 'model.dart';
+import '../chat/model.dart';
 
 // List _data = [
 //   {

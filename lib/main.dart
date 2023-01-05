@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart'; //IOS 디자인홈 화면 함수 불러
 import 'package:firebase_core/firebase_core.dart';
 import 'package:han_bab/loading/splash_screen.dart';
 import 'package:han_bab/screens/login/login_page.dart';
-import 'package:han_bab/screens/main/main_screen.dart';
 import 'firebase_options.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
