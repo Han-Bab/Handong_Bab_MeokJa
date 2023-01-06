@@ -5,7 +5,6 @@ import 'package:han_bab/screens/chat/add_chat_room.dart';
 import 'package:han_bab/screens/main/home_page.dart';
 import 'package:han_bab/screens/main/profile_page.dart';
 import 'group_screen.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -34,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
         loggedUser = user;
         print(loggedUser!.email);
         print(loggedUser!.displayName);
-        showToast(loggedUser!.displayName);
       }
     } catch (e) {
       print(e);
@@ -112,15 +110,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-}
-
-void showToast(String? userName) {
-  Fluttertoast.showToast(
-    msg: '$userName님, 환영합니다',
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.blue,
-    fontSize: 15,
-    textColor: Colors.white,
-    toastLength: Toast.LENGTH_SHORT,
-  );
 }

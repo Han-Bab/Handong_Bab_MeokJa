@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/screens/login/sign_up_page.dart';
+import 'package:han_bab/screens/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -183,13 +184,6 @@ class _LoginPageState extends State<LoginPage> {
                                     password: userPW,
                                   );
                                   // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
-                                  if (currUser.user != null) {
-                                    //   Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //           builder: (context) =>
-                                    //               MainScreen()));
-                                  }
                                   // 이동 이후 스피너 false
                                   setState(() {
                                     showSpinner = false;
