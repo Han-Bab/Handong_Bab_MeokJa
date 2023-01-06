@@ -1,11 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:han_bab/screens/chat/chatService.dart';
 import 'package:han_bab/screens/chat/new_message.dart';
 import '../main/main_screen.dart';
 import 'model.dart';
 import 'message.dart';
 
 class ChatRoom extends StatelessWidget {
-  const ChatRoom({Key? key, required this.chat}) : super(key: key);
+  ChatRoom({Key? key, required this.chat}) : super(key: key);
 
   final Chat chat;
 
@@ -26,34 +28,11 @@ class ChatRoom extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext ctx){
-                      return AlertDialog(
-                        title: Text("나가기"),
-                        content: Text("방에서 나가겠습니까?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            child: Text("예"),
-                          ),
-                          TextButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                            },
-                            child: Text("아니오"),
-                          )
-                        ],
-                      );
-                    }
-                );
-              },
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ChatService()));
+               },
               icon: Icon(
-                Icons.exit_to_app_sharp,
+                CupertinoIcons.bars,
                 color: Colors.blue,
               )
           )

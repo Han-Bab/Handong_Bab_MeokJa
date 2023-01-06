@@ -151,25 +151,26 @@ class GroupListViewDemo extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: GroupedListView<dynamic, String>(
-        elements: _data,
-        groupBy: (item) {
-          var now = new DateTime.now();
-          String date = "오래전";
-          String formatDate = DateFormat('yyyy/MM/dd').format(now);
-          if (item['date'] == formatDate) date = "오늘";
-          var yesterday = new DateTime(now.year, now.month, now.day - 1);
-          formatDate = DateFormat('yyyy/MM/dd').format(yesterday);
-          if (item['date'] == formatDate) date = "어제";
-          for (int i = 2; i <= 31; i++) {
-            var week = new DateTime(now.year, now.month, now.day - i);
-            formatDate = DateFormat('yyyy/MM/dd').format(week);
-            if (item['date'] == formatDate) {
-              if (i >= 2 && i <= 7) date = "일주일전";
-              if (i > 7 && i <= 31) date = "한달전";
+          elements: _data,
+          groupBy: (item) {
+            var now = new DateTime.now();
+            String date = "오래전";
+            String formatDate = DateFormat('yyyy/MM/dd').format(now);
+            if (item['date'] == formatDate) date = "오늘";
+            var yesterday = new DateTime(now.year, now.month, now.day - 1);
+            formatDate = DateFormat('yyyy/MM/dd').format(yesterday);
+            if (item['date'] == formatDate) date = "어제";
+            for (int i = 2; i <= 31; i++) {
+              var week = new DateTime(now.year, now.month, now.day - i);
+              formatDate = DateFormat('yyyy/MM/dd').format(week);
+              if (item['date'] == formatDate) {
+                if (i >= 2 && i <= 7) date = "일주일전";
+                if (i > 7 && i <= 31) date = "한달전";
+              }
             }
-          }
-          return date;
-        },
+            return date;
+          },
+          //groupComparator: ,
         groupSeparatorBuilder: (groupValue) => Padding(
           padding: EdgeInsets.all(8),
           child: Row(
@@ -328,7 +329,6 @@ class GroupListViewDemo extends StatelessWidget {
             ),
           );
         },
-        groupComparator: (group1, group2) => group1.compareTo((group2)),
         itemComparator: (item1, item2) =>
             item1['date'].compareTo(item2['date']),
         useStickyGroupSeparators: true,

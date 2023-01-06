@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:han_bab/screens/main/home_page.dart';
+
+import 'menu.dart';
 
 class NewMessage extends StatefulWidget {
   const NewMessage({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _controller = TextEditingController();
   var _userEnterMessage = "";
+
   void _sendMessage()async{
     FocusScope.of(context).unfocus();
     final user = FirebaseAuth.instance.currentUser;
@@ -32,38 +36,59 @@ class _NewMessageState extends State<NewMessage> {
       padding: EdgeInsets.all(8),
       child: Row(
         children: [
-          Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      maxLines: null,
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        labelText: 'Send a message...'
-                      ),
-                      onChanged: (value){
-                        setState(() { //user == value => 모든 키 입력에서 setState 메소드 실행
-                          _userEnterMessage = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 60),
-                  ],
-                ),
-              )
-          ),
           Column(
             children: [
-              IconButton(
-                  onPressed: _userEnterMessage.trim().isEmpty ? null : _sendMessage,
-                  icon: Icon(Icons.send),
-                  color: Colors.blue,
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const Menu()));
+                  },
+                  child: Image.asset("assets/images/menu.png", scale: 11,),
+
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 20),
             ],
-          )
+          ),
+          Expanded(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      TextFormField(
+                        maxLines: null,
+                        controller: _controller,
+                        decoration: InputDecoration(
+                            labelText: 'Send a message...',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              borderSide: BorderSide(color: Colors.blue)
+                            )
+                        ),
+                        onChanged: (value){
+                          setState(() { //user == value => 모든 키 입력에서 setState 메소드 실행
+                            _userEnterMessage = value;
+                          });
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.fromLTRB(0, 17, 10, 0), // 패딩 설정
+                            constraints: BoxConstraints(),
+                            onPressed: _userEnterMessage.trim().isEmpty ? null : _sendMessage,
+                            icon: Icon(Icons.send),
+                            color: Colors.blue,
+                          ),
+                        ],
+                      )
+                    ]
+                  ),
+                  SizedBox(height: 20),
+                ],
+              )
+          ),
+
         ],
       ),
     );
