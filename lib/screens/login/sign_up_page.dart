@@ -69,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     const Text(
                       "한동 계정 이메일",
                     ),
-                    // 이메일 입력 및 인증
+                    //d 이메일 입력 및 인증
                     // Row(
                     //   children: [
                     // 한동 이메일 입력

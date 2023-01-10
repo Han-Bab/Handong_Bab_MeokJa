@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   ListTile(
                     title: const Text(
-                      "토스트",
+                      "로그아웃",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -55,7 +55,10 @@ class ProfilePage extends StatelessWidget {
                       color: Colors.black87,
                     ),
                     onTap: () {
-                      showToast();
+                      print("logout");
+                      GoogleSignIn().signOut();
+                      _authentication.signOut();
+                      // Navigator.pop(context);
                     },
                   ),
                 ],
