@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../api/toss.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -44,19 +46,30 @@ class ProfilePage extends StatelessWidget {
                   ),
                   ListTile(
                     title: const Text(
-                      "토스트",
+                      "토스 api 테스트",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    trailing: const Icon(
-                      Icons.exit_to_app_rounded,
-                      color: Colors.black87,
-                    ),
                     onTap: () {
-                      showToast();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Toss(
+                                    title: 'Toss Test',
+                                  )));
                     },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      "카카오 링크 테스트",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onTap: () {},
                   ),
                 ],
               ),
