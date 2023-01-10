@@ -9,9 +9,11 @@ import 'package:han_bab/screens/login/login_page.dart';
 import 'package:han_bab/screens/login/verify_login_page.dart';
 import 'package:han_bab/screens/login/verify_signup_page.dart';
 import 'package:han_bab/screens/main/main_screen.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  KakaoSdk.init(nativeAppKey: '7a0fe1780f619b2dccaea7d4ddbaea70');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
