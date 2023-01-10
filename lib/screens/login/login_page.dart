@@ -189,6 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                                     showSpinner = false;
                                   });
                                 } catch (e) {
+                                  setState(() {
+                                    showSpinner = false;
+                                  });
                                   print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text("$e")));

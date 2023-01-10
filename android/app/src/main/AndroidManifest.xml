@@ -1,5 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.han_bab">
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <queries>
+    <!-- 토스 -->
+    <package android:name="viva.republica.toss" />
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="supertoss" />
+    </intent>
+    </queries>
    <application
         android:label="han_bab"
         android:name="${applicationName}"
@@ -17,7 +26,8 @@
                <data android:scheme="kakao7a0fe1780f619b2dccaea7d4ddbaea70" android:host="oauth"/>
            </intent-filter>
        </activity>
-
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -39,6 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
