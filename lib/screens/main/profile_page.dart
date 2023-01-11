@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:han_bab/screens/onboarding/kakao_intro_page.dart';
+import 'package:han_bab/screens/onboarding/toss_intro_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -44,21 +46,34 @@ class ProfilePage extends StatelessWidget {
                   ),
                   ListTile(
                     title: const Text(
-                      "로그아웃",
+                      "카카오 온보딩",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    trailing: const Icon(
-                      Icons.exit_to_app_rounded,
-                      color: Colors.black87,
+                    onTap: () {
+                      print("카카오");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KakaoIntroPage()));
+                    },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      "토스 온보딩",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     onTap: () {
-                      print("logout");
-                      GoogleSignIn().signOut();
-                      _authentication.signOut();
-                      // Navigator.pop(context);
+                      print("토스");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TossIntroPage()));
                     },
                   ),
                 ],
