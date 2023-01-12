@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:han_bab/screens/main/profile_page.dart';
+import 'package:han_bab/view/main/profile_page.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-class TossIntroPage extends StatelessWidget {
-  const TossIntroPage({Key? key}) : super(key: key);
+class KakaoIntroPage extends StatelessWidget {
+  const KakaoIntroPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +14,16 @@ class TossIntroPage extends StatelessWidget {
           body: "This is my First Page"
               '\nWe are making on-boarding screens'
               '\nIt is very interesting!',
-          image: Image.asset(
-            "/assets/images/page1.png",
-          ),
-          decoration: getPageDecoration(),
+          image: Image.asset("assets/images/page1.png"),
         ),
         PageViewModel(
           title: "Welcome",
           body: "This is my Second Page"
               '\nWe are making on-boarding screens'
               '\nIt is very interesting!',
-          image: Image.asset("assets/images/page2.png"),
-          decoration: getPageDecoration(),
+          image: Image.asset(
+            "assets/images/page2.png",
+          ),
         ),
         PageViewModel(
           title: "Welcome",
@@ -33,7 +31,6 @@ class TossIntroPage extends StatelessWidget {
               '\nWe are making on-boarding screens'
               '\nIt is very interesting!',
           image: Image.asset("assets/images/page3.png"),
-          decoration: getPageDecoration(),
         ),
       ],
       done: const Text("done"),
@@ -53,6 +50,7 @@ class TossIntroPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
       ),
+      curve: Curves.bounceOut,
     );
   }
 }

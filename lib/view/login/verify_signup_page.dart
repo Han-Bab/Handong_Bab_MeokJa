@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:han_bab/screens/main/main_screen.dart';
+import 'package:han_bab/view/main/main_screen.dart';
 
 class VerifySignupPage extends StatefulWidget {
   const VerifySignupPage({Key? key}) : super(key: key);

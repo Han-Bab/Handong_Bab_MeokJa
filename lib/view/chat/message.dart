@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:han_bab/screens/chat/chat_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'chat_bubble.dart';
 
 class Messages extends StatelessWidget {
   const Messages({Key? key}) : super(key: key);
@@ -14,8 +14,9 @@ class Messages extends StatelessWidget {
           .collection('chat')
           .orderBy('time', descending: true)
           .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
-        if(snapshot.connectionState == ConnectionState.waiting){
+      builder: (context,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -24,12 +25,11 @@ class Messages extends StatelessWidget {
         return ListView.builder(
           reverse: true,
           itemCount: chatDocs.length,
-          itemBuilder: (context, index){
+          itemBuilder: (context, index) {
             return ChatBubbles(
                 chatDocs[index]['text'],
                 chatDocs[index]['userID'].toString() == user!.uid,
-                chatDocs[index]['userName']
-            );
+                chatDocs[index]['userName']);
           },
         );
       },

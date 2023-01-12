@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart'; //안드로이드 디자인
 import 'package:flutter/cupertino.dart'; //IOS 디자인홈 화면 함수 불러오기 불러오기
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:han_bab/screens/loading/splash_screen.dart';
-import 'package:han_bab/screens/login/login_page.dart';
-import 'package:han_bab/screens/login/verify_login_page.dart';
-import 'package:han_bab/screens/login/verify_signup_page.dart';
-import 'package:han_bab/screens/main/main_screen.dart';
+import 'package:han_bab/view/loading/splash_screen.dart';
+import 'package:han_bab/view/login/login_page.dart';
+import 'package:han_bab/view/login/verify_login_page.dart';
+import 'package:han_bab/view/main/main_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'firebase_options.dart';
 
