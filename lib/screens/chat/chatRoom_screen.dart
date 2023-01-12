@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:han_bab/screens/chat/new_message.dart';
+import 'package:intl/intl.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/main_screen.dart';
@@ -10,25 +14,23 @@ import 'model.dart';
 import 'message.dart';
 
 
-class ChatRoom extends StatelessWidget {
-  ChatRoom({Key? key, required this.chat}) : super(key: key);
+
+class ChatRoom extends StatefulWidget {
+  const ChatRoom({Key? key, required this.chat}) : super(key: key);
 
   final Chat chat;
 
-  //final Uri _url = Uri.parse('https://qr.kakaopay.com/FTH8NL7za');
-  final Uri _url = Uri.parse('https://toss.me/quokkalove/20');
+  @override
+  State<ChatRoom> createState() => _ChatRoomState();
+}
+
+class _ChatRoomState extends State<ChatRoom> {
+  late Uri _url;
 
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
-    // try {
-    //   User user = await UserApi.instance.me();
-    //   print('사용자 정보 요청 성공'
-    //       '\n회원번호: ${user.id}');
-    // } catch (error) {
-    //   print('사용자 정보 요청 실패 $error');
-    // }
   }
 
   void nextPage(context) {
@@ -43,6 +45,120 @@ class ChatRoom extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), color: Colors.white),
             ),
+          );
+        });
+  }
+
+
+  void payModal(context) {
+    bool visibility = false;
+    String account = "농협 333-3333-3333-33";
+    // var f = NumberFormat('###,###,###,###');
+    // int price = 1000000;
+    // String toHexValue(int value){
+    //   return (value * 524288).toRadixString(16);
+    // }
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: 380,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 70, bottom: 10),
+                    child: Column(
+                        children: [
+                          const Text("관리자", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(account, style: TextStyle(fontSize: 15),),
+                          // Text("${f.format(price)}원", style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextButton(
+                              onPressed: (){},
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    _url = Uri.parse('https://qr.kakaopay.com/FTH8NL7za}');
+                                    _launchUrl();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFFEB03),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text("카카오페이 ", style: TextStyle(color: Colors.black),),
+                                      Text("송금", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                                    ],
+                                  )
+                              )
+                          ),
+                          TextButton(
+                              onPressed: (){},
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    _url = Uri.parse('https://toss.me/김김김경록');
+                                    _launchUrl();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF3268E8),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text("토스 ", style: TextStyle(color: Colors.white),),
+                                      Text("송금", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                                    ],
+                                  )
+                              )
+                          ),
+                          TextButton(
+                              onPressed: (){},
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      visibility = true;
+                                      Clipboard.setData(ClipboardData(text: account));
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text("계좌변호 ", style: TextStyle(color: Colors.white),),
+                                      Text("복사", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                                    ],
+                                  )
+                              )
+                          ),
+                          AnimatedOpacity(
+                            opacity: visibility ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 500),
+                            child: const Text("클립보드에 계좌번호가 복사되었습니다.", style: TextStyle(color: Colors.red, fontSize: 10),)
+                          )
+                        ]
+                    ),
+                  ),
+                ),
+              );
+            }
           );
         });
   }
@@ -64,7 +180,7 @@ class ChatRoom extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
 
         title: Text(
-          chat.name,
+          widget.chat.name,
           style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -101,8 +217,16 @@ class ChatRoom extends StatelessWidget {
                         title: Text("2"),
                         onTap: (){nextPage(context);}
                     ),
-
                   ],
+                ),
+                Container(
+                    child: Divider(color: Colors.grey, thickness: 1.0, indent: 20, endIndent: 20, height: 1,)),
+                ListTile(
+                  leading: Icon(CupertinoIcons.money_dollar_circle),
+                  title: Text("정산하기"),
+                  onTap: () {
+                    payModal(context);
+                  },
                 ),
                 Container(
                     child: Divider(color: Colors.grey, thickness: 1.0, indent: 20, endIndent: 20, height: 1,)),
