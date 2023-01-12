@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:han_bab/view/chat/chatService.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/main_screen.dart';
@@ -195,17 +194,6 @@ class _ChatRoomState extends State<ChatRoom> {
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ChatService()));
-              },
-              icon: Icon(
-                CupertinoIcons.bars,
-                color: Colors.blue,
-              ))
-        ],
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           widget.chat.name,
