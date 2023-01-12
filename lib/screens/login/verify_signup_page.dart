@@ -75,6 +75,7 @@ class _VerifySignupPageState extends State<VerifySignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     if (isEmailVerified) {
       String? userName = FirebaseAuth.instance.currentUser!.displayName;
       showToast('$userName님, 환영합니다');
@@ -88,51 +89,55 @@ class _VerifySignupPageState extends State<VerifySignupPage> {
         body: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "입력하신 계정으로 인증 메일을 보냈습니다.",
-                  style: TextStyle(fontSize: 24),
-                ),
-                const Text(
-                  "계정을 인증해주세요",
-                  style: TextStyle(fontSize: 24),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        size: 28,
+            SizedBox(
+              width: width * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "입력하신 계정으로 인증 메일을 보냈습니다.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const Text(
+                    "계정을 인증해주세요",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        icon: const Icon(
+                          Icons.cancel,
+                          size: 20,
+                        ),
+                        label: const Text(
+                          '취소하기',
+                        ),
                       ),
-                      label: const Text(
-                        '취소하기',
-                        style: TextStyle(fontSize: 24),
+                      const SizedBox(
+                        width: 8,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: canResendEmail ? sendVerificationEmail : null,
-                      icon: const Icon(
-                        CupertinoIcons.mail_solid,
+                      ElevatedButton.icon(
+                        onPressed:
+                            canResendEmail ? sendVerificationEmail : null,
+                        icon: const Icon(
+                          CupertinoIcons.mail_solid,
+                          size: 20,
+                        ),
+                        label: const Text(
+                          "인증코드 재전송",
+                        ),
                       ),
-                      label: const Text(
-                        "인증코드 재전송",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
