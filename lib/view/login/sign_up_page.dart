@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:han_bab/screens/login/account_term.dart';
-import 'package:han_bab/screens/login/privacy_term.dart';
-import 'package:han_bab/screens/login/verify_signup_page.dart';
+import 'package:han_bab/view/login/account_term.dart';
+import 'package:han_bab/view/login/privacy_term.dart';
+import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

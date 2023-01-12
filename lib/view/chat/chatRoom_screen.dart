@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:han_bab/screens/chat/chatService.dart';
-import 'package:han_bab/screens/chat/new_message.dart';
+import 'package:han_bab/view/chat/chatService.dart';
 import '../main/main_screen.dart';
 import 'model.dart';
 import 'message.dart';
+import 'new_message.dart';
 
 class ChatRoom extends StatelessWidget {
   ChatRoom({Key? key, required this.chat}) : super(key: key);
@@ -28,14 +28,13 @@ class ChatRoom extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const ChatService()));
-               },
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ChatService()));
+              },
               icon: Icon(
                 CupertinoIcons.bars,
                 color: Colors.blue,
-              )
-          )
+              ))
         ],
         title: Text(
           chat.name,

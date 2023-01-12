@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:han_bab/screens/main/main_screen.dart';
+import '../main/main_screen.dart';
 
 void nextPage(context) {
   // 상세 페이지 넘겨주기
@@ -19,14 +19,13 @@ void nextPage(context) {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 100),
-                  child:
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: TextButton(
-                        child: Image.asset("assets/images/kakao.png"), onPressed: () {  },
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: TextButton(
+                      child: Image.asset("assets/images/kakao.png"),
+                      onPressed: () {},
                     ),
-
+                  ),
                 )
               ],
             ),
@@ -44,12 +43,13 @@ class ChatService extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("설정",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+        title: const Text(
+          "설정",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: BackButton(
-            color: Colors.black
-        ),
+        leading: BackButton(color: Colors.black),
       ),
       body: ListView.builder(
         itemCount: 1,
@@ -74,7 +74,7 @@ class ChatService extends StatelessWidget {
                       showDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext ctx){
+                          builder: (BuildContext ctx) {
                             return AlertDialog(
                               title: Text("나가기"),
                               content: Text("방에서 나가겠습니까?"),
@@ -82,20 +82,21 @@ class ChatService extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) => const MainScreen()));
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainScreen()));
                                   },
                                   child: Text("예"),
                                 ),
                                 TextButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: Text("아니오"),
                                 )
                               ],
                             );
-                          }
-                      );
+                          });
                     },
                   ),
                   ListTile(
