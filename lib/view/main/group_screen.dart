@@ -20,7 +20,7 @@ List _data = [
     'name': '동궁찜닭',
     'image': 'assets/images/2.jpg',
     'user': 'bb',
-    'date': '2022/12/28',
+    'date': '2023/01/06',
     'time': '13:00',
     'curr_people': 2,
     'max_people': 4
@@ -70,7 +70,7 @@ List _data = [
     'name': '신전 떡볶이',
     'image': 'assets/images/7.jpg',
     'user': 'gg',
-    'date': '2022/12/20',
+    'date': '2023/01/08',
     'time': '17:00',
     'curr_people': 2,
     'max_people': 4
@@ -80,7 +80,7 @@ List _data = [
     'name': '명성',
     'image': 'assets/images/8.jpg',
     'user': 'hh',
-    'date': '2022/12/14',
+    'date': '2023/01/09',
     'time': '17:00',
     'curr_people': 1,
     'max_people': 4
@@ -100,7 +100,7 @@ List _data = [
     'name': '행복한 마라탕',
     'image': 'assets/images/10.jpg',
     'user': 'jj',
-    'date': '2022/10/10',
+    'date': '2023/01/05',
     'time': '17:00',
     'curr_people': 1,
     'max_people': 4
@@ -122,6 +122,7 @@ void nextPage(context, user, image, description) {
         );
       });
 }
+
 
 class GroupListViewDemo extends StatelessWidget {
   const GroupListViewDemo({Key? key}) : super(key: key);
@@ -170,7 +171,21 @@ class GroupListViewDemo extends StatelessWidget {
             }
             return date;
           },
-          //groupComparator: ,
+          order: GroupedListOrder.ASC,
+          groupComparator: ((a,b){
+            int x =0,y=0;
+            if(a == "오래전") x = 4;
+            else if(a == "한달전") x = 3;
+            else if(a == "일주일전") x = 2;
+            else if(a == "어제") x = 1;
+            else if(a == "오늘") x = 0;
+            if(b == "오래전") y = 4;
+            else if(b == "한달전") y = 3;
+            else if(b == "일주일전") y = 2;
+            else if(b == "어제") y = 1;
+            else if(b == "오늘") y = 0;
+            return x-y;
+          }),
         groupSeparatorBuilder: (groupValue) => Padding(
           padding: EdgeInsets.all(8),
           child: Row(
@@ -333,7 +348,6 @@ class GroupListViewDemo extends StatelessWidget {
             item1['date'].compareTo(item2['date']),
         useStickyGroupSeparators: true,
         floatingHeader: false,
-        order: GroupedListOrder.DESC,
       ),
     );
   }
