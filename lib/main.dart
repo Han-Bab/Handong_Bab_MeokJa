@@ -15,6 +15,7 @@ void main() async {
     Get.put(AuthController());
   });
   KakaoSdk.init(nativeAppKey: '7a0fe1780f619b2dccaea7d4ddbaea70');
+
   runApp(const MyApp());
 }
 
