@@ -53,25 +53,12 @@ class _CommunityPageState extends State<CommunityPage> {
     'ㅈㄱㄴ'
   ];
 
-  void showPopup(context, title, content) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: 380,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.white),
-          ),
-        );
-      },
-    );
-  }
+  GlobalKey Boxkey = GlobalKey();
+
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.7;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -93,7 +80,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Content()),
+                    MaterialPageRoute(builder: (context) => const Content()),
                   );
                   //showPopup(context, titleList[index], content[index]);
                   //Navigator.push(
@@ -103,15 +90,16 @@ class _CommunityPageState extends State<CommunityPage> {
                 },
                 child: Card(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.only(bottom: 10, top: 10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              width: width + 40,
+                            SizedBox(
+                              width: width * 0.9,
+                              //height: 30,
                               child: Text(
                                 titleList[index],
                                 style: const TextStyle(
@@ -125,54 +113,46 @@ class _CommunityPageState extends State<CommunityPage> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  width: width - 20,
-                                  height: 20,
+                                SizedBox(
+                                  width: width * 0.7,
+                                  //height: 30,
                                   child: Text(
                                     content[index],
                                     style: const TextStyle(
                                         fontSize: 15, color: Colors.black54),
                                   ),
                                 ),
-                                // const SizedBox(
-                                //   height: 5,
-                                // ),
-                                SizedBox(
-                                  //width: 30,
-                                  //margin: EdgeInsets.only(right: 10),
-                                  //padding: const EdgeInsets.only(),
+                                Positioned(
+                                  height: 20,
                                   child: Row(
-                                    children: const [
+                                    children: [
+                                      const LikeButton(
+                                        size: 25,
+                                        likeCount: 0,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
                                       LikeButton(
-                                        size: 20,
+                                        size: 25,
                                         likeCount: 0,
+                                        likeBuilder: (isTapped) {
+                                          return Icon(
+                                            Icons.chat_bubble_outline_outlined,
+                                            color: isTapped ? Colors.black54 : Colors.grey,
+                                          );
+                                        },
                                       )
                                     ],
                                   ),
                                 ),
-                                Container(width: 5,),
-                                SizedBox(
-                                  //width: 5,
-                                  //margin: EdgeInsets.only(left: 5),
-                                  //padding: const EdgeInsets.only(),
-                                  child: Row(
-                                    children: const [
-                                       LikeButton(
-                                        size: 20,
-                                        likeCount: 0,
-                                      )
-                                      // const Icon(CupertinoIcons.heart),
-                                      // Text(
-                                      //   heart[index],
-                                      // ),
-                                    ],
-                                  ),
-                                ),
+                                //Container(width: width * 0.1,),
                               ],
                             )
                           ],
                         ),
-                      ),
+                      )
+
 
                       // 여기에 좋아요랑 댓글 수 이런 거 착성하면 되겠다.
                     ],
@@ -182,23 +162,37 @@ class _CommunityPageState extends State<CommunityPage> {
         ),
         Positioned(
           bottom: 20,
-          left: 150,
-          child: TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PlusPage()),
-              );
-            },
-            style: TextButton.styleFrom(
-                primary: Colors.black, backgroundColor: Colors.grey),
-            child: const Text(
-              '글 쓰기',
-              style: TextStyle(fontSize: 20),
+            child: SizedBox(
+              width: width,
+              child: Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PlusPage()),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                      primary: Colors.black, backgroundColor: Colors.grey),
+                  child: const Text(
+                    '글 쓰기',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+
       ]),
     );
+  }
+}
+
+getSize(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+    key.currentContext!.findRenderObject() as RenderBox;
+    Size size = renderBox.size;
+    return size;
   }
 }
