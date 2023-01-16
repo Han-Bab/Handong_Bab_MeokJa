@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:han_bab/view/chat/add_chat_room.dart';
 import 'package:han_bab/view/main/home_page.dart';
 import 'package:han_bab/view/main/profile_page.dart';
+import 'community_page.dart';
 import 'group_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -47,9 +48,7 @@ class _MainScreenState extends State<MainScreen> {
         index: _bottomSelectedIndex,
         children: [
           HomePage(),
-          Container(
-            color: Colors.accents[4],
-          ),
+          CommunityPage(),
           Container(
             color: Colors.accents[7],
           ),
