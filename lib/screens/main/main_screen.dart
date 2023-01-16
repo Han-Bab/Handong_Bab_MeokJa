@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/screens/chat/add_chat_room.dart';
+import 'package:han_bab/screens/main/community_page.dart';
 import 'package:han_bab/screens/main/home_page.dart';
 import 'package:han_bab/screens/main/profile_page.dart';
 import 'group_screen.dart';
@@ -48,9 +49,7 @@ class _MainScreenState extends State<MainScreen> {
         index: _bottomSelectedIndex,
         children: [
           HomePage(),
-          Container(
-            color: Colors.accents[4],
-          ),
+          CommunityPage(),
           Container(
             color: Colors.accents[7],
           ),
