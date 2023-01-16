@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/sign_up_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,41 +18,15 @@ class _LoginPageState extends State<LoginPage> {
   // textfield에 입력한 내용을 관리하기 위함
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
-  String userPW = '';
-  String userEmail = '';
+  Map userInfo = {
+    'userEmail': '',
+    'userPW': '',
+  };
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-    }
-  }
-
-  final _authentication = FirebaseAuth.instance;
-
-  // 구글 간편 로그인
-  Future signInWithGoogle() async {
-    // Trigger the authentication flow
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser!.email.contains('@handong.ac.kr')) {
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      print("한동 계정임으로 로그인 성공");
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } else {
-      print("한동 계정 아님으로 로그인 실패");
-      showToast();
-      return await FirebaseAuth.instance.signOut();
     }
   }
 
@@ -86,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Center(
                   child: Image(
-                    image: const AssetImage('assets/images/chef.gif'),
+                    image: const AssetImage('assets/images/hanbab_icon.png'),
                     width: width * 0.7,
                   ),
                 ),
@@ -118,13 +91,13 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _idController,
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !value!.contains("@handong.ac.kr")) {
+                                  !value.contains("@handong.ac.kr")) {
                                 return "한동 이메일을 입력해주세요";
                               }
                               return null;
                             },
                             onChanged: (value) {
-                              userEmail = value!;
+                              userInfo['userEmail'] = value;
                             },
                             decoration: InputDecoration(
                               hintText: '한동이메일을 입력하세요',
@@ -141,13 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: _pwController,
                             validator: (value) {
-                              if (value!.isEmpty || value!.length < 6) {
+                              if (value!.isEmpty || value.length < 6) {
                                 return "비밀번호는 최소 6자 이상 입력해주세요";
                               }
                               return null;
                             },
                             onChanged: (value) {
-                              userPW = value!;
+                              userInfo['userPW'] = value;
                             },
                             decoration: InputDecoration(
                               hintText: '비밀번호를 입력하세요',
@@ -176,25 +149,12 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 // 로그인 버튼 기능 구현
                                 _tryValidation();
-                                try {
-                                  final currUser = await _authentication
-                                      .signInWithEmailAndPassword(
-                                    email: userEmail,
-                                    password: userPW,
-                                  );
-                                  // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
-                                  // 이동 이후 스피너 false
-                                  setState(() {
-                                    showSpinner = false;
-                                  });
-                                } catch (e) {
-                                  setState(() {
-                                    showSpinner = false;
-                                  });
-                                  print(e);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("$e")));
-                                }
+                                AuthController.instance.login(userInfo);
+                                // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
+                                // 이동 이후 스피너 false
+                                setState(() {
+                                  showSpinner = false;
+                                });
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orangeAccent,
@@ -225,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   showSpinner = true;
                                 });
-                                signInWithGoogle();
+                                AuthController.instance.signInWithGoogle();
                                 setState(() {
                                   showSpinner = false;
                                 });
@@ -265,8 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                               GestureDetector(
                                 child: const Text("회원가입"),
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SignUpPage()));
+                                  Get.to(() => SignUpPage());
                                 },
                               ),
                               GestureDetector(
@@ -289,15 +248,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-void showToast() {
-  Fluttertoast.showToast(
-    msg: '한동 구글 계정만 로그인 가능합니다',
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.blue,
-    fontSize: 15,
-    textColor: Colors.white,
-    toastLength: Toast.LENGTH_SHORT,
-  );
 }

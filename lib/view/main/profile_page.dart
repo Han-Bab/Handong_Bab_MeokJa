@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/onboarding/kakao_intro_page.dart';
 import 'package:han_bab/view/onboarding/toss_intro_page.dart';
 
@@ -11,8 +11,6 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authentication = FirebaseAuth.instance;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("마이페이지"),
@@ -38,10 +36,8 @@ class ProfilePage extends StatelessWidget {
                       color: Colors.black87,
                     ),
                     onTap: () {
-                      print("logout");
-                      GoogleSignIn().signOut();
-                      _authentication.signOut();
-                      // Navigator.pop(context);
+                      AuthController.instance.logout();
+                      AuthController.instance.logoutGoogle();
                     },
                   ),
                   ListTile(
