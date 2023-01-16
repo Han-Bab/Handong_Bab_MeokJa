@@ -176,7 +176,7 @@ int j=0;
 int TimeOutCount () {
   int count = 0;
   for(int i=0; i<chatData.length; i++) {
-    if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour))||
+    if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour)-10)||
         ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
       count++;
     }
@@ -229,7 +229,7 @@ class HomePage extends StatelessWidget {
         itemCount: TimeOutCount(),
         itemBuilder: (context, index) {
           for(int i=0; i<chatData.length; i++) {
-            if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour))||
+            if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour)-10)||
                 ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
               flag1.add(i);
             }

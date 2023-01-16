@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import '../../noticeBoard/content.dart';
-import 'package:han_bab/screens/main/home_page.dart';
 
 import '../../noticeBoard/content.dart';
 import '../../noticeBoard/pluspage.dart';

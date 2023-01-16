@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:han_bab/screens/login/verify_signup_page.dart';
+import 'package:han_bab/view/login/account_term.dart';
+import 'package:han_bab/view/login/privacy_term.dart';
+import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -16,8 +18,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _phoneNumberController =
-      TextEditingController(text: "010");
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   bool validation = false;
   // delay시간 때 스피너
@@ -27,16 +28,27 @@ class _SignUpPageState extends State<SignUpPage> {
   String userEmail = '';
   String userName = '';
   String userPhone = '';
-  bool emailValidation = true;
   FocusNode emailFocusNode = FocusNode();
+
+  bool _isChecked1 = false;
+  bool _isChecked2 = false;
+  bool _visibility = false;
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
-      setState(() {
-        validation = true;
-      });
-      _formKey.currentState!.save();
+      if (_isChecked1 && _isChecked2) {
+        setState(() {
+          validation = true;
+          _visibility = false;
+        });
+        _formKey.currentState!.save();
+      } else {
+        setState(() {
+          validation = false;
+          _visibility = true;
+        });
+      }
     }
     if (!isValid) {
       setState(() {
@@ -66,12 +78,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "한동 계정 이메일",
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "한동 계정 이메일",
+                      ),
                     ),
-                    //d 이메일 입력 및 인증
-                    // Row(
-                    //   children: [
                     // 한동 이메일 입력
                     TextFormField(
                       controller: _emailController,
@@ -93,73 +105,24 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       focusNode: emailFocusNode,
                       onTap: () {},
-                      decoration: InputDecoration(
-                          hintText: "example@handong.ac.kr",
-                          hintStyle: TextStyle(fontSize: 14),
-                          errorText: emailValidation ? null : "한동 계정을 입력해주세요"),
+                      decoration: const InputDecoration(
+                        hintText: "example@handong.ac.kr",
+                        hintStyle: TextStyle(fontSize: 14),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                     ),
-                    // const SizedBox(
-                    //   width: 10,
-                    // ),
-                    // // 이메일 validation 하는 버튼
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     if (!_emailController.text!
-                    //         .contains("@handong.ac.kr")) {
-                    //       setState(() {
-                    //         emailValidation = false;
-                    //       });
-                    //       // 작성한 글 다 select(drag) 하기
-                    //       _emailController.selection = TextSelection(
-                    //         baseOffset: 0,
-                    //         extentOffset: _emailController.text.length,
-                    //       );
-                    //       FocusScope.of(context)
-                    //           .requestFocus(emailFocusNode);
-                    //     } else {
-                    //       setState(() {
-                    //         emailValidation = true;
-                    //       });
-                    //     }
-                    //     debugPrint(_emailController.text);
-                    //     debugPrint("$emailValidation");
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     padding: EdgeInsets.symmetric(horizontal: 1),
-                    //   ),
-                    //   child: const Text("인증"),
-                    // )
-                    // ],
-                    // ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: TextFormField(
-                    //         keyboardType: TextInputType.number,
-                    //         inputFormatters: [MaskedInputFormatter("000000")],
-                    //         onTap: () {},
-                    //         decoration: const InputDecoration(
-                    //           hintText: "인증번호를 입력하세요",
-                    //           hintStyle: TextStyle(fontSize: 13),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     ElevatedButton(
-                    //       onPressed: () {},
-                    //       style: ElevatedButton.styleFrom(
-                    //         padding: const EdgeInsets.symmetric(horizontal: 1),
-                    //       ),
-                    //       child: const Text("확인"),
-                    //     ),
-                    //   ],
-                    // ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
-                    const Text("비밀번호"),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "비밀번호 ",
+                      ),
+                    ),
                     // 비밀번호 입력폼
                     TextFormField(
                       validator: (value) {
@@ -168,6 +131,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+                      decoration: const InputDecoration(
+                        hintText: "비밀번호를 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       obscureText: true,
                       onSaved: (value) {
                         userPW = value!;
@@ -178,19 +149,41 @@ class _SignUpPageState extends State<SignUpPage> {
                       onTap: () {},
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
-                    const Text(
-                      "비밀번호 확인",
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "비밀번호 확인",
+                      ),
                     ),
                     TextFormField(
+                      validator: (value) {
+                        if (value != userPW) {
+                          return '비밀번호가 일치하지 않습니다';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "비밀번호를 다시 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       obscureText: true,
                       onTap: () {},
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
-                    const Text("이름"),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "이름",
+                      ),
+                    ),
                     TextFormField(
                       onChanged: (value) {
                         userName = value;
@@ -201,12 +194,25 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+                      decoration: const InputDecoration(
+                        hintText: "이름을 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       onTap: () {},
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
-                    const Text("전화번호"),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "전화번호",
+                      ),
+                    ),
                     TextFormField(
                       controller: _phoneNumberController,
                       keyboardType: TextInputType.phone,
@@ -219,15 +225,113 @@ class _SignUpPageState extends State<SignUpPage> {
                       onChanged: (value) {
                         userPhone = value;
                       },
+                      decoration: const InputDecoration(
+                        hintText: "010-0000-0000",
+                        hintStyle: TextStyle(fontSize: 15),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       inputFormatters: [MaskedInputFormatter("000-0000-0000")],
                       onTap: () {},
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
-                    Text("개인정보 수집 이용 동의 넣어야함"),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CheckboxListTile(
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            contentPadding: EdgeInsets.zero,
+                            title: const Text(
+                              "한밥 이용약관",
+                            ),
+                            value: _isChecked1,
+                            onChanged: (value) {
+                              setState(() {
+                                _isChecked1 = value!;
+                              });
+                            },
+                            activeColor: Colors.blue,
+                            checkColor: Colors.black,
+                            checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AccountTerm()));
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CheckboxListTile(
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            contentPadding: EdgeInsets.zero,
+                            title: const Text(
+                              "개인정보 수집 및 이용 동의",
+                            ),
+                            value: _isChecked2,
+                            onChanged: (value) {
+                              setState(() {
+                                _isChecked2 = value!;
+                              });
+                            },
+                            activeColor: Colors.blue,
+                            checkColor: Colors.black,
+                            checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PrivacyTerm()));
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50),
+                      child: Visibility(
+                        visible: _visibility,
+                        child: const Text(
+                          "약관에 동의해주세요",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(
-                      height: 40,
+                      height: 20,
                     ),
                     Row(
                       children: [
@@ -246,9 +350,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: ElevatedButton(
                             onPressed: () async {
                               _tryValidation();
-                              if (!validation) {
-                                showToast('정보를 다시 입력해주세요');
-                              }
                               if (validation) {
                                 setState(() {
                                   showSpinner = true;

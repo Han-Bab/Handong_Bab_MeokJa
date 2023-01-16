@@ -1,19 +1,18 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:han_bab/screens/login/login_page.dart';
+import 'package:han_bab/view/main/main_screen.dart';
 
-class VerifyLoginPage extends StatefulWidget {
-  const VerifyLoginPage({Key? key}) : super(key: key);
+class VerifySignupPage extends StatefulWidget {
+  const VerifySignupPage({Key? key}) : super(key: key);
 
   @override
-  State<VerifyLoginPage> createState() => _VerifyLoginPageState();
+  State<VerifySignupPage> createState() => _VerifySignupPageState();
 }
 
-class _VerifyLoginPageState extends State<VerifyLoginPage> {
+class _VerifySignupPageState extends State<VerifySignupPage> {
   bool isEmailVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -75,8 +74,11 @@ class _VerifyLoginPageState extends State<VerifyLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     if (isEmailVerified) {
-      return LoginPage();
+      String? userName = FirebaseAuth.instance.currentUser!.displayName;
+      showToast('$userName님, 환영합니다');
+      return MainScreen();
     } else {
       return Scaffold(
         appBar: AppBar(
@@ -86,51 +88,55 @@ class _VerifyLoginPageState extends State<VerifyLoginPage> {
         body: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "입력하신 계정으로 인증 메일을 보냈습니다.",
-                  style: TextStyle(fontSize: 24),
-                ),
-                const Text(
-                  "계정을 인증해주세요",
-                  style: TextStyle(fontSize: 24),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        size: 28,
+            SizedBox(
+              width: width * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "입력하신 계정으로 인증 메일을 보냈습니다.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const Text(
+                    "계정을 인증해주세요",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        icon: const Icon(
+                          Icons.cancel,
+                          size: 20,
+                        ),
+                        label: const Text(
+                          '취소하기',
+                        ),
                       ),
-                      label: const Text(
-                        '취소하기',
-                        style: TextStyle(fontSize: 24),
+                      const SizedBox(
+                        width: 8,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: canResendEmail ? sendVerificationEmail : null,
-                      icon: const Icon(
-                        CupertinoIcons.mail_solid,
+                      ElevatedButton.icon(
+                        onPressed:
+                            canResendEmail ? sendVerificationEmail : null,
+                        icon: const Icon(
+                          CupertinoIcons.mail_solid,
+                          size: 20,
+                        ),
+                        label: const Text(
+                          "인증코드 재전송",
+                        ),
                       ),
-                      label: const Text(
-                        "인증코드 재전송",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

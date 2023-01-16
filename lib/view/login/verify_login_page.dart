@@ -4,16 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:han_bab/screens/main/main_screen.dart';
+import 'package:han_bab/view/login/login_page.dart';
 
-class VerifySignupPage extends StatefulWidget {
-  const VerifySignupPage({Key? key}) : super(key: key);
+class VerifyLoginPage extends StatefulWidget {
+  const VerifyLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<VerifySignupPage> createState() => _VerifySignupPageState();
+  State<VerifyLoginPage> createState() => _VerifyLoginPageState();
 }
 
-class _VerifySignupPageState extends State<VerifySignupPage> {
+class _VerifyLoginPageState extends State<VerifyLoginPage> {
   bool isEmailVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -76,9 +76,7 @@ class _VerifySignupPageState extends State<VerifySignupPage> {
   @override
   Widget build(BuildContext context) {
     if (isEmailVerified) {
-      String? userName = FirebaseAuth.instance.currentUser!.displayName;
-      showToast('$userName님, 환영합니다');
-      return MainScreen();
+      return LoginPage();
     } else {
       return Scaffold(
         appBar: AppBar(
