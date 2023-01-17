@@ -125,8 +125,20 @@ class AuthController extends GetxController {
         return await _authentication.signInWithCredential(credential);
       } else {
         print("로그인 실패");
-        showToast();
+        showToast('한동 계정만 로그인 할 수 있습니다');
         return await _authentication.signOut();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        print(user!.email);
+        print(user!.displayName);
       }
     } catch (e) {
       print(e);
@@ -142,9 +154,9 @@ class AuthController extends GetxController {
   }
 }
 
-void showToast() {
+void showToast(String msg) {
   Fluttertoast.showToast(
-    msg: '한동 구글 계정만 로그인 가능합니다',
+    msg: msg,
     gravity: ToastGravity.BOTTOM,
     backgroundColor: Colors.blue,
     fontSize: 15,
