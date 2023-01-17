@@ -9,9 +9,7 @@ import 'message.dart';
 import 'new_message.dart';
 
 class ChatRoom extends StatefulWidget {
-  const ChatRoom({Key? key, required this.chat}) : super(key: key);
-
-  final Chat chat;
+  const ChatRoom({Key? key}) : super(key: key);
 
   @override
   State<ChatRoom> createState() => _ChatRoomState();
@@ -195,14 +193,14 @@ class _ChatRoomState extends State<ChatRoom> {
           color: Colors.black,
         ),
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          widget.chat.name,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+        // title: Text(
+        //   widget.chat.name,
+        //   style: const TextStyle(
+        //     color: Colors.black,
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: 20,
+        //   ),
+        // ),
         backgroundColor: Colors.white,
       ),
       endDrawer: Drawer(

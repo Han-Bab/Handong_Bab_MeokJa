@@ -131,16 +131,6 @@ class GroupListViewDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          padding: EdgeInsets.zero, // 패딩 설정
-          constraints: const BoxConstraints(), // constraints
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MainScreen()));
-          },
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
         title: const Text(
           "주문내역",
           style: TextStyle(
@@ -152,40 +142,40 @@ class GroupListViewDemo extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: GroupedListView<dynamic, String>(
-          elements: _data,
-          groupBy: (item) {
-            var now = new DateTime.now();
-            String date = "오래전";
-            String formatDate = DateFormat('yyyy/MM/dd').format(now);
-            if (item['date'] == formatDate) date = "오늘";
-            var yesterday = new DateTime(now.year, now.month, now.day - 1);
-            formatDate = DateFormat('yyyy/MM/dd').format(yesterday);
-            if (item['date'] == formatDate) date = "어제";
-            for (int i = 2; i <= 31; i++) {
-              var week = new DateTime(now.year, now.month, now.day - i);
-              formatDate = DateFormat('yyyy/MM/dd').format(week);
-              if (item['date'] == formatDate) {
-                if (i >= 2 && i <= 7) date = "일주일전";
-                if (i > 7 && i <= 31) date = "한달전";
-              }
+        elements: _data,
+        groupBy: (item) {
+          var now = new DateTime.now();
+          String date = "오래전";
+          String formatDate = DateFormat('yyyy/MM/dd').format(now);
+          if (item['date'] == formatDate) date = "오늘";
+          var yesterday = new DateTime(now.year, now.month, now.day - 1);
+          formatDate = DateFormat('yyyy/MM/dd').format(yesterday);
+          if (item['date'] == formatDate) date = "어제";
+          for (int i = 2; i <= 31; i++) {
+            var week = new DateTime(now.year, now.month, now.day - i);
+            formatDate = DateFormat('yyyy/MM/dd').format(week);
+            if (item['date'] == formatDate) {
+              if (i >= 2 && i <= 7) date = "일주일전";
+              if (i > 7 && i <= 31) date = "한달전";
             }
-            return date;
-          },
-          order: GroupedListOrder.ASC,
-          groupComparator: ((a,b){
-            int x =0,y=0;
-            if(a == "오래전") x = 4;
-            else if(a == "한달전") x = 3;
-            else if(a == "일주일전") x = 2;
-            else if(a == "어제") x = 1;
-            else if(a == "오늘") x = 0;
-            if(b == "오래전") y = 4;
-            else if(b == "한달전") y = 3;
-            else if(b == "일주일전") y = 2;
-            else if(b == "어제") y = 1;
-            else if(b == "오늘") y = 0;
-            return x-y;
-          }),
+          }
+          return date;
+        },
+        order: GroupedListOrder.ASC,
+        groupComparator: ((a,b){
+          int x =0,y=0;
+          if(a == "오래전") x = 4;
+          else if(a == "한달전") x = 3;
+          else if(a == "일주일전") x = 2;
+          else if(a == "어제") x = 1;
+          else if(a == "오늘") x = 0;
+          if(b == "오래전") y = 4;
+          else if(b == "한달전") y = 3;
+          else if(b == "일주일전") y = 2;
+          else if(b == "어제") y = 1;
+          else if(b == "오늘") y = 0;
+          return x-y;
+        }),
         groupSeparatorBuilder: (groupValue) => Padding(
           padding: EdgeInsets.all(8),
           child: Row(
@@ -241,7 +231,7 @@ class GroupListViewDemo extends StatelessWidget {
                           height: 80,
                           child: ClipRRect(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                             child: Image.asset(
                               item['image'],
                               fit: BoxFit.cover,
@@ -258,7 +248,7 @@ class GroupListViewDemo extends StatelessWidget {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 8, right: 8),
@@ -302,14 +292,14 @@ class GroupListViewDemo extends StatelessWidget {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 8),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(
                                           Icons.calendar_today,
