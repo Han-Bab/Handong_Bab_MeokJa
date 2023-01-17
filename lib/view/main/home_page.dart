@@ -1,191 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:han_bab/controller/home_controller.dart';
 import 'package:intl/intl.dart';
 import '../chat/chatRoom_screen.dart';
 import 'main_screen.dart';
-import '../chat/model.dart';
-
-// List _data = [
-//   {
-//     'id': 1,
-//     'user': 'aa',
-//     'image': 'assets/images/1.jpg',
-//     'name': '류앤돈까스',
-//     'time': '17:00',
-//     'curr_people': 1,
-//     'max_people': 4
-//   },
-//   {
-//     'id': 2,
-//     'user': 'bb',
-//     'image': 'assets/images/2.jpg',
-//     'name': '동굼찜닭',
-//     'time': '13:00',
-//     'currPeople': 2,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 3,
-//     'user': 'cc',
-//     'image': 'assets/images/3.jpg',
-//     'name': '꼬꼬뽀끼',
-//     'time': '17:00',
-//     'currPeople': 4,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 4,
-//     'user': 'dd',
-//     'image': 'assets/images/4.jpg',
-//     'name': 'bbq',
-//     'time': '17:00',
-//     'currPeople': 3,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 5,
-//     'user': 'ee',
-//     'image': 'assets/images/5.jpg',
-//     'name': '행복한 마라탕',
-//     'time': '17:00',
-//     'currPeople': 2,
-//     'maxPeople': 3
-//   },
-//   {
-//     'id': 6,
-//     'user': 'ff',
-//     'image': 'assets/images/6.jpg',
-//     'name': '삼촌네',
-//     'time': '17:00',
-//     'currPeople': 1,
-//     'maxPeople': 2
-//   },
-//   {
-//     'id': 7,
-//     'user': 'gg',
-//     'image': 'assets/images/7.jpg',
-//     'name': '신전 떡볶이',
-//     'time': '17:00',
-//     'currPeople': 2,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 8,
-//     'user': 'hh',
-//     'image': 'assets/images/8.jpg',
-//     'name': '명성',
-//     'time': '17:00',
-//     'currPeople': 1,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 9,
-//     'user': 'ii',
-//     'image': 'assets/images/9.jpg',
-//     'name': '땅땅치킨',
-//     'time': '17:00',
-//     'currPeople': 1,
-//     'maxPeople': 4
-//   },
-//   {
-//     'id': 10,
-//     'user': 'jj',
-//     'image': 'assets/images/10.jpg',
-//     'name': '행복한 마라탕',
-//     'time': '17:00',
-//     'currPeople': 1,
-//     'maxPeople': 4
-//   },
-// ];
-
-final List<String> userList = [
-  'aa',
-  'bb',
-  'cc',
-  'dd',
-  'ee',
-  'ff',
-  'gg',
-  'hh',
-  'ii',
-  'jj'
-];
-final List<String> nameList = [
-  '류앤돈까스',
-  '동궁찜닭',
-  '꼬꼬뽀끼',
-  'bbq',
-  '행복한 마라탕',
-  '삼촌네',
-  '신전 떡볶이',
-  '명성',
-  '땅땅치킨',
-  '행복한 마라탕'
-];
-final List<String> time = [
-  '17:00',
-  '14:00',
-  '13:20',
-  '11:30',
-  '15:30',
-  '18:00',
-  '21:00',
-  '23:00',
-  '13:00',
-  '12:00'
-];
-final List<String> date = [
-  '2023/01/02',
-  '2022/12/28',
-  '2023/01/01',
-  '2022/12/11',
-  '2022/11/01',
-  '2022/12/19',
-  '2022/12/20',
-  '2022/12/14',
-  '2022/10/02',
-  '2022/10/10'
-];
-final List<int> currPeople = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
-final List<int> maxPeople = [3, 4, 3, 4, 3, 4, 3, 4, 3, 4];
-final List<String> imageList = [
-  'assets/images/1.jpg',
-  'assets/images/2.jpg',
-  'assets/images/3.jpg',
-  'assets/images/4.jpg',
-  'assets/images/5.jpg',
-  'assets/images/6.jpg',
-  'assets/images/7.jpg',
-  'assets/images/8.jpg',
-  'assets/images/9.jpg',
-  'assets/images/10.jpg'
-];
-
-final List<Chat> chatData = List.generate(
-    imageList.length,
-    (index) => Chat(imageList[index], userList[index], nameList[index],
-        date[index], time[index], currPeople[index], maxPeople[index]));
+import 'package:get/get.dart';
 
 DateTime now = DateTime.now();
 String currHour = DateFormat("HH").format(now);
 String currMinute = DateFormat("mm").format(now);
 
-
 var flag1 = List.empty(growable: true);
 int j=0;
-int TimeOutCount () {
-  int count = 0;
-  for(int i=0; i<chatData.length; i++) {
-    if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour)-10)||
-        ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
-      count++;
-    }
-  }
-  return count;
+
+class HomePage extends StatefulWidget {
+
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class _HomePageState extends State<HomePage> {
+  final homeController = Get.put(HomeController());
+  late List<String> items;
+
+  @override
+  void initState() {
+    super.initState();
+    //items = dummies.sublist(0, 20);
+  }
+
+  Future<void> refresh() {
+    return Future.delayed(const Duration(seconds: 1));  // 1초 후 리턴
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,13 +54,13 @@ class HomePage extends StatelessWidget {
                   Icons.search,
                   color: Colors.blue,
                 ),
-                label: Text("Search"),
+                label: const Text("Search"),
                 style: OutlinedButton.styleFrom(
                   alignment: Alignment.centerLeft,
                   foregroundColor: Colors.blue,
-                  textStyle: TextStyle(fontSize: 20),
-                  minimumSize: Size(420, 0),
-                  side: BorderSide(
+                  textStyle: const TextStyle(fontSize: 20),
+                  minimumSize: const Size(420, 0),
+                  side: const BorderSide(
                     color: Colors.transparent,
                   ),
                 ),
@@ -225,273 +74,37 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.white70,
         elevation: 0, //appbar 경계선
       ),
-      body: ListView.builder(
-        itemCount: TimeOutCount(),
-        itemBuilder: (context, index) {
-          for(int i=0; i<chatData.length; i++) {
-            if((int.parse(chatData[i].time.substring(0,2))>int.parse(currHour)-10)||
-                ((int.parse(chatData[i].time.substring(0,2))==int.parse(currHour))&&(int.parse(chatData[i].time.substring(3,5))>int.parse(currMinute)))){
-              flag1.add(i);
-            }
-          }
-          index = flag1[j];
-          //print("index ${index}");
-          j++;
-          return GestureDetector(
-            onTap: () {
-              if(chatData[index].currPeople != chatData[index].maxPeople) {
-                  debugPrint(chatData[index].name);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ChatRoom(chat: chatData[index],)));
-              }else{
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext ctx){
-                      return AlertDialog(
-                        title: Text("정원초과"),
-                        content: Text("인원이 마감되었습니다."),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text("확인"),
-                          ),
-                        ],
-                      );
-                    }
-                );
-              }
-            },
-            child: Card(
-              color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        imageList[index],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ), //image
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.account_circle_sharp,
-                                  color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
-                                  size: 16,
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  chatData[index].user,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(chatData[index].time),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              chatData[index].name,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                            if(chatData[index].currPeople != chatData[index].maxPeople)
-                              const Text(
-                                " ❯",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red),
-                              )
-                            else
-                              const Text(
-                                " ❯",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              child: FittedBox(
-                                child: Row(
-                                  children: [
-                                    const Icon(CupertinoIcons.person),
-                                    if(chatData[index].currPeople != chatData[index].maxPeople)
-                                        Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
-                                    else
-                                      Text(
-                                        '${chatData[index].currPeople}/${chatData[index].maxPeople}',
-                                        style: const TextStyle(
-                                            decoration: TextDecoration.lineThrough,
-                                            decorationColor: Colors.red,
-                                            decorationThickness: 3
-                                        ),
-                                      ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class MySearchDelegate extends SearchDelegate {
-  List<String> searchResults = [
-    '행복한 마라탕',
-    '명성',
-    '신전 떡볶이',
-    'bbq',
-    '동궁찜닭',
-  ];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) => [
-        IconButton(
-          icon: const Icon(
-            Icons.clear,
-            color: Colors.blue,
-          ),
-          onPressed: () {
-            if (query=="") {
-              Navigator.of(context).pop();//close searchbar
-            } else {
-              showSearch(
-                context: context,
-                delegate: MySearchDelegate(),
-              );
-              query = "";
-            }
-          },
-        ),
-      ];
-
-  @override
-  Widget? buildLeading(BuildContext context) => IconButton(
-      icon: const Icon(
-        // close searchbar
-        Icons.arrow_back,
-        color: Colors.blue,
-      ),
-      onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => MainScreen()));
-      });
-
-  int itemCnt() {
-    int count = 0;
-    for (int i = 0; i < chatData.length; i++) {
-      if (chatData[i].name.contains(query)) {
-        if ((int.parse(chatData[i].time.substring(0, 2)) >
-            int.parse(currHour)) ||
-            ((int.parse(chatData[i].time.substring(0, 2)) ==
-                int.parse(currHour)) &&
-                (int.parse(chatData[i].time.substring(3, 5)) >
-                    int.parse(currMinute)))) {
-          count++;
-        }
-      }
-    }
-    return count;
-  }
-
-  var flag = List.empty(growable: true);
-  int j=0;
-  @override
-  Widget buildResults(BuildContext context) => Center(
-        child: ListView.builder(
-          itemCount: itemCnt(),
+      body: RefreshIndicator(
+        onRefresh: () => refresh().then((_) => {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('새로고침 되었습니다.')) // refresh 완료시 snackbar 생성
+          )
+        }),
+        child: Obx(() => ListView.builder(
+          itemCount: homeController.restaurant.length,
           itemBuilder: (context, index) {
-            for(int i=0; i<chatData.length; i++) {
-              if (chatData[i].name.contains(query)) {
-                if ((int.parse(chatData[i].time.substring(0, 2)) >
-                    int.parse(currHour)) ||
-                    ((int.parse(chatData[i].time.substring(0, 2)) ==
-                        int.parse(currHour)) &&
-                        (int.parse(chatData[i].time.substring(3, 5)) >
-                            int.parse(currMinute)))) {
-                  flag.add(i);
-                }
-              }
-            }
-            index = flag[j];
-            j++;
-            return GestureDetector(
+            if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour)-3)||
+                ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour)-3)&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
+
+              return GestureDetector(
               onTap: () {
-                if(chatData[index].currPeople != chatData[index].maxPeople) {
-                  debugPrint(chatData[index].name);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ChatRoom(chat: chatData[index],)));
+                if(homeController.restaurant[index].currPeople != homeController.restaurant[index].maxPeople) {
+                  debugPrint(homeController.restaurant[index].restaurantName);
+                  Get.to(const ChatRoom());
                 }else{
                   showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext ctx){
                         return AlertDialog(
-                          title: Text("정원초과"),
-                          content: Text("인원이 마감되었습니다."),
+                          title: const Text("정원초과"),
+                          content: const Text("인원이 마감되었습니다."),
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Get.back();
                               },
-                              child: Text("확인"),
+                              child: const Text("확인"),
                             ),
                           ],
                         );
@@ -500,7 +113,7 @@ class MySearchDelegate extends SearchDelegate {
                 }
               },
               child: Card(
-                color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.grey : Colors.white,
+                color: (homeController.restaurant[index].currPeople == homeController.restaurant[index].maxPeople) ? Colors.grey : Colors.white,
                 child: Row(
                   children: [
                     SizedBox(
@@ -509,7 +122,7 @@ class MySearchDelegate extends SearchDelegate {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: Image.asset(
-                          imageList[index],
+                          homeController.restaurant[index].imgUrl,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -528,24 +141,24 @@ class MySearchDelegate extends SearchDelegate {
                                 children: [
                                   Icon(
                                     Icons.account_circle_sharp,
-                                    color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
+                                    color: (homeController.restaurant[index].currPeople == homeController.restaurant[index].maxPeople) ? Colors.black : Colors.grey,
                                     size: 16,
                                   ),
                                   const SizedBox(
                                     width: 8,
                                   ),
                                   Text(
-                                    chatData[index].user,
+                                    homeController.restaurant[index].userName,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: (chatData[index].currPeople == chatData[index].maxPeople) ? Colors.black : Colors.grey,
+                                      color: (homeController.restaurant[index].currPeople == homeController.restaurant[index].maxPeople) ? Colors.black : Colors.grey,
                                     ),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Text(chatData[index].time),
+                                  Text(homeController.restaurant[index].time),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -559,13 +172,13 @@ class MySearchDelegate extends SearchDelegate {
                           Row(
                             children: [
                               Text(
-                                chatData[index].name,
+                                homeController.restaurant[index].restaurantName,
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                              if(chatData[index].currPeople != chatData[index].maxPeople)
+                              if(homeController.restaurant[index].currPeople != homeController.restaurant[index].maxPeople)
                                 const Text(
                                   " ❯",
                                   style: TextStyle(
@@ -584,21 +197,28 @@ class MySearchDelegate extends SearchDelegate {
                             ],
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 8,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Text(
+                                homeController.restaurant[index].position,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: (homeController.restaurant[index].currPeople == homeController.restaurant[index].maxPeople) ? Colors.black : Colors.grey,
+                                ),
+                              ),
                               SizedBox(
                                 child: FittedBox(
                                   child: Row(
                                     children: [
                                       const Icon(CupertinoIcons.person),
-                                      if(chatData[index].currPeople != chatData[index].maxPeople)
-                                        Text('${chatData[index].currPeople}/${chatData[index].maxPeople}')
+                                      if(homeController.restaurant[index].currPeople != homeController.restaurant[index].maxPeople)
+                                        Text('${homeController.restaurant[index].currPeople}/${homeController.restaurant[index].maxPeople}')
                                       else
                                         Text(
-                                          '${chatData[index].currPeople}/${chatData[index].maxPeople}',
+                                          '${homeController.restaurant[index].currPeople}/${homeController.restaurant[index].maxPeople}',
                                           style: const TextStyle(
                                               decoration: TextDecoration.lineThrough,
                                               decorationColor: Colors.red,
@@ -621,7 +241,282 @@ class MySearchDelegate extends SearchDelegate {
                 ),
               ),
             );
+            }else{
+              return const SizedBox(height: 1,);
+            }
           },
+        ),
+        ),
+      ),
+    );
+  }
+}
+
+
+// 검색
+class MySearchDelegate extends SearchDelegate {
+
+  final homeController = Get.put(HomeController());
+  List<String> searchResults = [
+    '행복한 마라탕',
+    '명성',
+    '신전 떡볶이',
+    'bbq',
+    '동궁찜닭',
+  ];
+
+  @override
+  List<Widget>? buildActions(BuildContext context) => [
+        IconButton(
+          icon: const Icon(
+            Icons.clear,
+            color: Colors.blue,
+          ),
+          onPressed: () {
+            if (query=="") {
+              Get.back();//close searchbar
+            } else {
+              showSearch(
+                context: context,
+                delegate: MySearchDelegate(),
+              );
+              query = "";
+            }
+          },
+        ),
+      ];
+
+  @override
+  Widget? buildLeading(BuildContext context) => IconButton(
+      icon: const Icon(
+        // close searchbar
+        Icons.arrow_back,
+        color: Colors.blue,
+      ),
+      onPressed: () {
+        Get.to(const MainScreen());
+      });
+
+  var flag = List.empty(growable: true);
+  int j=0;
+  @override
+  Widget buildResults(BuildContext context) => Center(
+        child: Obx(()=>ListView.builder(
+            itemCount: homeController.restaurant.length,
+            itemBuilder: (context, index) {
+              print(homeController.restaurant[index].restaurantName);
+              print(query);
+              if (homeController.restaurant[index].restaurantName.contains(query)){
+                 if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour)-3)||
+                   ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour)-3)&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
+                   return GestureDetector(
+                     onTap: () {
+                       if (homeController.restaurant[index].currPeople !=
+                           homeController.restaurant[index].maxPeople) {
+                         debugPrint(
+                             homeController.restaurant[index].restaurantName);
+                         Get.to(const ChatRoom());
+                       } else {
+                         showDialog(
+                             context: context,
+                             barrierDismissible: false,
+                             builder: (BuildContext ctx) {
+                               return AlertDialog(
+                                 title: const Text("정원초과"),
+                                 content: const Text("인원이 마감되었습니다."),
+                                 actions: [
+                                   TextButton(
+                                     onPressed: () {
+                                       Get.back();
+                                     },
+                                     child: const Text("확인"),
+                                   ),
+                                 ],
+                               );
+                             }
+                         );
+                       }
+                     },
+                     child: Card(
+                       color: (homeController.restaurant[index].currPeople ==
+                           homeController.restaurant[index].maxPeople) ? Colors
+                           .grey : Colors.white,
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width: 100,
+                             height: 100,
+                             child: ClipRRect(
+                               borderRadius: BorderRadius.circular(20.0),
+                               child: Image.asset(
+                                 homeController.restaurant[index].imgUrl,
+                                 fit: BoxFit.cover,
+                               ),
+                             ),
+                           ), //image
+                           const SizedBox(
+                             width: 16,
+                           ),
+                           Expanded(
+                             child: Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                 Row(
+                                   mainAxisAlignment: MainAxisAlignment
+                                       .spaceBetween,
+                                   children: [
+                                     Row(
+                                       children: [
+                                         Icon(
+                                           Icons.account_circle_sharp,
+                                           color: (homeController
+                                               .restaurant[index].currPeople ==
+                                               homeController.restaurant[index]
+                                                   .maxPeople)
+                                               ? Colors.black
+                                               : Colors.grey,
+                                           size: 16,
+                                         ),
+                                         const SizedBox(
+                                           width: 8,
+                                         ),
+                                         Text(
+                                           homeController.restaurant[index]
+                                               .userName,
+                                           style: TextStyle(
+                                             fontSize: 15,
+                                             color: (homeController
+                                                 .restaurant[index]
+                                                 .currPeople ==
+                                                 homeController
+                                                     .restaurant[index]
+                                                     .maxPeople)
+                                                 ? Colors.black
+                                                 : Colors.grey,
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                     Row(
+                                       children: [
+                                         Text(homeController.restaurant[index]
+                                             .time),
+                                         const SizedBox(
+                                           width: 5,
+                                         ),
+                                       ],
+                                     ),
+                                   ],
+                                 ),
+                                 const SizedBox(
+                                   height: 10,
+                                 ),
+                                 Row(
+                                   children: [
+                                     Text(
+                                       homeController.restaurant[index]
+                                           .restaurantName,
+                                       style: const TextStyle(
+                                           fontSize: 20,
+                                           fontWeight: FontWeight.bold,
+                                           color: Colors.black),
+                                     ),
+                                     if(homeController.restaurant[index]
+                                         .currPeople !=
+                                         homeController.restaurant[index]
+                                             .maxPeople)
+                                       const Text(
+                                         " ❯",
+                                         style: TextStyle(
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.bold,
+                                             color: Colors.red),
+                                       )
+                                     else
+                                       const Text(
+                                         " ❯",
+                                         style: TextStyle(
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.bold,
+                                             color: Colors.black),
+                                       ),
+                                   ],
+                                 ),
+                                 const SizedBox(
+                                   height: 8,
+                                 ),
+                                 Row(
+                                   mainAxisAlignment: MainAxisAlignment
+                                       .spaceBetween,
+                                   children: [
+                                     Text(
+                                       homeController.restaurant[index]
+                                           .position,
+                                       style: TextStyle(
+                                         fontSize: 15,
+                                         color: (homeController
+                                             .restaurant[index]
+                                             .currPeople ==
+                                             homeController.restaurant[index]
+                                                 .maxPeople)
+                                             ? Colors.black
+                                             : Colors.grey,
+                                       ),
+                                     ),
+                                     SizedBox(
+                                       child: FittedBox(
+                                         child: Row(
+                                           children: [
+                                             const Icon(CupertinoIcons.person),
+                                             if(homeController.restaurant[index]
+                                                 .currPeople !=
+                                                 homeController
+                                                     .restaurant[index]
+                                                     .maxPeople)
+                                               Text('${homeController
+                                                   .restaurant[index]
+                                                   .currPeople}/${homeController
+                                                   .restaurant[index]
+                                                   .maxPeople}')
+                                             else
+                                               Text(
+                                                 '${homeController
+                                                     .restaurant[index]
+                                                     .currPeople}/${homeController
+                                                     .restaurant[index]
+                                                     .maxPeople}',
+                                                 style: const TextStyle(
+                                                     decoration: TextDecoration
+                                                         .lineThrough,
+                                                     decorationColor: Colors
+                                                         .red,
+                                                     decorationThickness: 3
+                                                 ),
+                                               ),
+                                             const SizedBox(
+                                               width: 5,
+                                             ),
+                                           ],
+                                         ),
+                                       ),
+                                     ),
+                                   ],
+                                 )
+                               ],
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                   );
+                 }else{
+                   return const SizedBox(height: 1,);
+                 }
+              }else{
+                return const SizedBox(height: 1,);
+              }
+            },
+          ),
         ),
       );
 

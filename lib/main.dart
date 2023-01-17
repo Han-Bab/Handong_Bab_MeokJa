@@ -8,6 +8,7 @@ import 'package:han_bab/view/login/login_page.dart';
 import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 import 'firebase_options.dart';
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
         future: Future.delayed(Duration(seconds: 2), () => 100),
         builder: (context, snapshot) {
-          return MaterialApp(
+          return GetMaterialApp(
             home: AnimatedSwitcher(
               duration: Duration(milliseconds: 900),
               child: _splashLoadingWidget(snapshot),
