@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:han_bab/noticeBoard/pluspage.dart';
+import 'package:han_bab/view/community/pluspage.dart';
+import 'package:han_bab/view/main/community_page.dart';
 import 'package:like_button/like_button.dart';
-
-import '../view/main/community_page.dart';
 
 class Content extends StatefulWidget {
   const Content({Key? key}) : super(key: key);
@@ -131,11 +130,9 @@ class _ContentState extends State<Content> {
                     ),
                     hintText: "댓글을 입력하세요.",
                     hintStyle: new TextStyle(color: Colors.black26),
-                    suffixIcon:  IconButton(
+                    suffixIcon: IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                     ),
                     isDense: true,
                   ),
