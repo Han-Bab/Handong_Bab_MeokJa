@@ -25,18 +25,7 @@ class _CommunityPageState extends State<CommunityPage> {
     '점메추'
   ];
 
-  var heart = [
-    '1',
-    '2',
-    '1',
-    '5',
-    '18',
-    '0',
-    '9',
-    '10',
-    '54',
-    '4'
-  ];
+  var heart = ['1', '2', '1', '5', '18', '0', '9', '10', '54', '4'];
 
   var content = [
     '진짜 대체 언제 나옴',
@@ -74,10 +63,7 @@ class _CommunityPageState extends State<CommunityPage> {
       appBar: AppBar(
         title: const Text(
           '자유게시판',
-          style: TextStyle(
-              color: Colors.black,
-            fontWeight: FontWeight.bold
-          ),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -148,14 +134,16 @@ class _CommunityPageState extends State<CommunityPage> {
                                     ],
                                   ),
                                 ),
-                                Container(width: 5,),
+                                Container(
+                                  width: 5,
+                                ),
                                 SizedBox(
                                   //width: 5,
                                   //margin: EdgeInsets.only(left: 5),
                                   //padding: const EdgeInsets.only(),
                                   child: Row(
                                     children: const [
-                                       LikeButton(
+                                      LikeButton(
                                         size: 20,
                                         likeCount: 0,
                                       )
