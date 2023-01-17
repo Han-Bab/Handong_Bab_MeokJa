@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
 import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -16,7 +18,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -24,10 +25,12 @@ class _SignUpPageState extends State<SignUpPage> {
   // delay시간 때 스피너
   bool showSpinner = false;
   // validation 기능 구현을 위한 세 개의 string 변수
-  String userPW = '';
-  String userEmail = '';
-  String userName = '';
-  String userPhone = '';
+  Map userInfo = {
+    'userEmail': '',
+    'userPW': '',
+    'userName': '',
+    'userPhone': ''
+  };
   FocusNode emailFocusNode = FocusNode();
 
   bool _isChecked1 = false;
@@ -63,6 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text("회원 가입"),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -98,10 +102,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         return null;
                       },
                       onSaved: (value) {
-                        userEmail = value!;
+                        userInfo['userEmail'] = value!;
                       },
                       onChanged: (value) {
-                        userEmail = value;
+                        userInfo['userEmail'] = value;
                       },
                       focusNode: emailFocusNode,
                       onTap: () {},
@@ -141,10 +145,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       obscureText: true,
                       onSaved: (value) {
-                        userPW = value!;
+                        userInfo['userPW'] = value!;
                       },
                       onChanged: (value) {
-                        userPW = value;
+                        userInfo['userPW'] = value;
                       },
                       onTap: () {},
                     ),
@@ -159,7 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     TextFormField(
                       validator: (value) {
-                        if (value != userPW) {
+                        if (value != userInfo['userPW']) {
                           return '비밀번호가 일치하지 않습니다';
                         }
                         return null;
@@ -186,7 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     TextFormField(
                       onChanged: (value) {
-                        userName = value;
+                        userInfo['userName'] = value;
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -223,7 +227,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         return null;
                       },
                       onChanged: (value) {
-                        userPhone = value;
+                        userInfo['userPhone'] = value;
                       },
                       decoration: const InputDecoration(
                         hintText: "010-0000-0000",
@@ -249,6 +253,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: CheckboxListTile(
                             visualDensity: const VisualDensity(
                                 horizontal: -4, vertical: -4),
+                            dense: true,
                             contentPadding: EdgeInsets.zero,
                             title: const Text(
                               "한밥 이용약관",
@@ -268,15 +273,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AccountTerm()));
+                            Get.to(() => AccountTerm());
                           },
                           icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
-                            size: 15,
+                            size: 12,
                           ),
+                          padding: EdgeInsets.only(left: 20), // 패딩 설정
+                          constraints: BoxConstraints(),
                         ),
                       ],
                     ),
@@ -284,6 +288,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         Expanded(
                           child: CheckboxListTile(
+                            dense: true,
                             visualDensity: const VisualDensity(
                                 horizontal: -4, vertical: -4),
                             contentPadding: EdgeInsets.zero,
@@ -305,15 +310,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PrivacyTerm()));
+                            Get.to(() => PrivacyTerm());
                           },
                           icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
-                            size: 15,
+                            size: 12,
                           ),
+                          padding: EdgeInsets.only(left: 20), // 패딩 설정
+                          constraints: BoxConstraints(),
                         ),
                       ],
                     ),
@@ -338,7 +342,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Get.back();
                             },
                             child: const Text("취소"),
                           ),
@@ -350,49 +354,15 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: ElevatedButton(
                             onPressed: () async {
                               _tryValidation();
+                              setState(() {
+                                showSpinner = true;
+                              });
                               if (validation) {
-                                setState(() {
-                                  showSpinner = true;
-                                });
-                                try {
-                                  final newUser = await _authentication
-                                      .createUserWithEmailAndPassword(
-                                    email: userEmail,
-                                    password: userPW,
-                                  );
-                                  // newUser.user!.uid 는 특정 다큐먼트를 위한 식별자 역할
-                                  // set 메소드 내애서 원하는 엑스트라 데이터를 추가해줄 수 있다. 데이터는 항상 map 형태
-                                  // future 이면 await 붙이기
-                                  await FirebaseFirestore.instance
-                                      .collection('user')
-                                      .doc(newUser.user!.uid)
-                                      .set({
-                                    'userEmail': userEmail,
-                                    'userName': userName,
-                                    'userPhone': userPhone,
-                                  });
-                                  if (newUser.user != null) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                VerifySignupPage()));
-                                  }
-                                  setState(() {
-                                    showSpinner = false;
-                                  });
-                                } catch (e) {
-                                  print(e);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text('$e'),
-                                    backgroundColor: Colors.blue,
-                                  ));
-                                  setState(() {
-                                    showSpinner = false;
-                                  });
-                                }
+                                AuthController.instance.register(userInfo);
                               }
+                              setState(() {
+                                showSpinner = false;
+                              });
                             },
                             child: const Text("가입"),
                           ),
