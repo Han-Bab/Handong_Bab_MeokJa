@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
-import '../noticeBoard/content.dart';
-import '../noticeBoard/pluspage.dart';
+import '../community/content.dart';
+import '../community/pluspage.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);

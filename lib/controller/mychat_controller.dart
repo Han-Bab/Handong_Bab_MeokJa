@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:han_bab/model/restaurant.dart';
 
 class MyController extends GetxController {
-  var restaurant = <Restaurant>[].obs;
+  RxList<Restaurant> myRestaurant = <Restaurant>[].obs;
 
   @override
   void onInit() {
@@ -11,14 +11,14 @@ class MyController extends GetxController {
   }
 
   void fetchData() async{
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     var restaurantData = [
       Restaurant(
           id: 1,
           restaurantName: '류앤돈까스',
           imgUrl: 'assets/images/1.jpg',
           userName: 'zz',
-          date: '2023/01/02',
+          date: '2023/01/17',
           time: '17:00',
           currPeople: 1,
           maxPeople: 4,
@@ -41,7 +41,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/3.jpg',
           userName: 'xx',
           date: '2023/01/01',
-          time: '17:00',
+          time: '14:00',
           currPeople: 4,
           maxPeople: 4,
           position: "오석관"
@@ -52,7 +52,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/4.jpg',
           userName: 'w',
           date: '2022/12/11',
-          time: '17:00',
+          time: '11:00',
           currPeople: 3,
           maxPeople: 4,
           position: "오석관"
@@ -63,7 +63,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/5.jpg',
           userName: 'v',
           date: '2022/11/01',
-          time: '17:00',
+          time: '14:00',
           currPeople: 2,
           maxPeople: 3,
           position: "오석관"
@@ -74,7 +74,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/6.jpg',
           userName: 'oo',
           date: '2022/12/19',
-          time: '17:00',
+          time: '21:00',
           currPeople: 1,
           maxPeople: 2,
           position: "오석관"
@@ -85,7 +85,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/7.jpg',
           userName: 'pp',
           date: '2023/01/08',
-          time: '17:00',
+          time: '22:00',
           currPeople: 2,
           maxPeople: 4,
           position: "오석관"
@@ -96,7 +96,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/8.jpg',
           userName: 'qq',
           date: '2023/01/09',
-          time: '17:00',
+          time: '23:00',
           currPeople: 1,
           maxPeople: 4,
           position: "오석관"
@@ -107,7 +107,7 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/9.jpg',
           userName: 'rr',
           date: '2023/01/16',
-          time: '17:00',
+          time: '23:20',
           currPeople: 1,
           maxPeople: 4,
           position: "오석관"
@@ -118,12 +118,12 @@ class MyController extends GetxController {
           imgUrl: 'assets/images/10.jpg',
           userName: 'ss',
           date: '2023/01/15',
-          time: '17:00',
+          time: '14:20',
           currPeople: 1,
           maxPeople: 4,
           position: "오석관"
       ),
     ];
-    restaurant.assignAll(restaurantData);
+    myRestaurant.assignAll(restaurantData);
   }
 }

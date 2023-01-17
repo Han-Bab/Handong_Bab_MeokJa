@@ -83,8 +83,8 @@ class _HomePageState extends State<HomePage> {
         child: Obx(() => ListView.builder(
           itemCount: homeController.restaurant.length,
           itemBuilder: (context, index) {
-            if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour)-3)||
-                ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour)-3)&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
+            if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour))||
+                ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour))&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
 
               return GestureDetector(
               onTap: () {
@@ -307,8 +307,8 @@ class MySearchDelegate extends SearchDelegate {
               print(homeController.restaurant[index].restaurantName);
               print(query);
               if (homeController.restaurant[index].restaurantName.contains(query)){
-                 if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour)-3)||
-                   ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour)-3)&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
+                 if((int.parse(homeController.restaurant[index].time.substring(0,2))>int.parse(currHour))||
+                   ((int.parse(homeController.restaurant[index].time.substring(0,2))==int.parse(currHour))&&(int.parse(homeController.restaurant[index].time.substring(3,5))>int.parse(currMinute)))) {
                    return GestureDetector(
                      onTap: () {
                        if (homeController.restaurant[index].currPeople !=
