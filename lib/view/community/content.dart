@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/view/community/pluspage.dart';
-import 'package:han_bab/view/main/community_page.dart';
 import 'package:like_button/like_button.dart';
+
+import '../main/community_page.dart';
 
 class Content extends StatefulWidget {
   const Content({Key? key}) : super(key: key);
