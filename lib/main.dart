@@ -4,6 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
+import 'package:han_bab/view/login/verify_login_page.dart';
+import 'package:han_bab/view/main/main_screen.dart';
+import 'firebase_options.dart';
+import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 

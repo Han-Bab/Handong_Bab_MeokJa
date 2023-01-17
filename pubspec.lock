@@ -465,7 +465,7 @@ packages:
     source: hosted
     version: "1.3.1"
   kakao_flutter_sdk_user:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: kakao_flutter_sdk_user
       url: "https://pub.dartlang.org"
@@ -686,6 +686,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sort:
+    dependency: "direct main"
+    description:
+      name: sort
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   source_span:
     dependency: transitive
     description:
