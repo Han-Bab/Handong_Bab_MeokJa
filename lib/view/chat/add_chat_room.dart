@@ -1,22 +1,26 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:get/get.dart';
+import 'package:han_bab/controller/order_time_button_controller.dart';
+import 'package:han_bab/model/order_time_button.dart';
+import 'package:han_bab/view/main/main_screen.dart';
 
-class AddChatRoom extends StatefulWidget {
-  const AddChatRoom({Key? key}) : super(key: key);
+class AddChatRoom extends StatelessWidget {
+  AddChatRoom({Key? key}) : super(key: key);
 
-  @override
-  State<AddChatRoom> createState() => _AddChatRoomState();
-}
-
-class _AddChatRoomState extends State<AddChatRoom> {
   final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _maxPeopleController = TextEditingController();
+
   String orderTime = "주문 예정 시간을 설정해주세요";
   String accountNumber = "1002-452-023325 우리";
+
   @override
   Widget build(BuildContext context) {
+    Get.put(OrderTimeButtonController());
     double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,7 +39,7 @@ class _AddChatRoomState extends State<AddChatRoom> {
         child: SingleChildScrollView(
           child: Form(
             child: Container(
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
               child: Column(
                 children: [
                   DottedBorder(
@@ -49,9 +53,9 @@ class _AddChatRoomState extends State<AddChatRoom> {
                       ),
                     ),
                     color: Colors.grey,
-                    dashPattern: [5, 3],
+                    dashPattern: const [5, 3],
                     borderType: BorderType.RRect,
-                    radius: Radius.circular(10),
+                    radius: const Radius.circular(10),
                   ),
                   const SizedBox(
                     height: 30,
@@ -65,12 +69,19 @@ class _AddChatRoomState extends State<AddChatRoom> {
                             hintText: '가게명을 입력해주세요',
                             icon: const Icon(CupertinoIcons.search),
                             iconColor: Colors.black,
+                            labelText: '가게명',
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelStyle: Theme.of(context)
                                 .inputDecorationTheme
                                 .labelStyle,
                             hintStyle: Theme.of(context)
                                 .inputDecorationTheme
                                 .hintStyle,
+                            contentPadding: EdgeInsets.all(16),
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 3, color: Colors.grey),
+                            ),
                           ),
                           keyboardType: TextInputType.emailAddress,
                         ),
@@ -78,54 +89,30 @@ class _AddChatRoomState extends State<AddChatRoom> {
                           height: 20,
                         ),
                         Row(
-                          children: [
-                            const Text("주문 예정 시간"),
-                            const SizedBox(
+                          children: const [
+                            Text("주문 예정 시간"),
+                            SizedBox(
                               width: 10,
                             ),
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  // 주문 예정 시간 설정하기
-                                  Future<TimeOfDay?> selectedTime =
-                                      showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  int? hour;
-                                  int? minute;
-                                  selectedTime.then((timeOfDay) {
-                                    hour = timeOfDay?.hour;
-                                    minute = timeOfDay?.minute;
-                                    hour ??= TimeOfDay.now().hour;
-                                    minute ??= TimeOfDay.now().minute;
-                                    setState(() {
-                                      orderTime = "$hour : $minute";
-                                    });
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                child: Text(
-                                  orderTime,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                            ),
+                            // OrderTimeButton
+                            Expanded(child: OrderTimeButton()),
                           ],
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         Row(
                           children: [
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () {},
-                                child: Text(accountNumber),
+                                onPressed: null,
+                                child: Text(
+                                  accountNumber,
+                                  style: TextStyle(color: Colors.blueAccent),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: Colors.grey),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -143,36 +130,61 @@ class _AddChatRoomState extends State<AddChatRoom> {
                           ],
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("최대 인원"),
+                            Flexible(
+                              flex: 2,
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: "예) 비전관, 오석관 등",
+                                  labelText: "수령 장소",
+                                  contentPadding: EdgeInsets.all(10),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 3, color: Colors.grey),
+                                  ),
+                                ),
+                              ),
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
-                              width: width * 0.25,
-                              child: TextField(
+                            Flexible(
+                              flex: 1,
+                              child: TextFormField(
                                 controller: _maxPeopleController,
-                                textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  hintText: "예) 4명 등",
+                                  labelText: "최대 인원",
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 3, color: Colors.grey),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(
-                          height: 110,
+                          height: 200,
                         ),
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Get.off(MainScreen());
                                 },
-                                child: const Text("취소"),
+                                child: const Text("취소하기"),
                               ),
                             ),
                             const SizedBox(
@@ -180,8 +192,10 @@ class _AddChatRoomState extends State<AddChatRoom> {
                             ),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("확인"),
+                                onPressed: () {
+                                  Get.off(() => MainScreen());
+                                },
+                                child: const Text("생성하기"),
                               ),
                             ),
                           ],
