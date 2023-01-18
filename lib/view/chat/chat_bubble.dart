@@ -3,7 +3,7 @@ import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
 
-
+// 말풍선
 class ChatBubbles extends StatelessWidget {
   const ChatBubbles(this.message, this.isMe, this.userName, {Key? key}) : super(key: key);
 
