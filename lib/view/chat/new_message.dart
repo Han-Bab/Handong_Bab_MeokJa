@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'menu.dart';
 
+// 메시지 보내기
 class NewMessage extends StatefulWidget {
   const NewMessage({Key? key}) : super(key: key);
 

@@ -12,7 +12,7 @@ class HomeController extends GetxController {
   }
 
   void fetchData() async{
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
     var restaurantData = [
       Restaurant(
           id: 1,
