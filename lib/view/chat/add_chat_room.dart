@@ -175,7 +175,7 @@ class AddChatRoom extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(
-                          height: 200,
+                          height: 120,
                         ),
                         Row(
                           children: [

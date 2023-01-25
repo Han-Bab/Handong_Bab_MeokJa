@@ -19,6 +19,7 @@ class AuthController extends GetxController {
   late Rx<User?> _user;
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool isVerified = false;
 
   // GetX Controller 초기 렌더링 후,정보를 불러와주려고 초기화할 때 필요
   @override
@@ -35,10 +36,9 @@ class AuthController extends GetxController {
   _moveToPage(User? user) {
     // user 정보 존재 (로그인)
     if (user != null) {
-      if (!user.emailVerified) {
-        Get.offAll(() => VerifyLoginPage());
+      if (user.emailVerified) {
+        Get.offAll(() => MainScreen());
       }
-      Get.offAll(() => MainScreen());
     }
     // user 정보가 없다 (로그아웃 상태)
     else {
@@ -63,8 +63,8 @@ class AuthController extends GetxController {
         'userName': userInfo['userName'],
         'userPhone': userInfo['userPhone'],
       });
-      if (user.user != null) {
-        Get.to(() => VerifySignupPage());
+      if (!_authentication.currentUser!.emailVerified) {
+        Get.off(() => VerifyLoginPage());
       }
     } catch (e) {
       Get.snackbar('Error Message', 'User Message',
@@ -83,17 +83,30 @@ class AuthController extends GetxController {
     }
   }
 
+  void getData() async {
+    final user = _authentication.currentUser;
+    var docRef =
+        await FirebaseFirestore.instance.collection('user').doc(user?.uid);
+    print("getData");
+    docRef.get().then((DocumentSnapshot doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      print(data);
+    });
+  }
+
   void login(Map userInfo) async {
     try {
       await _authentication.signInWithEmailAndPassword(
         email: userInfo['userEmail'],
         password: userInfo['userPW'],
       );
+      if (!_authentication.currentUser!.emailVerified) {
+        Get.off(() => VerifyLoginPage());
+      }
     } catch (e) {
       print(e);
       Get.snackbar('Error Message', 'User Message',
           backgroundColor: Colors.red,
-          snackPosition: SnackPosition.BOTTOM,
           titleText: const Text(
             'Login is failed',
             style: TextStyle(color: Colors.white),
@@ -127,7 +140,7 @@ class AuthController extends GetxController {
       } else {
         print("로그인 실패");
         showToast('한동 계정만 로그인 할 수 있습니다');
-        return await _authentication.signOut();
+        return await _googleSignIn.signOut();
       }
     } catch (e) {
       print(e);
@@ -138,8 +151,7 @@ class AuthController extends GetxController {
     try {
       final user = _authentication.currentUser;
       if (user != null) {
-        print(user!.email);
-        print(user!.displayName);
+        getData();
       }
     } catch (e) {
       print(e);
