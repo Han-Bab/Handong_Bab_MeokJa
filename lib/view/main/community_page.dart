@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
-import '../../noticeBoard/content.dart';
 
-import '../../noticeBoard/content.dart';
-import '../../noticeBoard/pluspage.dart';
+import '../community/content.dart';
+import '../community/pluspage.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);
@@ -53,9 +52,6 @@ class _CommunityPageState extends State<CommunityPage> {
     'ㅈㄱㄴ'
   ];
 
-  GlobalKey Boxkey = GlobalKey();
-
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -65,7 +61,7 @@ class _CommunityPageState extends State<CommunityPage> {
           '자유게시판',
           style: TextStyle(
               color: Colors.black,
-            fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold
           ),
         ),
         centerTitle: true,
@@ -82,30 +78,27 @@ class _CommunityPageState extends State<CommunityPage> {
                     context,
                     MaterialPageRoute(builder: (context) => const Content()),
                   );
-                  //showPopup(context, titleList[index], content[index]);
-                  //Navigator.push(
-                  //context,
-                  //MaterialPageRoute(builder: (context) => ),
-                  // );
                 },
                 child: Card(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10, top: 10),
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: width * 0.9,
-                              //height: 30,
-                              child: Text(
-                                titleList[index],
-                                style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: SizedBox(
+                                width: width * 0.9,
+                                child: Text(
+                                  titleList[index],
+                                  style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -115,7 +108,6 @@ class _CommunityPageState extends State<CommunityPage> {
                               children: [
                                 SizedBox(
                                   width: width * 0.7,
-                                  //height: 30,
                                   child: Text(
                                     content[index],
                                     style: const TextStyle(
@@ -146,15 +138,11 @@ class _CommunityPageState extends State<CommunityPage> {
                                     ],
                                   ),
                                 ),
-                                //Container(width: width * 0.1,),
                               ],
                             )
                           ],
                         ),
                       )
-
-
-                      // 여기에 좋아요랑 댓글 수 이런 거 착성하면 되겠다.
                     ],
                   ),
                 ));
@@ -162,37 +150,27 @@ class _CommunityPageState extends State<CommunityPage> {
         ),
         Positioned(
           bottom: 20,
-            child: SizedBox(
-              width: width,
-              child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PlusPage()),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                      primary: Colors.black, backgroundColor: Colors.grey),
-                  child: const Text(
-                    '글 쓰기',
-                    style: TextStyle(fontSize: 20),
-                  ),
+          child: SizedBox(
+            width: width,
+            child: Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PlusPage()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                    primary: Colors.black, backgroundColor: Colors.grey),
+                child: const Text(
+                  '글 쓰기',
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
           ),
-
+        ),
       ]),
     );
-  }
-}
-
-getSize(GlobalKey key) {
-  if (key.currentContext != null) {
-    final RenderBox renderBox =
-    key.currentContext!.findRenderObject() as RenderBox;
-    Size size = renderBox.size;
-    return size;
   }
 }
