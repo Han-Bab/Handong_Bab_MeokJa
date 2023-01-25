@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/sign_up_page.dart';
+import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final authController = Get.put(AuthController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -149,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 // 로그인 버튼 기능 구현
                                 _tryValidation();
-                                AuthController.instance.login(userInfo);
+                                authController.login(userInfo);
                                 // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
                                 // 이동 이후 스피너 false
                                 setState(() {
@@ -185,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   _showSpinner = true;
                                 });
-                                AuthController.instance.signInWithGoogle();
+                                authController.signInWithGoogle();
                                 setState(() {
                                   _showSpinner = false;
                                 });
