@@ -48,9 +48,10 @@ class AuthController extends GetxController {
 
   void register(Map userInfo) async {
     try {
+      print(userInfo);
       final user = await _authentication.createUserWithEmailAndPassword(
-        email: userInfo['email'],
-        password: userInfo['password'],
+        email: userInfo['userEmail'],
+        password: userInfo['userPW'],
       );
       // newUser.user!.uid 는 특정 다큐먼트를 위한 식별자 역할
       // set 메소드 내애서 원하는 엑스트라 데이터를 추가해줄 수 있다. 데이터는 항상 map 형태
