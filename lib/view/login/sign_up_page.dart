@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
-import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -23,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   bool validation = false;
   // delay시간 때 스피너
-  bool showSpinner = false;
+  bool _showSpinner = false;
   // validation 기능 구현을 위한 세 개의 string 변수
   Map userInfo = {
     'userEmail': '',
@@ -69,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
         automaticallyImplyLeading: false,
       ),
       body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
+        inAsyncCall: _showSpinner,
         child: Form(
           key: _formKey,
           child: GestureDetector(
@@ -96,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (value!.isEmpty) {
                           return "이메일을 입력해주세요";
                         }
-                        if (!value!.contains('@handong.ac.kr')) {
+                        if (!value.contains('@handong.ac.kr')) {
                           return "한동계정을 입력해주세요";
                         }
                         return null;
@@ -340,6 +336,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Row(
                       children: [
                         Expanded(
+                          flex: 1,
                           child: ElevatedButton(
                             onPressed: () {
                               Get.back();
@@ -351,17 +348,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: 10,
                         ),
                         Expanded(
+                          flex: 1,
                           child: ElevatedButton(
-                            onPressed: () async {
-                              _tryValidation();
+                            onPressed: () {
                               setState(() {
-                                showSpinner = true;
+                                _showSpinner = true;
                               });
+                              _tryValidation();
                               if (validation) {
                                 AuthController.instance.register(userInfo);
                               }
                               setState(() {
-                                showSpinner = false;
+                                _showSpinner = false;
                               });
                             },
                             child: const Text("가입"),

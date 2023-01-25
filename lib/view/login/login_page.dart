@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   // 로그인 버튼 이후 딜레이 시간 스피너 지정
-  bool showSpinner = false;
+  bool _showSpinner = false;
   // textfield에 입력한 내용을 관리하기 위함
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       // SingleChildScrollView: 키보드가 밀고올라와서 스크린 영역을 침범할때
       // 침범한 영역만큼 스크롤할 수 있게 하는 역할
       body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
+        inAsyncCall: _showSpinner,
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -142,10 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                             minWidth: 100,
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () async {
+                              onPressed: () {
                                 // 로그인 버튼 누를 시 스피너 트루 지정
                                 setState(() {
-                                  showSpinner = true;
+                                  _showSpinner = true;
                                 });
                                 // 로그인 버튼 기능 구현
                                 _tryValidation();
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
                                 // 이동 이후 스피너 false
                                 setState(() {
-                                  showSpinner = false;
+                                  _showSpinner = false;
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -183,11 +183,11 @@ class _LoginPageState extends State<LoginPage> {
                               // 구글 로그인
                               onPressed: () {
                                 setState(() {
-                                  showSpinner = true;
+                                  _showSpinner = true;
                                 });
                                 AuthController.instance.signInWithGoogle();
                                 setState(() {
-                                  showSpinner = false;
+                                  _showSpinner = false;
                                 });
                               },
                               child: Row(

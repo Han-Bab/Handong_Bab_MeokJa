@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GoogleLoginPage extends StatelessWidget {
-  const GoogleLoginPage({Key? key}) : super(key: key);
+class AfterGoogleLogin extends StatelessWidget {
+  const AfterGoogleLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
