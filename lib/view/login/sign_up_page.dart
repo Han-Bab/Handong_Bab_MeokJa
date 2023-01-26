@@ -3,7 +3,6 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
-import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +25,9 @@ class _SignUpPageState extends State<SignUpPage> {
     'userEmail': '',
     'userPW': '',
     'userName': '',
-    'userPhone': ''
+    'userPhone': '',
+    'userNickName': '',
+    'userAccount': ''
   };
   FocusNode emailFocusNode = FocusNode();
 
@@ -230,13 +231,74 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       decoration: const InputDecoration(
                         hintText: "010-0000-0000",
-                        hintStyle: TextStyle(fontSize: 15),
+                        hintStyle: TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         contentPadding: EdgeInsets.all(10),
                       ),
                       inputFormatters: [MaskedInputFormatter("000-0000-0000")],
+                      onTap: () {},
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "닉네임",
+                      ),
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        userInfo['userNickName'] = value;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "닉네임을 입력해주세요";
+                        }
+                        if (value.length > 7) {
+                          return "7자 이하로 설정해주세요";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "닉네임을 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
+                      onTap: () {},
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "주계좌번호",
+                      ),
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        userInfo['userAccount'] = value;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "사용할 계좌번호를 입력해주세요";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "계좌번호를 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       onTap: () {},
                     ),
                     const SizedBox(
