@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:han_bab/view/login/after_google_login.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:han_bab/view/login/verify_signup_page.dart';
@@ -87,10 +88,11 @@ class AuthController extends GetxController {
     final user = _authentication.currentUser;
     var docRef =
         await FirebaseFirestore.instance.collection('user').doc(user?.uid);
-    print("getData");
     docRef.get().then((DocumentSnapshot doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      print(data);
+      print(doc.data());
+      if (doc.data() == null) {
+        Get.off(() => AfterGoogleLogin());
+      }
     });
   }
 

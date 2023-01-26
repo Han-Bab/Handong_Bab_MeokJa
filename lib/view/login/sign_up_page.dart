@@ -361,10 +361,6 @@ class _SignUpPageState extends State<SignUpPage> {
                               if (validation) {
                                 AuthController.instance.register(userInfo);
                               }
-                              if (!authController.verifyEmail()) {
-                                Future.delayed(Duration.zero,
-                                    () => Get.to(() => VerifyLoginPage()));
-                              }
                               setState(() {
                                 _showSpinner = false;
                               });
