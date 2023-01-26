@@ -1,11 +1,15 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
 import 'package:han_bab/model/order_time_button.dart';
+import 'package:han_bab/view/main/home_page.dart';
 import 'package:han_bab/view/main/main_screen.dart';
+import 'package:get/get.dart';
+import '../../component/database_service.dart';
 
 class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
@@ -193,7 +197,13 @@ class AddChatRoom extends StatelessWidget {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Get.off(() => MainScreen());
+                                  DatabaseService(
+                                      uid: FirebaseAuth.instance.currentUser!.uid)
+                                      .createGroup(_restaurantController.text,
+                                      FirebaseAuth.instance.currentUser!.uid, _restaurantController.text)
+                                      .whenComplete(() {
+                                  });
+                                  Get.to(const MainScreen());
                                 },
                                 child: const Text("생성하기"),
                               ),
