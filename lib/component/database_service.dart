@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DatabaseService {
   final String? uid;
@@ -35,14 +39,21 @@ class DatabaseService {
   }
 
   // creating a group
-  Future createGroup(String userName, String id, String groupName) async {
+  Future createGroup(String userName, String id, String groupName, String orderTime, String pickup, String maxPeople) async {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String strToday = formatter.format(now);
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
       "admin": "${id}_$userName",
       "members": [],
       "groupId": "",
-      "orderTime": "",
-
+      "orderTime": orderTime,
+      "pickup": pickup,
+      "currPeople": "1",
+      "maxPeople": maxPeople,
+      "imgUrl": "assets/images/$groupName.jpg",
+      "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
     });

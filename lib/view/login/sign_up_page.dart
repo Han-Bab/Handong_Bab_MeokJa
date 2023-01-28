@@ -3,6 +3,7 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
+import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
@@ -58,6 +59,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.put(AuthController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("회원 가입"),

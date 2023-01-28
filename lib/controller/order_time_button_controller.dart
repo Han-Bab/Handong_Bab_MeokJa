@@ -10,4 +10,5 @@ class OrderTimeButtonController extends GetxController {
   void setOrderTime(String? _selectedTime) {
     orderTime(_selectedTime);
   }
+
 }
