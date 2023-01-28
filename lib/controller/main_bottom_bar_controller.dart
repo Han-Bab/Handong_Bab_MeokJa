@@ -12,7 +12,7 @@ class MainBottomBarController extends GetxController {
   void changeIndex(int index) {
     selectedIndex(index);
     if (selectedIndex.value == 2) {
-      Get.off(AddChatRoom());
+      Get.off(() => AddChatRoom());
       selectedIndex(0);
     }
   }
