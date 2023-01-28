@@ -106,7 +106,7 @@ class AuthController extends GetxController {
       if (doc.data() == null) {
         Get.snackbar(
           '알림',
-          '구글 로그인의 경우 추가 정보 입력이 필요합니다.',
+          '구글 로그인의 경우 추가 정보 입력이 필요합니다',
           snackPosition: SnackPosition.TOP,
         );
         Get.off(() => AfterGoogleLogin());
