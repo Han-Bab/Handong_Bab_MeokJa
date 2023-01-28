@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/view/login/after_google_login.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:han_bab/view/login/verify_login_page.dart';
-import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 
 // 각기 다른 상황에서 곧바로 사용자들이 원하는 페이지로 이동을 시켜야 함
@@ -18,18 +17,20 @@ class AuthController extends GetxController {
 
   // 현재 시점에서 초기화되는 것이 아니므로 late 붙혀줌.
   late Rx<User?> _user;
-  final FirebaseAuth _authentication = FirebaseAuth.instance;
+  final FirebaseAuth authentication = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool isVerified = false;
+
+  final RxBool isUniqueNick = false.obs;
 
   // GetX Controller 초기 렌더링 후,정보를 불러와주려고 초기화할 때 필요
   @override
   void onReady() {
     super.onReady();
     // Rx<User?>로 선언해줬기 때문에 타입 선언 필수
-    _user = Rx<User?>(_authentication.currentUser);
+    _user = Rx<User?>(authentication.currentUser);
     // user 상태를 곧바로 check 할 수 있게 하기 위한 선언 (예전 StreamBuilder 느낌)
-    _user.bindStream(_authentication.userChanges());
+    _user.bindStream(authentication.userChanges());
     // 상시 파베 이벤트 상태 감지
     ever(_user, _moveToPage);
   }
@@ -50,21 +51,14 @@ class AuthController extends GetxController {
   void register(Map userInfo) async {
     try {
       print(userInfo);
-      final user = await _authentication.createUserWithEmailAndPassword(
+      final user = await authentication.createUserWithEmailAndPassword(
         email: userInfo['userEmail'],
         password: userInfo['userPW'],
       );
       // newUser.user!.uid 는 특정 다큐먼트를 위한 식별자 역할
       // set 메소드 내애서 원하는 엑스트라 데이터를 추가해줄 수 있다. 데이터는 항상 map 형태
-      await FirebaseFirestore.instance
-          .collection('user')
-          .doc(user.user!.uid)
-          .set({
-        'userEmail': userInfo['userEmail'],
-        'userName': userInfo['userName'],
-        'userPhone': userInfo['userPhone'],
-      });
-      if (!_authentication.currentUser!.emailVerified) {
+      addInfo(userInfo);
+      if (!authentication.currentUser!.emailVerified) {
         Get.off(() => VerifyLoginPage());
       }
     } catch (e) {
@@ -84,25 +78,62 @@ class AuthController extends GetxController {
     }
   }
 
-  void getData() async {
-    final user = _authentication.currentUser;
+  // READ Collection 내의 모든 데이터 가져올 때
+  Future<bool> checkNickName(String nickName) async {
+    CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('user');
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await collectionReference.get();
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data()['userNickName'] != null) {
+        if (nickName == doc.data()['userNickName']) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void checkInfo() async {
+    final user = authentication.currentUser;
     var docRef =
         await FirebaseFirestore.instance.collection('user').doc(user?.uid);
     docRef.get().then((DocumentSnapshot doc) {
       print(doc.data());
       if (doc.data() == null) {
+        Get.snackbar(
+          '알림',
+          '구글 로그인의 경우 추가 정보 입력이 필요합니다.',
+          snackPosition: SnackPosition.TOP,
+        );
         Get.off(() => AfterGoogleLogin());
       }
     });
   }
 
+  void addInfo(Map userInfo) async {
+    try {
+      final user = authentication.currentUser;
+      await FirebaseFirestore.instance.collection('user').doc(user!.uid).set({
+        'userEmail': userInfo['userEmail'],
+        'userName': userInfo['userName'],
+        'userPhone': userInfo['userPhone'],
+        'userNickName': userInfo['userNickName'],
+        'userAccount': userInfo['userAccount'],
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   void login(Map userInfo) async {
     try {
-      await _authentication.signInWithEmailAndPassword(
+      await authentication.signInWithEmailAndPassword(
         email: userInfo['userEmail'],
         password: userInfo['userPW'],
       );
-      if (!_authentication.currentUser!.emailVerified) {
+      if (!authentication.currentUser!.emailVerified) {
         Get.off(() => VerifyLoginPage());
       }
     } catch (e) {
@@ -138,7 +169,7 @@ class AuthController extends GetxController {
         );
         print("로그인 성공");
         // Once signed in, return the UserCredential
-        return await _authentication.signInWithCredential(credential);
+        return await authentication.signInWithCredential(credential);
       } else {
         print("로그인 실패");
         showToast('한동 계정만 로그인 할 수 있습니다');
@@ -151,9 +182,9 @@ class AuthController extends GetxController {
 
   void getCurrentUser() {
     try {
-      final user = _authentication.currentUser;
+      final user = authentication.currentUser;
       if (user != null) {
-        getData();
+        checkInfo();
       }
     } catch (e) {
       print(e);
@@ -165,7 +196,7 @@ class AuthController extends GetxController {
   }
 
   void logout() {
-    _authentication.signOut();
+    authentication.signOut();
   }
 }
 
