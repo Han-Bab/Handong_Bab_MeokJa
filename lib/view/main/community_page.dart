@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
 import '../community/content.dart';
-import '../community/plus_page.dart';
+import '../community/pluspage.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);

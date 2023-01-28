@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:han_bab/view/main/my_page.dart';
+import 'package:han_bab/view/main/profile_page.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class TossIntroPage extends StatelessWidget {
@@ -39,7 +39,7 @@ class TossIntroPage extends StatelessWidget {
       done: const Text("done"),
       onDone: () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => ProfilePage()),
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
         );
       },
       next: const Icon(Icons.arrow_forward),
