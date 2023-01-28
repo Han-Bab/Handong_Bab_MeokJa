@@ -12,12 +12,11 @@ class AddChatRoom extends StatelessWidget {
   final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _maxPeopleController = TextEditingController();
 
-  String orderTime = "주문 예정 시간을 설정해주세요";
   String accountNumber = "1002-452-023325 우리";
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OrderTimeButtonController());
+    final controller = Get.put(OrderTimeButtonController());
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(

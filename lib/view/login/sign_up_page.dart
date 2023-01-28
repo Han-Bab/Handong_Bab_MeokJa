@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:han_bab/controller/auth_controller.dart';
@@ -34,6 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _visibility = false;
+
+  bool _isClicked = false;
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -251,6 +254,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     TextFormField(
                       onChanged: (value) {
+                        _isClicked = false;
                         userInfo['userNickName'] = value;
                       },
                       validator: (value) {
@@ -260,15 +264,53 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (value.length > 7) {
                           return "7자 이하로 설정해주세요";
                         }
+                        if (!_isClicked) {
+                          return '중복 확인을 해주세요';
+                        } else if (!authController.isUniqueNick.value) {
+                          return '중복된 닉네임이 존재합니다';
+                        }
+
                         return null;
                       },
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: "닉네임을 입력해주세요",
                         hintStyle: TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         contentPadding: EdgeInsets.all(10),
+                        suffixIcon: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border(left: BorderSide(color: Colors.grey))),
+                          child: TextButton(
+                            onPressed: () async {
+                              _isClicked = true;
+                              try {
+                                print('닉네임 중복 체크');
+                                authController.isUniqueNick.value =
+                                    await authController.checkNickName(
+                                        userInfo['userNickName']);
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                              print(authController.isUniqueNick.value);
+                              _tryValidation();
+                              if (authController.isUniqueNick.value) {
+                                Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              } else {
+                                Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              }
+                            },
+                            child: Text('중복'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              // backgroundColor: Colors.grey[300],
+                            ),
+                          ),
+                        ),
                       ),
                       onTap: () {},
                     ),
@@ -292,7 +334,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        hintText: "계좌번호를 입력해주세요",
+                        hintText: "ex) 우리 1002452023325",
                         hintStyle: TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),

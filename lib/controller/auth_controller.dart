@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/view/login/after_google_login.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:han_bab/view/login/verify_login_page.dart';
-import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 
 // 각기 다른 상황에서 곧바로 사용자들이 원하는 페이지로 이동을 시켜야 함
@@ -21,6 +20,8 @@ class AuthController extends GetxController {
   final FirebaseAuth authentication = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool isVerified = false;
+
+  final RxBool isUniqueNick = false.obs;
 
   // GetX Controller 초기 렌더링 후,정보를 불러와주려고 초기화할 때 필요
   @override
@@ -75,6 +76,23 @@ class AuthController extends GetxController {
             ),
           ));
     }
+  }
+
+  // READ Collection 내의 모든 데이터 가져올 때
+  Future<bool> checkNickName(String nickName) async {
+    CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('user');
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await collectionReference.get();
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data()['userNickName'] != null) {
+        if (nickName == doc.data()['userNickName']) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   void checkInfo() async {

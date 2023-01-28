@@ -18,6 +18,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
 
   final _googleFormKey = GlobalKey<FormState>();
 
+  bool _isClicked = false;
   void _tryValidation() {
     final isValid = _googleFormKey.currentState!.validate();
     if (isValid) {
@@ -170,15 +171,52 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                         if (value.length > 7) {
                           return "7자 이하로 설정해주세요";
                         }
+                        if (!_isClicked) {
+                          return '중복 확인을 해주세요';
+                        } else if (!authController.isUniqueNick.value) {
+                          return '중복된 닉네임이 존재합니다';
+                        }
                         return null;
                       },
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: "ex) 호빵이",
                         hintStyle: TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         contentPadding: EdgeInsets.all(10),
+                        suffixIcon: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border(left: BorderSide(color: Colors.grey))),
+                          child: TextButton(
+                            onPressed: () async {
+                              _isClicked = true;
+                              try {
+                                print('닉네임 중복 체크');
+                                authController.isUniqueNick.value =
+                                    await authController.checkNickName(
+                                        userInfo['userNickName']);
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                              print(authController.isUniqueNick.value);
+                              _tryValidation();
+                              if (authController.isUniqueNick.value) {
+                                Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              } else {
+                                Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              }
+                            },
+                            child: Text('중복'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              // backgroundColor: Colors.grey[300],
+                            ),
+                          ),
+                        ),
                       ),
                       onTap: () {},
                     ),
