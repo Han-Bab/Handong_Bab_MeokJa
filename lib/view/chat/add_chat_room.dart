@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
+import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
 import 'package:han_bab/model/order_time_button.dart';
 import 'package:han_bab/view/main/main_screen.dart';
+import 'package:get/get.dart';
+import '../../component/database_service.dart';
 
 class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
@@ -12,7 +17,12 @@ class AddChatRoom extends StatelessWidget {
   final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _maxPeopleController = TextEditingController();
 
+  final authController = AuthController();
+  final orderTimeController = Get.put(OrderTimeButtonController());
+
   String accountNumber = "1002-452-023325 우리";
+  String pickup = "";
+  String maxPeople= "";
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +146,9 @@ class AddChatRoom extends StatelessWidget {
                             Flexible(
                               flex: 2,
                               child: TextFormField(
+                                onChanged: (value) {
+                                  pickup = value;
+                                },
                                 decoration: const InputDecoration(
                                   hintText: "예) 비전관, 오석관 등",
                                   labelText: "수령 장소",
@@ -152,14 +165,29 @@ class AddChatRoom extends StatelessWidget {
                             const SizedBox(
                               width: 10,
                             ),
+                            // DropdownButton<String?>(
+                            //   onChanged: (String? newValue) {
+                            //     print(newValue);
+                            //   },
+                            //   items:
+                            //   [null, '2', '3'].map<DropdownMenuItem<String?>>((String? i) {
+                            //     return DropdownMenuItem<String?>(
+                            //       value: i,
+                            //       child: Text({'2': '2명', '3': '3명', '4': '4명'}[i] ?? '비공개'),
+                            //     );
+                            //   }).toList(),
+                            // )
                             Flexible(
                               flex: 1,
                               child: TextFormField(
+                                onChanged: (value) {
+                                  maxPeople = value;
+                                },
                                 controller: _maxPeopleController,
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.all(10),
-                                  hintText: "예) 4명 등",
+                                  hintText: "예) 2, 3",
                                   labelText: "최대 인원",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
@@ -190,12 +218,27 @@ class AddChatRoom extends StatelessWidget {
                             ),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {
-                                  Get.off(() => MainScreen());
-                                },
-                                child: const Text("생성하기"),
-                              ),
-                            ),
+                                  onPressed: () async {
+                                    var result = await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth
+                                        .instance.currentUser!.uid).get();
+                                    String userName = result['userName'];
+                                    DatabaseService(
+                                            uid: FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                        .createGroup(
+                                           userName,
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid,
+                                        _restaurantController.text,
+                                        orderTimeController.orderTime.value,
+                                            pickup,
+                                            maxPeople)
+                                        .whenComplete(() {});
+                                    Get.to(const MainScreen());
+                                  },
+                                  child: const Text("생성하기"),
+                                ),
+                              )
                           ],
                         ),
                       ],

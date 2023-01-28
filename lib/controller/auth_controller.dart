@@ -78,6 +78,8 @@ class AuthController extends GetxController {
     }
   }
 
+  void getData() async {
+    final user = _authentication.currentUser;
   // READ Collection 내의 모든 데이터 가져올 때
   Future<bool> checkNickName(String nickName) async {
     CollectionReference<Map<String, dynamic>> collectionReference =
@@ -100,7 +102,7 @@ class AuthController extends GetxController {
     var docRef =
         await FirebaseFirestore.instance.collection('user').doc(user?.uid);
     docRef.get().then((DocumentSnapshot doc) {
-      print(doc.data());
+      //print(doc.data());
       if (doc.data() == null) {
         Get.snackbar(
           '알림',
