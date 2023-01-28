@@ -26,7 +26,7 @@ class AddChatRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OrderTimeButtonController());
+    final controller = Get.put(OrderTimeButtonController());
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
