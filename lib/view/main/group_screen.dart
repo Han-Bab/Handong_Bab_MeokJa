@@ -39,6 +39,7 @@ class GroupListViewDemo extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Obx(() => GroupedListView<dynamic, String>(
           elements: myController.myRestaurant.value,
