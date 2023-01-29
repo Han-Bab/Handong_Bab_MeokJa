@@ -81,9 +81,9 @@ class AuthController extends GetxController {
   // READ Collection 내의 모든 데이터 가져올 때
   Future<bool> checkNickName(String nickName) async {
     CollectionReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection('user');
+    FirebaseFirestore.instance.collection('user');
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await collectionReference.get();
+    await collectionReference.get();
 
     for (var doc in querySnapshot.docs) {
       if (doc.data()['userNickName'] != null) {
@@ -98,7 +98,7 @@ class AuthController extends GetxController {
   void checkInfo() async {
     final user = authentication.currentUser;
     var docRef =
-        await FirebaseFirestore.instance.collection('user').doc(user?.uid);
+    await FirebaseFirestore.instance.collection('user').doc(user?.uid);
     docRef.get().then((DocumentSnapshot doc) {
       print(doc.data());
       if (doc.data() == null) {
@@ -161,7 +161,7 @@ class AuthController extends GetxController {
       if (googleSignInAccount!.email.contains('@handong.ac.kr')) {
         // Obtain the auth details from the request
         final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        await googleSignInAccount.authentication;
         // Create a new credential
         final credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
