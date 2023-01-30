@@ -3,12 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:get/get.dart';
+import '../mypage/setting_page.dart';
 
-class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key}) : super(key: key);
+class MyPage extends StatelessWidget {
+  MyPage({Key? key}) : super(key: key);
 
-  var kakaoCheck = true;
-  var tossCheck = true;
+  var kakaoCheck = false;
+  var tossCheck = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +37,8 @@ class ProfilePage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '',
+                            const Text(
+                              '감자튀김',
                               style: TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
@@ -55,8 +56,8 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Column(
                                   children: [
-                                    if (kakaoCheck == false)
-                                      (Padding(
+                                    GestureDetector(
+                                      child: Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 7),
                                         child: Container(
@@ -65,7 +66,9 @@ class ProfilePage extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(30),
-                                            color: Colors.grey,
+                                            color: kakaoCheck
+                                                ? const Color(0xFFFFEB03)
+                                                : Colors.grey,
                                           ),
                                           child: const Padding(
                                             padding: EdgeInsets.only(top: 2),
@@ -79,34 +82,11 @@ class ProfilePage extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                      ))
-                                    else if (kakaoCheck == true)
-                                      (Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 7),
-                                        child: Container(
-                                          height: 25,
-                                          width: 85,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: const Color(0xFFFFEB03),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              'Kakao',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                                    if (tossCheck == false)
-                                      (Padding(
+                                      ),
+                                      onTap: () {},
+                                    ),
+                                    GestureDetector(
+                                      child: Padding(
                                         padding: const EdgeInsets.only(top: 7),
                                         child: Container(
                                           height: 25,
@@ -114,51 +94,59 @@ class ProfilePage extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(30),
-                                            color: Colors.grey,
+                                            color: tossCheck
+                                                ? const Color(0xFF3268E8)
+                                                : Colors.grey,
                                           ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.only(top: 2),
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
                                             child: Text(
                                               'Toss',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                color: Colors.black,
+                                                color: tossCheck
+                                                    ? Colors.white
+                                                    : Colors.black,
                                                 fontSize: 17,
-                                                fontWeight: FontWeight.w400,
+                                                fontWeight: tossCheck
+                                                    ? FontWeight.w500
+                                                    : FontWeight.w400,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ))
-                                    else
-                                      (Padding(
-                                        padding: const EdgeInsets.only(top: 7),
-                                        child: Container(
-                                          height: 25,
-                                          width: 85,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: const Color(0xFF3268E8),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              'Toss',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ))
+                                      ),
+                                      onTap: () {},
+                                    )
                                   ],
                                 ),
                               ],
                             )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Text(
+                              '이름',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 60,
+                            ),
+                            Text(
+                              '윤유원',
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -175,7 +163,7 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: 20,
+                              width: 40,
                             ),
                             Text('yuwon0628@handong.ac.kr'),
                           ],
@@ -206,7 +194,39 @@ class ProfilePage extends StatelessWidget {
                               width: 50,
                               height: 25,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      var phoneNumberController =
+                                          TextEditingController();
+                                      return AlertDialog(
+                                        title: const Text('전화번호 수정'),
+                                        content: TextFormField(
+                                          controller: phoneNumberController,
+                                          decoration: const InputDecoration(
+                                              hintText: '010 - 1234 - 5678'),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('취소'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              var phoneNumber =
+                                                  phoneNumberController.text;
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('저장'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                                 style: TextButton.styleFrom(
                                   padding: const EdgeInsets.only(top: 0),
                                   shape: const BeveledRectangleBorder(
@@ -259,7 +279,39 @@ class ProfilePage extends StatelessWidget {
                               width: 50,
                               height: 25,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      var accountController =
+                                          TextEditingController();
+                                      return AlertDialog(
+                                        title: const Text('계좌번호 수정'),
+                                        content: TextFormField(
+                                          controller: accountController,
+                                          decoration: const InputDecoration(
+                                              hintText: '우리 1002233487645'),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('취소'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              var account =
+                                                  accountController.text;
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('저장'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                                 style: TextButton.styleFrom(
                                   padding: const EdgeInsets.only(top: 0),
                                   shape: const BeveledRectangleBorder(
@@ -293,44 +345,67 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    Card(
-                      child: ListTile(
-                        title: const Text(
-                          '환경설정',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.settings,
-                          color: Colors.black87,
-                        ),
-                        onTap: () {},
+                Card(
+                  child: ListTile(
+                    title: const Text(
+                      '카카오 및 토스 연결 방법',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Card(
-                      child: ListTile(
-                        title: const Text(
-                          '로그아웃',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.exit_to_app_rounded,
-                          color: Colors.black87,
-                        ),
-                        onTap: () {
-                          AuthController.instance.logout();
-                          AuthController.instance.logoutGoogle();
-                        },
+                    trailing: const Icon(
+                      Icons.attach_money_sharp,
+                      color: Colors.black87,
+                    ),
+                    onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => PlusPage()),
+                      // );
+                    },
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: const Text(
+                      '환경설정',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+                    trailing: const Icon(
+                      Icons.settings,
+                      color: Colors.black87,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingPage()),
+                      );
+                    },
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: const Text(
+                      '로그아웃',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.exit_to_app_rounded,
+                      color: Colors.black87,
+                    ),
+                    onTap: () {
+                      AuthController.instance.logout();
+                      AuthController.instance.logoutGoogle();
+                    },
+                  ),
                 ),
               ],
             ),
