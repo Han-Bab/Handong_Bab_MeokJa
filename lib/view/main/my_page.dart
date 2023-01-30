@@ -9,7 +9,7 @@ import 'package:han_bab/view/onboarding/toss_intro_page.dart';
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
 
-  var kakaoCheck = true;
+  var kakaoCheck = false;
   var tossCheck = true;
 
   @override
@@ -204,7 +204,9 @@ class ProfilePage extends StatelessWidget {
                               width: 50,
                               height: 25,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+
+                                },
                                 style: TextButton.styleFrom(
                                   padding: const EdgeInsets.only(top: 0),
                                   shape: const BeveledRectangleBorder(
@@ -306,7 +308,12 @@ class ProfilePage extends StatelessWidget {
                           Icons.settings,
                           color: Colors.black87,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => PlusPage()),
+                          // );
+                        },
                       ),
                     ),
                     Card(
