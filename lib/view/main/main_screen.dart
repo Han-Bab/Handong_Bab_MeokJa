@@ -33,7 +33,7 @@ class MainScreen extends StatelessWidget {
                 CommunityPage(),
                 Container(),
                 GroupListViewDemo(),
-                ProfilePage(),
+                MyPage(),
               ],
             ),
           ),
