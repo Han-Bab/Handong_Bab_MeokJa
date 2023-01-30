@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
-
+import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +12,10 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.put(AuthController());
+
+    print(authController.getUserInfo('userName'));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("마이페이지"),
@@ -31,8 +36,8 @@ class ProfilePage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              '감자튀김 우마이',
+                            Text(
+                              '',
                               style: TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
