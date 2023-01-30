@@ -14,11 +14,11 @@ class CommunityPage extends StatefulWidget {
 
 class _CommunityPageState extends State<CommunityPage> {
   var titleList = [
-    '기이 성적',
+    '양덕 맛집',
     '방학에 학교에 남는 사람?',
     '1월 2일 새벽 감사',
     '도와주세요',
-    '성적정정기간',
+    '수강 신청 교환 기간',
     '일생 한국어 분반',
     '오늘 오석',
     '겨울 나비',
@@ -26,15 +26,15 @@ class _CommunityPageState extends State<CommunityPage> {
     '점메추'
   ];
 
-  var heart = ['1', '2', '1', '5', '18', '0', '9', '10', '54', '4'];
+  List<int> heart = [51,0,11,7,3,1,5,88,1,14];
 
   var content = [
-    '진짜 대체 언제 나옴',
-    '물어볼 거 있어요',
+    '추천해 주세요',
+    '물어볼 거 있음',
     '맛있는 밥을 먹게 해주셔서 감사합니다!',
     '이 친구 왜 안 되는 거죠ㅠㅠ',
     '언제까지인지 아시는 분?',
-    '왜 점수 안 나오나요!?',
+    '정원 몇 명이야?',
     '열었나요?',
     '는 넘무 귀엽다',
     '문의 주세요',
@@ -104,9 +104,9 @@ class _CommunityPageState extends State<CommunityPage> {
                                   height: 20,
                                   child: Row(
                                     children: [
-                                      const LikeButton(
+                                       LikeButton(
                                         size: 25,
-                                        likeCount: 0,
+                                        likeCount: heart[index],
                                       ),
                                       const SizedBox(
                                         width: 10,
