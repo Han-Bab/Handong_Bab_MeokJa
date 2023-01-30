@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/main_screen.dart';
 import 'message.dart';
@@ -10,6 +11,7 @@ import 'new_message.dart';
 class ChatRoom extends StatelessWidget {
   ChatRoom({Key? key}) : super(key: key);
 
+  var restaurant = Get.arguments;
   late Uri _url;
 
   Future<void> _launchUrl() async {
@@ -186,14 +188,14 @@ class ChatRoom extends StatelessWidget {
           color: Colors.black,
         ),
         iconTheme: IconThemeData(color: Colors.black),
-        // title: Text(
-        //   widget.chat.name,
-        //   style: const TextStyle(
-        //     color: Colors.black,
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: 20,
-        //   ),
-        // ),
+        title: Text(
+          restaurant.groupName,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         backgroundColor: Colors.white,
       ),
       endDrawer: Drawer(

@@ -2,6 +2,14 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
 
+extension TimeOfDayConverter on TimeOfDay {
+  String to24hours() {
+    final hour = this.hour.toString().padLeft(2, "0");
+    final min = this.minute.toString().padLeft(2, "0");
+    return "$hour:$min";
+  }
+}
+
 class OrderTimeButton extends GetView<OrderTimeButtonController> {
   const OrderTimeButton({Key? key}) : super(key: key);
 
@@ -14,7 +22,7 @@ class OrderTimeButton extends GetView<OrderTimeButtonController> {
 
       if (result != null) {
         if (!mounted) return;
-        controller.setOrderTime(result.format(context));
+        controller.setOrderTime(result.to24hours());
       }
     }
 

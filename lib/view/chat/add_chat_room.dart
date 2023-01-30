@@ -22,13 +22,12 @@ class AddChatRoom extends StatelessWidget {
 
   String accountNumber = "1002-452-023325 우리";
   String pickup = "";
-  String maxPeople= "";
+  String maxPeople = "";
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OrderTimeButtonController());
     double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -51,19 +50,23 @@ class AddChatRoom extends StatelessWidget {
               child: Column(
                 children: [
                   DottedBorder(
-                    child: Container(
-                      width: 400,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/chef.gif'),
-                        ),
-                      ),
-                    ),
                     color: Colors.grey,
                     dashPattern: const [5, 3],
                     borderType: BorderType.RRect,
                     radius: const Radius.circular(10),
+                    child: Container(
+                      width: 400,
+                      height: 200,
+                      child: Image.asset(
+                          "assets/images/${_restaurantController.text}.jpg",
+                          fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Image.asset(
+                                "assets/hanbab_icon.png",
+                                fit: BoxFit.fitHeight);
+                          }),
+                    ),
                   ),
                   const SizedBox(
                     height: 30,
@@ -208,7 +211,7 @@ class AddChatRoom extends StatelessWidget {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Get.off(MainScreen());
+                                  Get.off(() => MainScreen());
                                 },
                                 child: const Text("취소하기"),
                               ),
@@ -218,27 +221,30 @@ class AddChatRoom extends StatelessWidget {
                             ),
                             Expanded(
                               child: ElevatedButton(
-                                  onPressed: () async {
-                                    var result = await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth
-                                        .instance.currentUser!.uid).get();
-                                    String userName = result['userName'];
-                                    DatabaseService(
-                                            uid: FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                        .createGroup(
-                                           userName,
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                        _restaurantController.text,
-                                        orderTimeController.orderTime.value,
-                                            pickup,
-                                            maxPeople)
-                                        .whenComplete(() {});
-                                    Get.to(const MainScreen());
-                                  },
-                                  child: const Text("생성하기"),
-                                ),
-                              )
+                                onPressed: () async {
+                                  var result = await FirebaseFirestore.instance
+                                      .collection('user')
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                      .get();
+                                  String userName = result['userName'];
+                                  DatabaseService(
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      .createGroup(
+                                          userName,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          _restaurantController.text,
+                                          orderTimeController.orderTime.value,
+                                          pickup,
+                                          maxPeople)
+                                      .whenComplete(() {});
+                                  Get.to(() => const MainScreen());
+                                },
+                                child: const Text("생성하기"),
+                              ),
+                            )
                           ],
                         ),
                       ],
