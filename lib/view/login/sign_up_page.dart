@@ -1,13 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
-import 'package:han_bab/view/login/verify_signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -23,19 +20,23 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   bool validation = false;
   // delay시간 때 스피너
-  bool showSpinner = false;
+  bool _showSpinner = false;
   // validation 기능 구현을 위한 세 개의 string 변수
   Map userInfo = {
     'userEmail': '',
     'userPW': '',
     'userName': '',
-    'userPhone': ''
+    'userPhone': '',
+    'userNickName': '',
+    'userAccount': ''
   };
   FocusNode emailFocusNode = FocusNode();
 
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _visibility = false;
+
+  bool _isClicked = false;
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -62,6 +63,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.put(AuthController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("회원 가입"),
@@ -69,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
         automaticallyImplyLeading: false,
       ),
       body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
+        inAsyncCall: _showSpinner,
         child: Form(
           key: _formKey,
           child: GestureDetector(
@@ -96,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (value!.isEmpty) {
                           return "이메일을 입력해주세요";
                         }
-                        if (!value!.contains('@handong.ac.kr')) {
+                        if (!value.contains('@handong.ac.kr')) {
                           return "한동계정을 입력해주세요";
                         }
                         return null;
@@ -231,13 +234,113 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       decoration: const InputDecoration(
                         hintText: "010-0000-0000",
-                        hintStyle: TextStyle(fontSize: 15),
+                        hintStyle: TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         contentPadding: EdgeInsets.all(10),
                       ),
                       inputFormatters: [MaskedInputFormatter("000-0000-0000")],
+                      onTap: () {},
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "닉네임",
+                      ),
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        _isClicked = false;
+                        userInfo['userNickName'] = value;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "닉네임을 입력해주세요";
+                        }
+                        if (value.length > 7) {
+                          return "7자 이하로 설정해주세요";
+                        }
+                        if (!_isClicked) {
+                          return '중복 확인을 해주세요';
+                        } else if (!authController.isUniqueNick.value) {
+                          return '중복된 닉네임이 존재합니다';
+                        }
+
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "닉네임을 입력해주세요",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                        suffixIcon: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border(left: BorderSide(color: Colors.grey))),
+                          child: TextButton(
+                            onPressed: () async {
+                              _isClicked = true;
+                              try {
+                                print('닉네임 중복 체크');
+                                authController.isUniqueNick.value =
+                                    await authController.checkNickName(
+                                        userInfo['userNickName']);
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                              print(authController.isUniqueNick.value);
+                              _tryValidation();
+                              if (authController.isUniqueNick.value) {
+                                Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              } else {
+                                Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요',
+                                    snackPosition: SnackPosition.BOTTOM);
+                              }
+                            },
+                            child: Text('중복'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              // backgroundColor: Colors.grey[300],
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {},
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "주계좌번호",
+                      ),
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        userInfo['userAccount'] = value;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "사용할 계좌번호를 입력해주세요";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "ex) 우리 1002452023325",
+                        hintStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
                       onTap: () {},
                     ),
                     const SizedBox(
@@ -340,6 +443,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Row(
                       children: [
                         Expanded(
+                          flex: 1,
                           child: ElevatedButton(
                             onPressed: () {
                               Get.back();
@@ -351,17 +455,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: 10,
                         ),
                         Expanded(
+                          flex: 1,
                           child: ElevatedButton(
-                            onPressed: () async {
-                              _tryValidation();
+                            onPressed: () {
                               setState(() {
-                                showSpinner = true;
+                                _showSpinner = true;
                               });
+                              _tryValidation();
                               if (validation) {
                                 AuthController.instance.register(userInfo);
                               }
                               setState(() {
-                                showSpinner = false;
+                                _showSpinner = false;
                               });
                             },
                             child: const Text("가입"),

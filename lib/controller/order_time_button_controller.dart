@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:get/get.dart';
 
 class OrderTimeButtonController extends GetxController {
@@ -10,4 +8,5 @@ class OrderTimeButtonController extends GetxController {
   void setOrderTime(String? _selectedTime) {
     orderTime(_selectedTime);
   }
+
 }

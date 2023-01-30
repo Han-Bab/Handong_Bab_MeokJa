@@ -4,18 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/main_screen.dart';
-import 'model.dart';
 import 'message.dart';
 import 'new_message.dart';
 
-class ChatRoom extends StatefulWidget {
-  const ChatRoom({Key? key}) : super(key: key);
+class ChatRoom extends StatelessWidget {
+  ChatRoom({Key? key}) : super(key: key);
 
-  @override
-  State<ChatRoom> createState() => _ChatRoomState();
-}
-
-class _ChatRoomState extends State<ChatRoom> {
   late Uri _url;
 
   Future<void> _launchUrl() async {
@@ -25,7 +19,6 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   void nextPage(context) {
-    // 상세 페이지 넘겨주기
     showDialog(
         context: context,
         builder: (context) {

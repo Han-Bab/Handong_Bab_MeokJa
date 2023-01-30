@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'chat_bubble.dart';
 
+// 말풍선 안 채팅 내용
 class Messages extends StatelessWidget {
   const Messages({Key? key}) : super(key: key);
 
@@ -17,7 +18,7 @@ class Messages extends StatelessWidget {
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

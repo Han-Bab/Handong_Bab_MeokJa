@@ -26,18 +26,7 @@ class _CommunityPageState extends State<CommunityPage> {
     '점메추'
   ];
 
-  var heart = [
-    '1',
-    '2',
-    '1',
-    '5',
-    '18',
-    '0',
-    '9',
-    '10',
-    '54',
-    '4'
-  ];
+  var heart = ['1', '2', '1', '5', '18', '0', '9', '10', '54', '4'];
 
   var content = [
     '진짜 대체 언제 나옴',
@@ -59,10 +48,7 @@ class _CommunityPageState extends State<CommunityPage> {
       appBar: AppBar(
         title: const Text(
           '자유게시판',
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-          ),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -114,7 +100,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                         fontSize: 15, color: Colors.black54),
                                   ),
                                 ),
-                                Positioned(
+                                SizedBox(
                                   height: 20,
                                   child: Row(
                                     children: [
@@ -131,7 +117,9 @@ class _CommunityPageState extends State<CommunityPage> {
                                         likeBuilder: (isTapped) {
                                           return Icon(
                                             Icons.chat_bubble_outline_outlined,
-                                            color: isTapped ? Colors.black54 : Colors.grey,
+                                            color: isTapped
+                                                ? Colors.black54
+                                                : Colors.grey,
                                           );
                                         },
                                       )
@@ -161,7 +149,8 @@ class _CommunityPageState extends State<CommunityPage> {
                   );
                 },
                 style: TextButton.styleFrom(
-                    primary: Colors.black, backgroundColor: Colors.grey),
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.grey),
                 child: const Text(
                   '글 쓰기',
                   style: TextStyle(fontSize: 20),
