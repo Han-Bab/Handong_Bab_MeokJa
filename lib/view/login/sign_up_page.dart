@@ -296,7 +296,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               print(authController.isUniqueNick.value);
                               _tryValidation();
-                              if (userInfo['userNickName'] != '') {
+                              if (userInfo['userNickName'] != '' &&
+                                  userInfo['userNickName'].toString().length <=
+                                      7) {
                                 if (authController.isUniqueNick.value) {
                                   Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
                                       snackPosition: SnackPosition.BOTTOM);
