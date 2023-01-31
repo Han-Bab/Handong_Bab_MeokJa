@@ -36,7 +36,7 @@ class KakaoIntroPage extends StatelessWidget {
       done: const Text("done"),
       onDone: () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => ProfilePage()),
+          MaterialPageRoute(builder: (context) => MyPage()),
         );
       },
       next: const Icon(Icons.arrow_forward),
