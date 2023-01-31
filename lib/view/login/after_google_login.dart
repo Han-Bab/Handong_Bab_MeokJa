@@ -202,12 +202,14 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                               }
                               print(authController.isUniqueNick.value);
                               _tryValidation();
-                              if (authController.isUniqueNick.value) {
-                                Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
-                                    snackPosition: SnackPosition.BOTTOM);
-                              } else {
-                                Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요!',
-                                    snackPosition: SnackPosition.BOTTOM);
+                              if (userInfo['userNickName'] != '') {
+                                if (authController.isUniqueNick.value) {
+                                  Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
+                                      snackPosition: SnackPosition.BOTTOM);
+                                } else {
+                                  Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요',
+                                      snackPosition: SnackPosition.BOTTOM);
+                                }
                               }
                             },
                             child: Text('중복'),
