@@ -221,6 +221,11 @@ class AuthController extends GetxController {
   void logout() {
     authentication.signOut();
   }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await authentication.sendPasswordResetEmail(email: email);
+  }
 }
 
 void showToast(String msg) {

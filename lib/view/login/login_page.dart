@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/sign_up_page.dart';
-import 'package:han_bab/view/login/verify_login_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
@@ -232,9 +231,52 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                               ),
                               GestureDetector(
-                                child: const Text("비밀번호 찾기"),
+                                child: const Text("비밀번호 재생성"),
                                 onTap: () {
                                   debugPrint("비번찾기");
+                                  String email = '';
+                                  Get.defaultDialog(
+                                    title: '비밀번호 재생성',
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                    content: Column(
+                                      children: [
+                                        const Text(
+                                          '계정',
+                                        ),
+                                        TextFormField(
+                                          onChanged: (value) {
+                                            email = value;
+                                          },
+                                          decoration: const InputDecoration(
+                                            hintText:
+                                                'ex) 2XX00XXX@handong.ac.kr',
+                                            hintStyle: TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    textConfirm: '재생성',
+                                    confirmTextColor: Colors.white,
+                                    onConfirm: () {
+                                      if (email.isNotEmpty) {
+                                        try {
+                                          authController.resetPassword(email);
+                                          Get.back();
+                                          Get.snackbar(
+                                              '알림', '비밀번호 재생성 메일을 전송했습니다',
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM);
+                                        } catch (e) {
+                                          Get.snackbar('알림', e.toString());
+                                        }
+                                      }
+                                    },
+                                    textCancel: '취소',
+                                    onCancel: Get.back,
+                                  );
                                 },
                               ),
                             ],
