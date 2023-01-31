@@ -121,6 +121,10 @@ class AuthController extends GetxController {
         'userPhone': userInfo['userPhone'],
         'userNickName': userInfo['userNickName'],
         'userAccount': userInfo['userAccount'],
+        'groups': [],
+        'uid': user!.uid,
+        'kakaoLink': false,
+        'tossLink': false,
       });
     } catch (e) {
       print(e.toString());
@@ -192,17 +196,22 @@ class AuthController extends GetxController {
   }
 
   Future<String> getUserInfo(String info) async {
-    try {
-      final user = authentication.currentUser;
-      var docRef =
-          await FirebaseFirestore.instance.collection('user').doc(user?.uid);
-      docRef.get().then((DocumentSnapshot doc) {
-        return doc[info];
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-    return '';
+    final user = authentication.currentUser;
+    var docRef = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user?.uid)
+        .get();
+    return docRef[info];
+  }
+
+  Future<bool> checkUserLink(String info) async {
+    final user = authentication.currentUser;
+    var docRef = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user?.uid)
+        .get();
+    print(docRef[info]);
+    return docRef[info];
   }
 
   Future<void> logoutGoogle() async {

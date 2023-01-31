@@ -8,14 +8,17 @@ import '../mypage/setting_page.dart';
 class MyPage extends StatelessWidget {
   MyPage({Key? key}) : super(key: key);
 
-  var kakaoCheck = false;
-  var tossCheck = false;
+  bool kakaoCheck = false;
+  bool tossCheck = false;
 
   @override
   Widget build(BuildContext context) {
     final authController = Get.put(AuthController());
 
-    print(authController.getUserInfo('userName'));
+    void getLinkStatus(String link) async {
+      kakaoCheck = await authController.checkUserLink(link);
+      // print(kakaoCheck);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -35,13 +38,34 @@ class MyPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              '감자튀김',
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: FutureBuilder(
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator
+                                        .adaptive();
+                                  }
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error.toString());
+                                    return Text("Error");
+                                  } else {
+                                    // print(snapshot.data);
+                                    return Text(
+                                      snapshot.data.toString(),
+                                      style: TextStyle(
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 8,
+                                      ),
+                                    );
+                                  }
+                                },
+                                future:
+                                    authController.getUserInfo('userNickName'),
                               ),
                             ),
                             Row(
@@ -60,27 +84,47 @@ class MyPage extends StatelessWidget {
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 7),
-                                        child: Container(
-                                          height: 25,
-                                          width: 85,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: kakaoCheck
-                                                ? const Color(0xFFFFEB03)
-                                                : Colors.grey,
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              'Kakao',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
+                                        child: FutureBuilder(
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<dynamic> snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const CircularProgressIndicator
+                                                  .adaptive();
+                                            }
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error.toString());
+                                              return Text("Error");
+                                            } else {
+                                              print(snapshot.data);
+                                              return Container(
+                                                height: 25,
+                                                width: 85,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  color: snapshot.data
+                                                      ? const Color(0xFFFFEB03)
+                                                      : Colors.grey,
+                                                ),
+                                                child: const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 2),
+                                                  child: Text(
+                                                    'Kakao',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          future: authController
+                                              .checkUserLink('kakaoLink'),
                                         ),
                                       ),
                                       onTap: () {},
@@ -88,33 +132,52 @@ class MyPage extends StatelessWidget {
                                     GestureDetector(
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 7),
-                                        child: Container(
-                                          height: 25,
-                                          width: 85,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: tossCheck
-                                                ? const Color(0xFF3268E8)
-                                                : Colors.grey,
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              'Toss',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: tossCheck
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 17,
-                                                fontWeight: tossCheck
-                                                    ? FontWeight.w500
-                                                    : FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
+                                        child: FutureBuilder(
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<dynamic> snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const CircularProgressIndicator
+                                                  .adaptive();
+                                            }
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error.toString());
+                                              return Text("Error");
+                                            } else {
+                                              print(snapshot.data);
+                                              return Container(
+                                                height: 25,
+                                                width: 85,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  color: snapshot.data
+                                                      ? const Color(0xFF3268E8)
+                                                      : Colors.grey,
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2),
+                                                  child: Text(
+                                                    'Toss',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: snapshot.data
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize: 17,
+                                                      fontWeight: snapshot.data
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          future: authController
+                                              .checkUserLink('tossLink'),
                                         ),
                                       ),
                                       onTap: () {},
@@ -130,7 +193,7 @@ class MyPage extends StatelessWidget {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               '이름',
                               style: TextStyle(
@@ -141,11 +204,29 @@ class MyPage extends StatelessWidget {
                             SizedBox(
                               width: 60,
                             ),
-                            Text(
-                              '윤유원',
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (snapshot.hasError) {
+                                  print(snapshot.error.toString());
+                                  return Text("Error");
+                                } else {
+                                  // print(snapshot.data);
+                                  return Text(
+                                    snapshot.data.toString(),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      letterSpacing: 3,
+                                    ),
+                                  );
+                                }
+                              },
+                              future: authController.getUserInfo('userName'),
                             ),
                           ],
                         ),
@@ -154,7 +235,7 @@ class MyPage extends StatelessWidget {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               '이메일',
                               style: TextStyle(
@@ -165,7 +246,26 @@ class MyPage extends StatelessWidget {
                             SizedBox(
                               width: 40,
                             ),
-                            Text('yuwon0628@handong.ac.kr'),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (snapshot.hasError) {
+                                  print(snapshot.error.toString());
+                                  return Text("Error");
+                                } else {
+                                  // print(snapshot.data);
+                                  return Text(
+                                    snapshot.data.toString(),
+                                  );
+                                }
+                              },
+                              future: authController.getUserInfo('userEmail'),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -176,7 +276,7 @@ class MyPage extends StatelessWidget {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   '전화번호',
                                   style: TextStyle(
@@ -187,7 +287,27 @@ class MyPage extends StatelessWidget {
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Text('010 - 9315 - 6383'),
+                                FutureBuilder(
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator
+                                          .adaptive();
+                                    }
+                                    if (snapshot.hasError) {
+                                      print(snapshot.error.toString());
+                                      return Text("Error");
+                                    } else {
+                                      // print(snapshot.data);
+                                      return Text(
+                                        snapshot.data.toString(),
+                                      );
+                                    }
+                                  },
+                                  future:
+                                      authController.getUserInfo('userPhone'),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -206,7 +326,7 @@ class MyPage extends StatelessWidget {
                                         content: TextFormField(
                                           controller: phoneNumberController,
                                           decoration: const InputDecoration(
-                                              hintText: '010 - 1234 - 5678'),
+                                              hintText: '010 - 0000 - 0000'),
                                         ),
                                         actions: [
                                           TextButton(
@@ -261,7 +381,7 @@ class MyPage extends StatelessWidget {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   '계좌번호',
                                   style: TextStyle(
@@ -272,7 +392,27 @@ class MyPage extends StatelessWidget {
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Text('토스뱅크 100013557921'),
+                                FutureBuilder(
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator
+                                          .adaptive();
+                                    }
+                                    if (snapshot.hasError) {
+                                      print(snapshot.error.toString());
+                                      return Text("Error");
+                                    } else {
+                                      // print(snapshot.data);
+                                      return Text(
+                                        snapshot.data.toString(),
+                                      );
+                                    }
+                                  },
+                                  future:
+                                      authController.getUserInfo('userAccount'),
+                                ),
                               ],
                             ),
                             SizedBox(
