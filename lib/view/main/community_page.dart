@@ -26,7 +26,7 @@ class _CommunityPageState extends State<CommunityPage> {
     '점메추'
   ];
 
-  List<int> heart = [51,0,11,7,3,1,5,88,1,14];
+  List<int> heart = [51, 0, 11, 7, 3, 1, 5, 88, 1, 14];
 
   var content = [
     '추천해 주세요',
@@ -47,7 +47,7 @@ class _CommunityPageState extends State<CommunityPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '자유게시판',
+          '음식게시판',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -104,7 +104,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                   height: 20,
                                   child: Row(
                                     children: [
-                                       LikeButton(
+                                      LikeButton(
                                         size: 25,
                                         likeCount: heart[index],
                                       ),
@@ -149,8 +149,8 @@ class _CommunityPageState extends State<CommunityPage> {
                   );
                 },
                 style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.grey),
+                  side: BorderSide(color: Colors.grey),
+                ),
                 child: const Text(
                   '글 쓰기',
                   style: TextStyle(fontSize: 20),
