@@ -99,7 +99,7 @@ class HomePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           String userName = "";
                           if (homeController
-                              .restaurants[index].members.isNotEmpty) {
+                              .restaurants[index].members.isNotEmpty) { // <- 필요 없을듯
                             return GestureDetector(
                               onTap: () async {
                                 if (homeController
