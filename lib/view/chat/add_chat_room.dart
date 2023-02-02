@@ -59,13 +59,12 @@ class AddChatRoom extends StatelessWidget {
                       height: 200,
                       child: Image.asset(
                           "assets/images/${_restaurantController.text}.jpg",
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                                "assets/hanbab_icon.png",
-                                fit: BoxFit.fitHeight);
-                          }),
+                          fit: BoxFit.cover, errorBuilder:
+                              (BuildContext context, Object exception,
+                                  StackTrace? stackTrace) {
+                        return Image.asset("assets/hanbab_icon.png",
+                            fit: BoxFit.fitHeight);
+                      }),
                     ),
                   ),
                   const SizedBox(
@@ -240,7 +239,7 @@ class AddChatRoom extends StatelessWidget {
                                           pickup,
                                           maxPeople)
                                       .whenComplete(() {});
-                                  Get.to(() => const MainScreen());
+                                  Get.to(() => MainScreen());
                                 },
                                 child: const Text("생성하기"),
                               ),

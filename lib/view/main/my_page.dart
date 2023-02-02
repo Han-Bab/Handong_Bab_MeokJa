@@ -67,7 +67,8 @@ class MyPage extends StatelessWidget {
                                       );
                                     }
                                   },
-                                  future: authController.getUserInfo('userName'),
+                                  future:
+                                      authController.getUserInfo('userName'),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(7.0),
@@ -89,7 +90,8 @@ class MyPage extends StatelessWidget {
                                         );
                                       }
                                     },
-                                    future: authController.getUserInfo('userEmail'),
+                                    future:
+                                        authController.getUserInfo('userEmail'),
                                   ),
                                 ),
                               ],
@@ -122,7 +124,7 @@ class MyPage extends StatelessWidget {
                                               print(snapshot.error.toString());
                                               return Text("Error");
                                             } else {
-                                              print(snapshot.data);
+                                              // print(snapshot.data);
                                               return Container(
                                                 height: 25,
                                                 width: 85,
@@ -170,7 +172,7 @@ class MyPage extends StatelessWidget {
                                               print(snapshot.error.toString());
                                               return const Text("Error");
                                             } else {
-                                              print(snapshot.data);
+                                              // print(snapshot.data);
                                               return Container(
                                                 height: 25,
                                                 width: 85,
@@ -183,7 +185,7 @@ class MyPage extends StatelessWidget {
                                                 ),
                                                 child: Padding(
                                                   padding:
-                                                    EdgeInsets.only(top: 2),
+                                                      EdgeInsets.only(top: 2),
                                                   child: Text(
                                                     'Toss',
                                                     textAlign: TextAlign.center,
@@ -254,8 +256,8 @@ class MyPage extends StatelessWidget {
                                       );
                                     }
                                   },
-                                  future:
-                                      authController.getUserInfo('userNickName'),
+                                  future: authController
+                                      .getUserInfo('userNickName'),
                                 ),
                               ],
                             ),
@@ -269,7 +271,7 @@ class MyPage extends StatelessWidget {
                                     barrierDismissible: true,
                                     builder: (BuildContext context) {
                                       var nickNameController =
-                                      TextEditingController();
+                                          TextEditingController();
                                       return AlertDialog(
                                         title: const Text('닉네임 수정'),
                                         content: TextFormField(
@@ -451,8 +453,7 @@ class MyPage extends StatelessWidget {
                                       AsyncSnapshot<dynamic> snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return const CircularProgressIndicator
-                                          .adaptive();
+                                      return const CircularProgressIndicator();
                                     }
                                     if (snapshot.hasError) {
                                       print(snapshot.error.toString());
@@ -555,7 +556,8 @@ class MyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const OnboardingPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const OnboardingPage()),
                       );
                     },
                   ),

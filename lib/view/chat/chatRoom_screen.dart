@@ -181,8 +181,8 @@ class ChatRoom extends StatelessWidget {
           padding: EdgeInsets.zero, // 패딩 설정
           constraints: const BoxConstraints(), // constraints
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MainScreen()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MainScreen()));
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
@@ -268,7 +268,7 @@ class ChatRoom extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const MainScreen()));
+                              builder: (context) => MainScreen()));
                         },
                         child: Text("예"),
                       ),

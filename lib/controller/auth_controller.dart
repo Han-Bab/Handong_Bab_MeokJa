@@ -210,7 +210,7 @@ class AuthController extends GetxController {
         .collection('user')
         .doc(user?.uid)
         .get();
-    print(docRef[info]);
+    // print(docRef[info]);
     return docRef[info];
   }
 
@@ -222,7 +222,6 @@ class AuthController extends GetxController {
     authentication.signOut();
   }
 
-  @override
   Future<void> resetPassword(String email) async {
     await authentication.sendPasswordResetEmail(email: email);
   }
