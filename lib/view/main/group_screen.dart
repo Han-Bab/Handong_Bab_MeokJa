@@ -165,7 +165,7 @@ class GroupListViewDemo extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8, right: 8),
                                         child: Text(
-                                          index.restaurantName,
+                                          index.groupName,
                                           style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
@@ -176,7 +176,7 @@ class GroupListViewDemo extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(right: 5),
                                         child: Text(
-                                          index.time,
+                                          index.orderTime,
                                           style: const TextStyle(fontSize: 14),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -197,7 +197,7 @@ class GroupListViewDemo extends StatelessWidget {
                                         ),
                                         Container(
                                           margin: const EdgeInsets.only(left: 8),
-                                          child: Text(index.userName),
+                                          child: Text(index.admin),
                                         )
                                       ],
                                     ),
