@@ -86,45 +86,60 @@ class HomePage extends StatelessWidget {
                 // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                 else {
                   return RefreshIndicator(
-                    onRefresh: () =>
-                        refresh().then((_) =>
-                        {
+                    onRefresh: () => refresh().then((_) => {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text(
                                       '새로고침 되었습니다.')) // refresh 완료시 snackbar 생성
-                          )
+                              )
                         }),
                     child: Obx(
-                          () =>
-                          ListView.builder(
-                            itemCount: homeController.restaurants.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () async {
-                                  if (homeController
-                                      .restaurants[index].currPeople !=
-                                      homeController.restaurants[index]
-                                          .maxPeople) {
-                                    debugPrint(homeController
-                                        .restaurants[index].groupName);
-                                    var result = await FirebaseFirestore.instance
-                                        .collection('user')
-                                        .doc(FirebaseAuth
-                                        .instance.currentUser!.uid)
-                                        .get();
-                                    String userName = result['userName'];
-                                    print("${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
-                                    DatabaseService(
-                                        uid: FirebaseAuth
-                                            .instance.currentUser!.uid).groupJoin(
-                                        homeController.restaurants[index].groupId,
-                                        userName,
-                                        homeController.restaurants[index].groupName);
-                                    Get.to(() => ChatRoom(),
-                                        arguments: homeController
-                                            .restaurants[index]);
-                                  } else {
+                      () => ListView.builder(
+                        itemCount: homeController.restaurants.length,
+                        itemBuilder: (context, index) {
+                          String userName = "";
+                          if (homeController
+                              .restaurants[index].members.isNotEmpty) {
+                            return GestureDetector(
+                              onTap: () async {
+                                if (homeController
+                                    .restaurants[index].currPeople !=
+                                    homeController
+                                        .restaurants[index].maxPeople) {
+                                  debugPrint(homeController
+                                      .restaurants[index].groupName);
+                                  var result = await FirebaseFirestore.instance
+                                      .collection('user')
+                                      .doc(FirebaseAuth
+                                      .instance.currentUser!.uid)
+                                      .get();
+                                  userName = result['userName'];
+                                  print(
+                                      "${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
+                                  DatabaseService(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                      .groupJoin(
+                                      homeController
+                                          .restaurants[index].groupId,
+                                      userName,
+                                      homeController
+                                          .restaurants[index].groupName);
+                                  Get.to(() => ChatRoom(),
+                                      arguments:
+                                      homeController.restaurants[index]);
+                                } else {
+                                  print(
+                                      "TF:${!await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).isUserJoined(homeController.restaurants[index].groupName, homeController.restaurants[index].groupId, userName)}");
+                                  if (!await DatabaseService(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                      .isUserJoined(
+                                      homeController
+                                          .restaurants[index].groupName,
+                                      homeController
+                                          .restaurants[index].groupId,
+                                      userName)) {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
@@ -142,70 +157,93 @@ class HomePage extends StatelessWidget {
                                             ],
                                           );
                                         });
+                                  } else {
+                                    Get.to(() => ChatRoom(),
+                                        arguments:
+                                        homeController.restaurants[index]);
                                   }
-                                },
-                                child: Card(
-                                  color: (homeController
-                                      .restaurants[index].currPeople ==
-                                      homeController
-                                          .restaurants[index].maxPeople)
-                                      ? Colors.grey
-                                      : Colors.white,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(20.0),
-                                            child: Image.asset(
-                                              homeController
-                                                  .restaurants[index].imgUrl,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (
-                                                  BuildContext? context,
-                                                  Object? exception,
-                                                  StackTrace? stackTrace) {
-                                                return Container(
-                                                  height: 120,
-                                                  width: 120,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        width: 3),
+                                }
+                              },
+                              child: Card(
+                                color: (homeController
+                                    .restaurants[index].currPeople ==
+                                    homeController
+                                        .restaurants[index].maxPeople)
+                                    ? Colors.grey
+                                    : Colors.white,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(20.0),
+                                          child: Image.asset(
+                                            homeController
+                                                .restaurants[index].imgUrl,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (BuildContext? context,
+                                                Object? exception,
+                                                StackTrace? stackTrace) {
+                                              return Container(
+                                                height: 120,
+                                                width: 120,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(width: 3),
+                                                  borderRadius:
+                                                  BorderRadius.circular(20),
+                                                ),
+                                                child: ClipRRect(
                                                     borderRadius:
                                                     BorderRadius.circular(
-                                                        20),
+                                                        20.0),
+                                                    child: Image.asset(
+                                                      'assets/hanbab_icon.png',
+                                                      scale: 5,
+                                                    )),
+                                              );
+                                            },
+                                          )),
+                                    ), //image
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.account_circle_sharp,
+                                                    color: (homeController
+                                                        .restaurants[
+                                                    index]
+                                                        .currPeople ==
+                                                        homeController
+                                                            .restaurants[
+                                                        index]
+                                                            .maxPeople)
+                                                        ? Colors.black
+                                                        : Colors.grey,
+                                                    size: 16,
                                                   ),
-                                                  child: ClipRRect(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                      child: Image.asset(
-                                                        'assets/hanbab_icon.png',
-                                                        scale: 5,
-                                                      )),
-                                                );
-                                              },
-                                            )),
-                                      ), //image
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .account_circle_sharp,
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    getName(homeController
+                                                        .restaurants[index]
+                                                        .admin),
+                                                    style: TextStyle(
+                                                      fontSize: 15,
                                                       color: (homeController
                                                           .restaurants[
                                                       index]
@@ -216,389 +254,136 @@ class HomePage extends StatelessWidget {
                                                               .maxPeople)
                                                           ? Colors.black
                                                           : Colors.grey,
-                                                      size: 16,
                                                     ),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Text(
-                                                      getName(homeController
-                                                          .restaurants[index]
-                                                          .admin),
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: (homeController
-                                                            .restaurants[
-                                                        index]
-                                                            .currPeople ==
-                                                            homeController
-                                                                .restaurants[
-                                                            index]
-                                                                .maxPeople)
-                                                            ? Colors.black
-                                                            : Colors.grey,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(homeController
-                                                        .restaurants[index]
-                                                        .orderTime),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(homeController
+                                                      .restaurants[index]
+                                                      .orderTime),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                homeController
+                                                    .restaurants[index]
+                                                    .groupName,
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black),
+                                              ),
+                                              if (homeController
+                                                  .restaurants[index]
+                                                  .currPeople !=
                                                   homeController
                                                       .restaurants[index]
-                                                      .groupName,
-                                                  style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight: FontWeight
-                                                          .bold,
+                                                      .maxPeople)
+                                                const Text(
+                                                  " ❯",
+                                                  style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      color: Colors.red),
+                                                )
+                                              else
+                                                const Text(
+                                                  " ❯",
+                                                  style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                      FontWeight.bold,
                                                       color: Colors.black),
                                                 ),
-                                                if (homeController
-                                                    .restaurants[index]
-                                                    .currPeople !=
-                                                    homeController
-                                                        .restaurants[index]
-                                                        .maxPeople)
-                                                  const Text(
-                                                    " ❯",
-                                                    style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                        color: Colors.red),
-                                                  )
-                                                else
-                                                  const Text(
-                                                    " ❯",
-                                                    style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                        color: Colors.black),
-                                                  ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  homeController
-                                                      .restaurants[index]
-                                                      .pickup,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: (homeController
-                                                        .restaurants[index]
-                                                        .currPeople ==
-                                                        homeController
-                                                            .restaurants[index]
-                                                            .maxPeople)
-                                                        ? Colors.black
-                                                        : Colors.grey,
-                                                  ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                homeController
+                                                    .restaurants[index].pickup,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: (homeController
+                                                      .restaurants[
+                                                  index]
+                                                      .currPeople ==
+                                                      homeController
+                                                          .restaurants[
+                                                      index]
+                                                          .maxPeople)
+                                                      ? Colors.black
+                                                      : Colors.grey,
                                                 ),
-                                                SizedBox(
-                                                  child: FittedBox(
-                                                    child: Row(
-                                                      children: [
-                                                        const Icon(
-                                                            CupertinoIcons
-                                                                .person),
-                                                        if (homeController
-                                                            .restaurants[index]
-                                                            .currPeople !=
-                                                            homeController
-                                                                .restaurants[index]
-                                                                .maxPeople)
-                                                          Text(
-                                                              '${homeController
-                                                                  .restaurants[index]
-                                                                  .currPeople}/${homeController
-                                                                  .restaurants[index]
-                                                                  .maxPeople}')
-                                                        else
-                                                          Text(
-                                                            '${homeController
-                                                                .restaurants[index]
-                                                                .currPeople}/${homeController
-                                                                .restaurants[index]
-                                                                .maxPeople}',
-                                                            style: const TextStyle(
-                                                                decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
-                                                                decorationColor:
-                                                                Colors.red,
-                                                                decorationThickness:
-                                                                3),
-                                                          ),
-                                                        const SizedBox(
-                                                          width: 5,
+                                              ),
+                                              SizedBox(
+                                                child: FittedBox(
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(CupertinoIcons
+                                                          .person),
+                                                      if (homeController
+                                                          .restaurants[
+                                                      index]
+                                                          .currPeople !=
+                                                          homeController
+                                                              .restaurants[
+                                                          index]
+                                                              .maxPeople)
+                                                        Text(
+                                                            '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
+                                                      else
+                                                        Text(
+                                                          '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
+                                                          style: const TextStyle(
+                                                              decoration:
+                                                              TextDecoration
+                                                                  .lineThrough,
+                                                              decorationColor:
+                                                              Colors.red,
+                                                              decorationThickness:
+                                                              3),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                              // if ((int.parse(homeController.restaurants[index].orderTime
-                              //             .substring(0, 2)) >
-                              //         int.parse(currHour)) ||
-                              //     ((int.parse(homeController.restaurants[index].orderTime
-                              //                 .substring(0, 2)) ==
-                              //             int.parse(currHour)) &&
-                              //         (int.parse(homeController
-                              //                 .restaurants[index].orderTime
-                              //                 .substring(3, 5)) >
-                              //             int.parse(currMinute)))) {
-                              //   return GestureDetector(
-                              //     onTap: () {
-                              //       if (homeController
-                              //               .restaurants[index].currPeople !=
-                              //           homeController
-                              //               .restaurants[index].maxPeople) {
-                              //         debugPrint(homeController
-                              //             .restaurants[index].groupName);
-                              //         Get.to(() => ChatRoom());
-                              //       } else {
-                              //         showDialog(
-                              //             context: context,
-                              //             barrierDismissible: false,
-                              //             builder: (BuildContext ctx) {
-                              //               return AlertDialog(
-                              //                 title: const Text("정원초과"),
-                              //                 content: const Text("인원이 마감되었습니다."),
-                              //                 actions: [
-                              //                   TextButton(
-                              //                     onPressed: () {
-                              //                       Get.back();
-                              //                     },
-                              //                     child: const Text("확인"),
-                              //                   ),
-                              //                 ],
-                              //               );
-                              //             });
-                              //       }
-                              //     },
-                              //     child: Card(
-                              //       color: (homeController
-                              //                   .restaurants[index].currPeople ==
-                              //               homeController
-                              //                   .restaurants[index].maxPeople)
-                              //           ? Colors.grey
-                              //           : Colors.white,
-                              //       child: Row(
-                              //         children: [
-                              //           SizedBox(
-                              //             width: 100,
-                              //             height: 100,
-                              //             child: ClipRRect(
-                              //               borderRadius:
-                              //                   BorderRadius.circular(20.0),
-                              //               child: Image.asset(
-                              //                 homeController
-                              //                     .restaurants[index].imgUrl,
-                              //                 fit: BoxFit.cover,
-                              //               ),
-                              //             ),
-                              //           ), //image
-                              //           const SizedBox(
-                              //             width: 16,
-                              //           ),
-                              //           Expanded(
-                              //             child: Column(
-                              //               crossAxisAlignment:
-                              //                   CrossAxisAlignment.start,
-                              //               children: [
-                              //                 Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.spaceBetween,
-                              //                   children: [
-                              //                     Row(
-                              //                       children: [
-                              //                         Icon(
-                              //                           Icons.account_circle_sharp,
-                              //                           color: (homeController
-                              //                                       .restaurants[
-                              //                                           index]
-                              //                                       .currPeople ==
-                              //                                   homeController
-                              //                                       .restaurants[
-                              //                                           index]
-                              //                                       .maxPeople)
-                              //                               ? Colors.black
-                              //                               : Colors.grey,
-                              //                           size: 16,
-                              //                         ),
-                              //                         const SizedBox(
-                              //                           width: 8,
-                              //                         ),
-                              //                         Text(
-                              //                           homeController
-                              //                               .restaurants[index]
-                              //                               .admin,
-                              //                           style: TextStyle(
-                              //                             fontSize: 15,
-                              //                             color: (homeController
-                              //                                         .restaurants[
-                              //                                             index]
-                              //                                         .currPeople ==
-                              //                                     homeController
-                              //                                         .restaurants[
-                              //                                             index]
-                              //                                         .maxPeople)
-                              //                                 ? Colors.black
-                              //                                 : Colors.grey,
-                              //                           ),
-                              //                         ),
-                              //                       ],
-                              //                     ),
-                              //                     Row(
-                              //                       children: [
-                              //                         Text(homeController
-                              //                             .restaurants[index].orderTime),
-                              //                         const SizedBox(
-                              //                           width: 5,
-                              //                         ),
-                              //                       ],
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //                 const SizedBox(
-                              //                   height: 10,
-                              //                 ),
-                              //                 Row(
-                              //                   children: [
-                              //                     Text(
-                              //                       homeController.restaurants[index]
-                              //                           .groupName,
-                              //                       style: const TextStyle(
-                              //                           fontSize: 20,
-                              //                           fontWeight: FontWeight.bold,
-                              //                           color: Colors.black),
-                              //                     ),
-                              //                     if (homeController
-                              //                             .restaurants[index]
-                              //                             .currPeople !=
-                              //                         homeController
-                              //                             .restaurants[index]
-                              //                             .maxPeople)
-                              //                       const Text(
-                              //                         " ❯",
-                              //                         style: TextStyle(
-                              //                             fontSize: 24,
-                              //                             fontWeight:
-                              //                                 FontWeight.bold,
-                              //                             color: Colors.red),
-                              //                       )
-                              //                     else
-                              //                       const Text(
-                              //                         " ❯",
-                              //                         style: TextStyle(
-                              //                             fontSize: 24,
-                              //                             fontWeight:
-                              //                                 FontWeight.bold,
-                              //                             color: Colors.black),
-                              //                       ),
-                              //                   ],
-                              //                 ),
-                              //                 const SizedBox(
-                              //                   height: 8,
-                              //                 ),
-                              //                 Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.spaceBetween,
-                              //                   children: [
-                              //                     Text(
-                              //                       homeController
-                              //                           .restaurants[index].pickup,
-                              //                       style: TextStyle(
-                              //                         fontSize: 15,
-                              //                         color: (homeController
-                              //                                     .restaurants[index]
-                              //                                     .currPeople ==
-                              //                                 homeController
-                              //                                     .restaurants[index]
-                              //                                     .maxPeople)
-                              //                             ? Colors.black
-                              //                             : Colors.grey,
-                              //                       ),
-                              //                     ),
-                              //                     SizedBox(
-                              //                       child: FittedBox(
-                              //                         child: Row(
-                              //                           children: [
-                              //                             const Icon(CupertinoIcons
-                              //                                 .person),
-                              //                             if (homeController
-                              //                                     .restaurants[index]
-                              //                                     .currPeople !=
-                              //                                 homeController
-                              //                                     .restaurants[index]
-                              //                                     .maxPeople)
-                              //                               Text(
-                              //                                   '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
-                              //                             else
-                              //                               Text(
-                              //                                 '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
-                              //                                 style: const TextStyle(
-                              //                                     decoration:
-                              //                                         TextDecoration
-                              //                                             .lineThrough,
-                              //                                     decorationColor:
-                              //                                         Colors.red,
-                              //                                     decorationThickness:
-                              //                                         3),
-                              //                               ),
-                              //                             const SizedBox(
-                              //                               width: 5,
-                              //                             ),
-                              //                           ],
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                   ],
-                              //                 )
-                              //               ],
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   );
-                              // } else {
-                              //   return const SizedBox(
-                              //     height: 1,
-                              //   );
-                              // }
-                            },
-                          ),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox(
+                              height: 0,
+                            );
+                          }
+                        },
+                      ),
                     ),
                   );
                 }
@@ -624,8 +409,7 @@ class MySearchDelegate extends SearchDelegate {
   ];
 
   @override
-  List<Widget>? buildActions(BuildContext context) =>
-      [
+  List<Widget>? buildActions(BuildContext context) => [
         IconButton(
           icon: const Icon(
             Icons.clear,
@@ -646,289 +430,309 @@ class MySearchDelegate extends SearchDelegate {
       ];
 
   @override
-  Widget? buildLeading(BuildContext context) =>
-      IconButton(
-          icon: const Icon(
-            // close searchbar
-            Icons.arrow_back,
-            color: Colors.blue,
-          ),
-          onPressed: () {
-            Get.to(() => const MainScreen());
-          });
+  Widget? buildLeading(BuildContext context) => IconButton(
+      icon: const Icon(
+        // close searchbar
+        Icons.arrow_back,
+        color: Colors.blue,
+      ),
+      onPressed: () {
+        Get.to(() => const MainScreen());
+      });
 
   @override
-  Widget buildResults(BuildContext context) =>
-      Center(
+  Widget buildResults(BuildContext context) => Center(
         child: Obx(
-              () =>
-              ListView.builder(
-                itemCount: homeController.restaurants.length,
-                itemBuilder: (context, index) {
-                  if (homeController.restaurants[index].groupName.contains(
-                      query)) {
-                    return GestureDetector(
-                      onTap: () async {
-                        if (homeController
-                            .restaurants[index].currPeople !=
-                            homeController.restaurants[index].maxPeople) {
-                          debugPrint(homeController
-                              .restaurants[index].groupName);
-                          var result = await FirebaseFirestore.instance
-                              .collection('user')
-                              .doc(FirebaseAuth
+          () => ListView.builder(
+            itemCount: homeController.restaurants.length,
+            itemBuilder: (context, index) {
+              if (homeController.restaurants[index].groupName.contains(query) &&
+                  (homeController.restaurants[index].members.isNotEmpty)) {
+                String userName = "";
+                return GestureDetector(
+                  onTap: () async {
+                    if (homeController
+                        .restaurants[index].currPeople !=
+                        homeController
+                            .restaurants[index].maxPeople) {
+                      debugPrint(homeController
+                          .restaurants[index].groupName);
+                      var result = await FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth
+                          .instance.currentUser!.uid)
+                          .get();
+                      userName = result['userName'];
+                      print(
+                          "${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
+                      DatabaseService(
+                          uid: FirebaseAuth
                               .instance.currentUser!.uid)
-                              .get();
-                          String userName = result['userName'];
-                          print("${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
-                          DatabaseService(
-                              uid: FirebaseAuth
-                                  .instance.currentUser!.uid).groupJoin(
-                              homeController.restaurants[index].groupId,
-                              userName,
-                              homeController.restaurants[index].groupName);
-                          Get.to(() => ChatRoom(), arguments: homeController
-                              .restaurants[index]);
-                        } else {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext ctx) {
-                                return AlertDialog(
-                                  title: const Text("정원초과"),
-                                  content: const Text("인원이 마감되었습니다."),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: const Text("확인"),
-                                    ),
-                                  ],
-                                );
-                              });
-                        }
-                      },
-                      child: Card(
-                        color: (homeController
-                            .restaurants[index].currPeople ==
-                            homeController
-                                .restaurants[index].maxPeople)
-                            ? Colors.grey
-                            : Colors.white,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 100,
-                              child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(20.0),
-                                  child: Image.asset(
-                                    homeController
-                                        .restaurants[index].imgUrl,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (BuildContext context,
-                                        Object exception,
-                                        StackTrace? stackTrace) {
-                                      return Container(
-                                        height: 120,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(width: 3),
-                                          borderRadius:
-                                          BorderRadius.circular(
-                                              20), //<-- SEE HERE
-                                        ),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(20.0),
-                                            child: Image.asset(
-                                              'assets/hanbab_icon.png',
-                                              scale: 5,
-                                            )),
-                                      );
+                          .groupJoin(
+                          homeController
+                              .restaurants[index].groupId,
+                          userName,
+                          homeController
+                              .restaurants[index].groupName);
+                      Get.to(() => ChatRoom(),
+                          arguments:
+                          homeController.restaurants[index]);
+                    } else {
+                      print(
+                          "TF:${!await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).isUserJoined(homeController.restaurants[index].groupName, homeController.restaurants[index].groupId, userName)}");
+                      if (!await DatabaseService(
+                          uid: FirebaseAuth
+                              .instance.currentUser!.uid)
+                          .isUserJoined(
+                          homeController
+                              .restaurants[index].groupName,
+                          homeController
+                              .restaurants[index].groupId,
+                          userName)) {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext ctx) {
+                              return AlertDialog(
+                                title: const Text("정원초과"),
+                                content: const Text("인원이 마감되었습니다."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
                                     },
-                                  )),
-                            ), //image
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                    child: const Text("확인"),
+                                  ),
+                                ],
+                              );
+                            });
+                      } else {
+                        Get.to(() => ChatRoom(),
+                            arguments:
+                            homeController.restaurants[index]);
+                      }
+                    }
+                  },
+                  child: Card(
+                    color: (homeController
+                        .restaurants[index].currPeople ==
+                        homeController
+                            .restaurants[index].maxPeople)
+                        ? Colors.grey
+                        : Colors.white,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: ClipRRect(
+                              borderRadius:
+                              BorderRadius.circular(20.0),
+                              child: Image.asset(
+                                homeController
+                                    .restaurants[index].imgUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (BuildContext? context,
+                                    Object? exception,
+                                    StackTrace? stackTrace) {
+                                  return Container(
+                                    height: 120,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 3),
+                                      borderRadius:
+                                      BorderRadius.circular(20),
+                                    ),
+                                    child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20.0),
+                                        child: Image.asset(
+                                          'assets/hanbab_icon.png',
+                                          scale: 5,
+                                        )),
+                                  );
+                                },
+                              )),
+                        ), //image
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle_sharp,
-                                            color: (homeController
+                                      Icon(
+                                        Icons.account_circle_sharp,
+                                        color: (homeController
+                                            .restaurants[
+                                        index]
+                                            .currPeople ==
+                                            homeController
                                                 .restaurants[
                                             index]
-                                                .currPeople ==
-                                                homeController
-                                                    .restaurants[
-                                                index]
-                                                    .maxPeople)
-                                                ? Colors.black
-                                                : Colors.grey,
-                                            size: 16,
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            getName(homeController
-                                                .restaurants[index]
-                                                .admin),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: (homeController
-                                                  .restaurants[
-                                              index]
-                                                  .currPeople ==
-                                                  homeController
-                                                      .restaurants[
-                                                  index]
-                                                      .maxPeople)
-                                                  ? Colors.black
-                                                  : Colors.grey,
-                                            ),
-                                          ),
-                                        ],
+                                                .maxPeople)
+                                            ? Colors.black
+                                            : Colors.grey,
+                                        size: 16,
                                       ),
-                                      Row(
-                                        children: [
-                                          Text(homeController
-                                              .restaurants[index]
-                                              .orderTime),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                        ],
+                                      const SizedBox(
+                                        width: 8,
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
                                       Text(
-                                        homeController
-                                            .restaurants[index].groupName,
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                      if (homeController
-                                          .restaurants[index]
-                                          .currPeople !=
-                                          homeController
-                                              .restaurants[index]
-                                              .maxPeople)
-                                        const Text(
-                                          " ❯",
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.red),
-                                        )
-                                      else
-                                        const Text(
-                                          " ❯",
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        homeController
-                                            .restaurants[index].pickup,
+                                        getName(homeController
+                                            .restaurants[index]
+                                            .admin),
                                         style: TextStyle(
                                           fontSize: 15,
                                           color: (homeController
-                                              .restaurants[index]
+                                              .restaurants[
+                                          index]
                                               .currPeople ==
                                               homeController
-                                                  .restaurants[index]
+                                                  .restaurants[
+                                              index]
                                                   .maxPeople)
                                               ? Colors.black
                                               : Colors.grey,
                                         ),
                                       ),
-                                      SizedBox(
-                                        child: FittedBox(
-                                          child: Row(
-                                            children: [
-                                              const Icon(
-                                                  CupertinoIcons.person),
-                                              if (homeController
-                                                  .restaurants[index]
-                                                  .currPeople !=
-                                                  homeController
-                                                      .restaurants[index]
-                                                      .maxPeople)
-                                                Text(
-                                                    '${homeController
-                                                        .restaurants[index]
-                                                        .currPeople}/${homeController
-                                                        .restaurants[index]
-                                                        .maxPeople}')
-                                              else
-                                                Text(
-                                                  '${homeController
-                                                      .restaurants[index]
-                                                      .currPeople}/${homeController
-                                                      .restaurants[index]
-                                                      .maxPeople}',
-                                                  style: const TextStyle(
-                                                      decoration:
-                                                      TextDecoration
-                                                          .lineThrough,
-                                                      decorationColor:
-                                                      Colors.red,
-                                                      decorationThickness:
-                                                      3),
-                                                ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(homeController
+                                          .restaurants[index]
+                                          .orderTime),
+                                      const SizedBox(
+                                        width: 5,
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    homeController
+                                        .restaurants[index]
+                                        .groupName,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  if (homeController
+                                      .restaurants[index]
+                                      .currPeople !=
+                                      homeController
+                                          .restaurants[index]
+                                          .maxPeople)
+                                    const Text(
+                                      " ❯",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight:
+                                          FontWeight.bold,
+                                          color: Colors.red),
+                                    )
+                                  else
+                                    const Text(
+                                      " ❯",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight:
+                                          FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    homeController
+                                        .restaurants[index].pickup,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: (homeController
+                                          .restaurants[
+                                      index]
+                                          .currPeople ==
+                                          homeController
+                                              .restaurants[
+                                          index]
+                                              .maxPeople)
+                                          ? Colors.black
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: FittedBox(
+                                      child: Row(
+                                        children: [
+                                          const Icon(CupertinoIcons
+                                              .person),
+                                          if (homeController
+                                              .restaurants[
+                                          index]
+                                              .currPeople !=
+                                              homeController
+                                                  .restaurants[
+                                              index]
+                                                  .maxPeople)
+                                            Text(
+                                                '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
+                                          else
+                                            Text(
+                                              '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
+                                              style: const TextStyle(
+                                                  decoration:
+                                                  TextDecoration
+                                                      .lineThrough,
+                                                  decorationColor:
+                                                  Colors.red,
+                                                  decorationThickness:
+                                                  3),
+                                            ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  } else {
-                    return const SizedBox(
-                      height: 1,
-                    );
-                  }
-                },
-              ),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return const SizedBox(
+                  height: 1,
+                );
+              }
+            },
+          ),
         ),
       );
 

@@ -38,7 +38,7 @@ class MainScreen extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: MainBottomBar(),
+        bottomNavigationBar: const MainBottomBar(),
       ),
     );
   }

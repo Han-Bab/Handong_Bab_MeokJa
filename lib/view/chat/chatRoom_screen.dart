@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../component/database_service.dart';
 import '../main/main_screen.dart';
 import 'message.dart';
 import 'new_message.dart';
@@ -18,6 +21,10 @@ class ChatRoom extends StatelessWidget {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
+  }
+
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
   }
 
   void nextPage(context) {
@@ -35,15 +42,22 @@ class ChatRoom extends StatelessWidget {
         });
   }
 
-  void payModal(context) {
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  Future<void> payModal(context) async {
     bool visibility = false;
-    String account = "농협 333-3333-3333-33";
     // var f = NumberFormat('###,###,###,###');
     // int price = 1000000;
     // String toHexValue(int value){
     //   return (value * 524288).toRadixString(16);
     // }
-
+    var result = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(getId(restaurant.admin))
+        .get();
+    String account = result['userAccount'];
     showDialog(
         context: context,
         builder: (context) {
@@ -58,8 +72,8 @@ class ChatRoom extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, bottom: 10),
                   child: Column(children: [
-                    const Text(
-                      "관리자",
+                    Text(
+                      getName(restaurant.admin),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -178,8 +192,10 @@ class ChatRoom extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          padding: EdgeInsets.zero, // 패딩 설정
-          constraints: const BoxConstraints(), // constraints
+          padding: EdgeInsets.zero,
+          // 패딩 설정
+          constraints: const BoxConstraints(),
+          // constraints
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const MainScreen()));
@@ -200,34 +216,54 @@ class ChatRoom extends StatelessWidget {
       ),
       endDrawer: Drawer(
           child: ListView(children: <Widget>[
+        const ListTile(
+          title: Text(
+            '방 정보',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
         ListTile(
-          title: Text('대화상대'),
+          title: Text("가게이름: ${restaurant.groupName}"),
         ),
-        Column(
-          children: [
-            ListTile(
-                leading: Text(
-                  "👑",
-                  style: TextStyle(fontSize: 25),
-                ),
-                title: Text("관리자"),
-                onTap: () {
-                  nextPage(context);
-                }),
-            ListTile(
-                leading: Text(" "),
-                title: Text("1"),
-                onTap: () {
-                  nextPage(context);
-                }),
-            ListTile(
-                leading: Text(" "),
-                title: Text("2"),
-                onTap: () {
-                  nextPage(context);
-                }),
-          ],
+        ListTile(
+          title: Text("시간: ${restaurant.orderTime}"),
         ),
+        ListTile(
+          title: Text("픽업장소: ${restaurant.pickup}"),
+        ),
+        Container(
+            child: Divider(
+          color: Colors.grey,
+          thickness: 1.0,
+          indent: 20,
+          endIndent: 20,
+          height: 1,
+        )),
+        const ListTile(
+          title: Text(
+            '대화상대',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            itemCount: restaurant.members!.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (restaurant.members[index] == restaurant.admin) {
+                return ListTile(
+                    leading: Text(
+                      "👑",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    title: Text(getName(restaurant.members[index]))
+                );
+              } else {
+                return ListTile(
+                  leading: Text(""),
+                  title: Text(getName(restaurant.members[index])),
+                );
+              }
+            }),
         Container(
             child: Divider(
           color: Colors.grey,
@@ -266,15 +302,27 @@ class ChatRoom extends StatelessWidget {
                     content: Text("방에서 나가겠습니까?"),
                     actions: [
                       TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const MainScreen()));
+                        onPressed: () async {
+                          var result = await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(FirebaseAuth
+                              .instance.currentUser!.uid)
+                              .get();
+                          String userName = result['userName'];
+                          DatabaseService(
+                              uid: FirebaseAuth
+                                  .instance.currentUser!.uid).groupOut(
+                              restaurant.groupId,
+                              userName,
+                              restaurant.groupName);
+
+                          Get.to(() => const MainScreen());
                         },
                         child: Text("예"),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                         child: Text("아니오"),
                       )
