@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/view/onboarding/kakao_intro_page.dart';
-import '../main/my_page.dart';
 import '../onboarding/toss_intro_page.dart';
+
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -10,15 +10,6 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyPage()),
-              );
-            },
-            icon: const Icon(Icons.arrow_back)
-        ),
         title: const Text('카카오 및 토스 연결 방법'),
       ),
       body: Center(
@@ -105,7 +96,7 @@ class OnboardingPage extends StatelessWidget {
             Column(
               children: [
                 const Text(
-                  '연결하기',
+                  '바로 연결',
                   style: TextStyle(fontSize: 25),
                 ),
                 const SizedBox(
@@ -135,7 +126,8 @@ class OnboardingPage extends StatelessWidget {
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext context) {
-                        var kakaoAccountController = TextEditingController();
+                        var kakaoAccountController =
+                        TextEditingController();
                         return AlertDialog(
                           title: const Text('카카오 계좌 연결'),
                           content: TextFormField(
@@ -145,12 +137,14 @@ class OnboardingPage extends StatelessWidget {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () =>
+                                  Navigator.pop(context),
                               child: const Text('취소'),
                             ),
                             TextButton(
                               onPressed: () {
-                                var kakaoAccount = kakaoAccountController.text;
+                                var kakaoAccount =
+                                    kakaoAccountController.text;
                                 Navigator.pop(context);
                               },
                               child: const Text('저장'),
@@ -189,9 +183,10 @@ class OnboardingPage extends StatelessWidget {
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext context) {
-                        var TossAccountController = TextEditingController();
+                        var TossAccountController =
+                        TextEditingController();
                         return AlertDialog(
-                          title: const Text('토스 계좌 연결'),
+                          title: const Text('카카오 계좌 연결'),
                           content: TextFormField(
                             controller: TossAccountController,
                             decoration: const InputDecoration(
@@ -199,12 +194,14 @@ class OnboardingPage extends StatelessWidget {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () =>
+                                  Navigator.pop(context),
                               child: const Text('취소'),
                             ),
                             TextButton(
                               onPressed: () {
-                                var TossAccount = TossAccountController.text;
+                                var TossAccount =
+                                    TossAccountController.text;
                                 Navigator.pop(context);
                               },
                               child: const Text('저장'),
