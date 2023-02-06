@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/view/chat/message_tile.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../component/database_service.dart';
 import '../main/main_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key? key}) : super(key: key);
@@ -29,7 +31,9 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   initState() {
     getChatandAdmin();
+
     super.initState();
+    initializeDateFormatting("ko", null);
   }
 
   getChatandAdmin() {
@@ -363,13 +367,9 @@ class _ChatRoomState extends State<ChatRoom> {
         ])),
         body: Stack(
           children: [
-            Column(
-              children: [
-                inOut(),
-                // chat messages here
-                chatMessages(),
-              ],
-            ),
+            SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: chatMessages()),
             Container(
               alignment: Alignment.bottomCenter,
               width: MediaQuery.of(context).size.width,
@@ -382,6 +382,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   children: [
                     Expanded(
                         child: TextFormField(
+                      maxLines: null,
                       controller: messageController,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
@@ -436,7 +437,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 child: Center(
                     child: Text(
                   "${getName(restaurant.members[restaurant.members.length - 1])}님이 입장하였습니다.",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 )),
               )
             : Container();
@@ -456,8 +457,8 @@ class _ChatRoomState extends State<ChatRoom> {
                   return MessageTile(
                       message: snapshot.data.docs[index]['message'],
                       sender: snapshot.data.docs[index]['sender'],
-                      sentByMe:
-                          userName == snapshot.data.docs[index]['sender']);
+                      sentByMe: userName == snapshot.data.docs[index]['sender'],
+                      time: snapshot.data.docs[index]['time']);
                 })
             : Container();
       },
@@ -465,12 +466,11 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   sendMessage() {
-    //userName = DatabaseService().getUserName();
     if (messageController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
-        "time": DateTime.now().millisecondsSinceEpoch,
+        "time": DateFormat("a h:mm:ss", "ko").format(DateTime.now()),
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       setState(() {
