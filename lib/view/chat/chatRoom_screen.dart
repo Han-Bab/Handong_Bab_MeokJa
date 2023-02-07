@@ -27,11 +27,11 @@ class _ChatRoomState extends State<ChatRoom> {
   String admin = "";
   String userName = "";
   StreamController<bool> streamController = StreamController<bool>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   initState() {
     getChatandAdmin();
-
     super.initState();
     initializeDateFormatting("ko", null);
   }
@@ -365,59 +365,60 @@ class _ChatRoomState extends State<ChatRoom> {
             },
           ),
         ])),
-        body: Stack(
-          children: [
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: chatMessages()),
-            Container(
-              alignment: Alignment.bottomCenter,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                width: MediaQuery.of(context).size.width,
-                color: Colors.grey[700],
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextFormField(
-                      maxLines: null,
-                      controller: messageController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: "Send a message...",
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 16),
-                        border: InputBorder.none,
-                      ),
-                    )),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        sendMessage();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+        body: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.1),
+                child: chatMessages(),
+            )),
+        bottomSheet: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            width: MediaQuery.of(context).size.width,
+            color: Colors.grey[700],
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: messageController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    hintText: "Send a message...",
+                    hintStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    border: InputBorder.none,
+                  ),
+                )),
+                const SizedBox(
+                  width: 12,
                 ),
-              ),
-            )
-          ],
+                GestureDetector(
+                  onTap: () {
+                    sendMessage();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ));
   }
 
@@ -445,15 +446,28 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
+  bool _needsScroll = false;
+
+  _scrollToEnd() async {
+    if (_needsScroll) {
+      _needsScroll = false;
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    }
+  }
+
   chatMessages() {
     return StreamBuilder(
       stream: chats,
       builder: (context, AsyncSnapshot snapshot) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
         return snapshot.hasData
             ? ListView.builder(
+                controller: _scrollController,
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
+                  _needsScroll = true;
                   return MessageTile(
                       message: snapshot.data.docs[index]['message'],
                       sender: snapshot.data.docs[index]['sender'],
@@ -479,14 +493,3 @@ class _ChatRoomState extends State<ChatRoom> {
     }
   }
 }
-
-// Container(
-// child: Column(
-// children: const [
-// Expanded(
-// child: Messages(),
-// ),
-// NewMessage(),
-// ],
-// ),
-// ),
