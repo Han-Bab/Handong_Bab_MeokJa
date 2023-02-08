@@ -53,11 +53,7 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const KakaoIntroPage()),
-                    );
+                    Get.off(() => KakaoIntroPage());
                   },
                 ),
                 const SizedBox(
@@ -84,11 +80,7 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TossIntroPage()),
-                    );
+                    Get.off(() => TossIntroPage());
                   },
                 ),
                 const SizedBox(
