@@ -54,54 +54,39 @@ class KakaoIntroPage extends StatelessWidget {
     );
   }
 }
+  PageDecoration getPageDecorationFull() {
+    return const PageDecoration(
+      titleTextStyle: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      titlePadding: EdgeInsets.only(bottom: 10),
+      bodyTextStyle: TextStyle(
+        fontSize: 18,
+        color: Colors.black87,
+      ),
+      imagePadding: EdgeInsets.only(top: 70),
+      imageFlex: 5,
+      pageColor: Color(0xFFFFEB03),
+    );
+  }
 
-PageDecoration getPageDecorationFull() {
-  return const PageDecoration(
-    titleTextStyle: TextStyle(
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-    titlePadding: EdgeInsets.only(bottom: 10),
-    bodyTextStyle: TextStyle(
-      fontSize: 18,
-      color: Colors.black87,
-    ),
-    imagePadding: EdgeInsets.only(top: 70),
-    imageFlex: 5,
-    pageColor: Color(0xFFFFEB03),
-  );
-}
-
-PageDecoration getPageDecorationCut() {
-  return const PageDecoration(
-    titleTextStyle: TextStyle(
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-    titlePadding: EdgeInsets.only(top: 20, bottom: 10),
-    bodyTextStyle: TextStyle(
-      fontSize: 18,
-      color: Colors.black87,
-    ),
-    imagePadding: EdgeInsets.only(top: 200),
-    imageFlex: 3,
-    pageColor: Color(0xFFFFEB03),
-  );
-}
-
-PageDecoration getPageDecoration() {
-  return const PageDecoration(
-    titleTextStyle: TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-    ),
-    bodyTextStyle: TextStyle(
-      fontSize: 18,
-      color: Colors.blue,
-    ),
-    imagePadding: EdgeInsets.only(top: 40),
-    pageColor: Colors.orange,
-  );
+  PageDecoration getPageDecorationCut() {
+    return const PageDecoration(
+      titleTextStyle: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      titlePadding: EdgeInsets.only(bottom: 10),
+      bodyTextStyle: TextStyle(
+        fontSize: 18,
+        color: Colors.black87,
+      ),
+      imagePadding: EdgeInsets.only(top: 200),
+      imageFlex: 3,
+      pageColor: Color(0xFFFFEB03),
+    );
+  }
 }
