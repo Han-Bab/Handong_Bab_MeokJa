@@ -39,7 +39,7 @@ class KakaoIntroPage extends StatelessWidget {
               decoration: getPageDecorationFull()),
         ],
         done: const Text(
-          "done ",
+          "done",
           style: TextStyle(color: Colors.orangeAccent),
         ),
         onDone: () {
