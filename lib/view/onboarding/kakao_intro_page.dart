@@ -89,4 +89,3 @@ class KakaoIntroPage extends StatelessWidget {
       pageColor: Color(0xFFFFEB03),
     );
   }
-}
