@@ -3,6 +3,7 @@ import 'package:han_bab/view/onboarding/kakao_intro_page.dart';
 import '../main/main_screen.dart';
 import '../onboarding/toss_intro_page.dart';
 import 'package:get/get.dart';
+import '../onboarding/toss_intro_page.dart';
 
 
 class OnboardingPage extends StatelessWidget {
@@ -52,7 +53,11 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Get.off(() => KakaoIntroPage());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const KakaoIntroPage()),
+                    );
                   },
                 ),
                 const SizedBox(
@@ -79,7 +84,11 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Get.off(() => TossIntroPage());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TossIntroPage()),
+                    );
                   },
                 ),
                 const SizedBox(
