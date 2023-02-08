@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/view/onboarding/kakao_intro_page.dart';
 import '../main/main_screen.dart';
-import '../main/my_page.dart';
+import '../onboarding/toss_intro_page.dart';
 import 'package:get/get.dart';
 import '../onboarding/toss_intro_page.dart';
 
