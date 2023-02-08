@@ -250,7 +250,7 @@ class HomePage extends StatelessWidget {
                                                           .currPeople ==
                                                           homeController
                                                               .restaurants[
-                                                          index]
+                                                                  index]
                                                               .maxPeople)
                                                           ? Colors.black
                                                           : Colors.grey,
@@ -437,7 +437,7 @@ class MySearchDelegate extends SearchDelegate {
         color: Colors.blue,
       ),
       onPressed: () {
-        Get.to(() => const MainScreen());
+        Get.to(() => MainScreen());
       });
 
   @override

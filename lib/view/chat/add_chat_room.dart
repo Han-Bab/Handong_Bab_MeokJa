@@ -6,7 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
-import 'package:han_bab/model/order_time_button.dart';
+import 'package:han_bab/view/chat/order_time_button.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 import 'package:get/get.dart';
 import '../../component/database_service.dart';
@@ -59,13 +59,12 @@ class AddChatRoom extends StatelessWidget {
                       height: 200,
                       child: Image.asset(
                           "assets/images/${_restaurantController.text}.jpg",
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                                "assets/hanbab_icon.png",
-                                fit: BoxFit.fitHeight);
-                          }),
+                          fit: BoxFit.cover, errorBuilder:
+                              (BuildContext context, Object exception,
+                                  StackTrace? stackTrace) {
+                        return Image.asset("assets/hanbab_icon.png",
+                            fit: BoxFit.fitHeight);
+                      }),
                     ),
                   ),
                   const SizedBox(
@@ -112,37 +111,38 @@ class AddChatRoom extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: null,
-                                child: Text(
-                                  accountNumber,
-                                  style: TextStyle(color: Colors.blueAccent),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 0)),
-                              child: const Text(
-                                "계좌 변경",
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        //TODO: 계좌번호 사용 금지
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: OutlinedButton(
+                        //         onPressed: null,
+                        //         child: Text(
+                        //           accountNumber,
+                        //           style: TextStyle(color: Colors.blueAccent),
+                        //         ),
+                        //         style: OutlinedButton.styleFrom(
+                        //           side: BorderSide(color: Colors.grey),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(
+                        //       width: 10,
+                        //     ),
+                        //     ElevatedButton(
+                        //       onPressed: () {},
+                        //       style: ElevatedButton.styleFrom(
+                        //           padding:
+                        //               const EdgeInsets.fromLTRB(10, 0, 10, 0)),
+                        //       child: const Text(
+                        //         "계좌 변경",
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // const SizedBox(
+                        //   height: 20,
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -206,47 +206,6 @@ class AddChatRoom extends StatelessWidget {
                         const SizedBox(
                           height: 120,
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Get.off(() => MainScreen());
-                                },
-                                child: const Text("취소하기"),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  var result = await FirebaseFirestore.instance
-                                      .collection('user')
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser!.uid)
-                                      .get();
-                                  String userName = result['userName'];
-                                  DatabaseService(
-                                          uid: FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                      .createGroup(
-                                          userName,
-                                          FirebaseAuth
-                                              .instance.currentUser!.uid,
-                                          _restaurantController.text,
-                                          orderTimeController.orderTime.value,
-                                          pickup,
-                                          maxPeople)
-                                      .whenComplete(() {});
-                                  Get.to(() => const MainScreen());
-                                },
-                                child: const Text("생성하기"),
-                              ),
-                            )
-                          ],
-                        ),
                       ],
                     ),
                   )
@@ -254,6 +213,46 @@ class AddChatRoom extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+      bottomSheet: Container(
+        padding: EdgeInsets.all(30),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.off(() => MainScreen());
+                },
+                child: const Text("취소하기"),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  var result = await FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .get();
+                  String userName = result['userName'];
+                  DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                      .createGroup(
+                          userName,
+                          FirebaseAuth.instance.currentUser!.uid,
+                          _restaurantController.text,
+                          orderTimeController.orderTime.value,
+                          pickup,
+                          maxPeople)
+                      .whenComplete(() {});
+                  Get.to(() => MainScreen());
+                },
+                child: const Text("생성하기"),
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -6,7 +6,7 @@ import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp().then((value) {

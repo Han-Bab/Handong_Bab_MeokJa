@@ -1,45 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
-
+import 'package:get/get.dart';
+import 'package:han_bab/controller/auth_controller.dart';
+import 'package:han_bab/controller/comment_controller.dart';
+import 'package:han_bab/controller/community_controller.dart';
 import '../community/content.dart';
-import '../community/plus_page.dart';
+import '../community/add_post.dart';
 
-class CommunityPage extends StatefulWidget {
-  const CommunityPage({Key? key}) : super(key: key);
-
-  @override
-  State<CommunityPage> createState() => _CommunityPageState();
-}
-
-class _CommunityPageState extends State<CommunityPage> {
-  var titleList = [
-    '양덕 맛집',
-    '방학에 학교에 남는 사람?',
-    '1월 2일 새벽 감사',
-    '도와주세요',
-    '수강 신청 교환 기간',
-    '일생 한국어 분반',
-    '오늘 오석',
-    '겨울 나비',
-    '원룸 양도',
-    '점메추'
-  ];
-
-  List<int> heart = [51,0,11,7,3,1,5,88,1,14];
-
-  var content = [
-    '추천해 주세요',
-    '물어볼 거 있음',
-    '맛있는 밥을 먹게 해주셔서 감사합니다!',
-    '이 친구 왜 안 되는 거죠ㅠㅠ',
-    '언제까지인지 아시는 분?',
-    '정원 몇 명이야?',
-    '열었나요?',
-    '는 넘무 귀엽다',
-    '문의 주세요',
-    'ㅈㄱㄴ'
-  ];
+class CommunityPage extends StatelessWidget {
+  CommunityPage({Key? key}) : super(key: key);
+  final communityController = Get.put(CommunityController());
+  final commentController = Get.put(CommentController());
+  final authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,119 +19,194 @@ class _CommunityPageState extends State<CommunityPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '자유게시판',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          '음식게시판',
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 2, // 경계선 없애는 늒임
       ),
-      body: Stack(children: [
-        ListView.builder(
-          itemCount: titleList.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Content()),
-                  );
+      body: Center(
+        child: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 200),
+              () => communityController.getData()),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            //error가 발생하게 될 경우 반환하게 되는 부분
+            else if (snapshot.hasError) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Error: ${snapshot.error}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+              );
+            }
+            // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+            else {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await communityController.getData();
+                  communityController.update();
                 },
-                child: Card(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10, top: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 7),
-                              child: SizedBox(
-                                width: width * 0.9,
-                                child: Text(
-                                  titleList[index],
-                                  style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: width * 0.7,
-                                  child: Text(
-                                    content[index],
-                                    style: const TextStyle(
-                                        fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
+                child: Stack(
+                  children: [
+                    GetBuilder<CommunityController>(
+                      builder: (communityController) {
+                        return ListView.builder(
+                          itemCount: communityController.communityList.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                commentController.boardID =
+                                    communityController.communityList[index].id;
+                                Get.to(() => Content(), arguments: index);
+                              },
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                       LikeButton(
-                                        size: 25,
-                                        likeCount: heart[index],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      LikeButton(
-                                        size: 25,
-                                        likeCount: 0,
-                                        likeBuilder: (isTapped) {
-                                          return Icon(
-                                            Icons.chat_bubble_outline_outlined,
-                                            color: isTapped
-                                                ? Colors.black54
-                                                : Colors.grey,
-                                          );
-                                        },
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Text(
+                                              communityController
+                                                  .communityList[index].title,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Text(
+                                              communityController
+                                                  .communityList[index].content,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  child: Text(
+                                                    '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        CupertinoIcons
+                                                            .heart_fill,
+                                                        color: Colors.red,
+                                                        size: 18,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                          '${communityController.communityList[index].likeCount}'),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      const Icon(
+                                                        CupertinoIcons
+                                                            .chat_bubble_fill,
+                                                        color: Colors.green,
+                                                        size: 18,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      GetBuilder<
+                                                              CommentController>(
+                                                          builder:
+                                                              (commentController) {
+                                                        return Text(
+                                                            '${communityController.communityList[index].commentCount}');
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
                                       )
                                     ],
                                   ),
                                 ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    // 글 작성하기 버튼
+                    Positioned(
+                      bottom: 20,
+                      child: SizedBox(
+                        width: width,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              Get.off(() => AddPost());
+                            },
+                            style: TextButton.styleFrom(
+                              fixedSize: Size(112, 45),
+                              side: BorderSide(color: Colors.blue),
+                              backgroundColor: Colors.white,
+                            ),
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  CupertinoIcons.pencil,
+                                  color: Colors.lightBlue,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '글 쓰기',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                ));
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
-        Positioned(
-          bottom: 20,
-          child: SizedBox(
-            width: width,
-            child: Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PlusPage()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.grey),
-                child: const Text(
-                  '글 쓰기',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
+      ),
     );
   }
 }
