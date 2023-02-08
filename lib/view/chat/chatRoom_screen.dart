@@ -29,6 +29,7 @@ class _ChatRoomState extends State<ChatRoom> {
   StreamController<bool> streamController = StreamController<bool>();
   final ScrollController _scrollController = ScrollController();
 
+
   @override
   initState() {
     getChatandAdmin();
@@ -282,6 +283,7 @@ class _ChatRoomState extends State<ChatRoom> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
           ),
+
           ListView.builder(
               shrinkWrap: true,
               itemCount: restaurant.members!.length,
@@ -445,7 +447,6 @@ class _ChatRoomState extends State<ChatRoom> {
       },
     );
   }
-
   bool _needsScroll = false;
 
   _scrollToEnd() async {
