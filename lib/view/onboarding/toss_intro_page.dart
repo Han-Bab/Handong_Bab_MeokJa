@@ -90,4 +90,3 @@ class TossIntroPage extends StatelessWidget {
     );
   }
 }
-
