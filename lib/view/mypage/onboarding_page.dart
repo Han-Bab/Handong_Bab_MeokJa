@@ -14,10 +14,7 @@ class OnboardingPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MainScreen()),
-              );
+              Get.to(() => MyPage());
             },
             icon: const Icon(Icons.arrow_back)),
         title: const Text('카카오 및 토스 연결 방법'),
