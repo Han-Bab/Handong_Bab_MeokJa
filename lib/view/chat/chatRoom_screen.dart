@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/view/chat/message_tile.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../component/database_service.dart';
 import '../main/main_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key? key}) : super(key: key);
@@ -25,11 +27,14 @@ class _ChatRoomState extends State<ChatRoom> {
   String admin = "";
   String userName = "";
   StreamController<bool> streamController = StreamController<bool>();
+  final ScrollController _scrollController = ScrollController();
+
 
   @override
   initState() {
     getChatandAdmin();
     super.initState();
+    initializeDateFormatting("ko", null);
   }
 
   getChatandAdmin() {
@@ -278,6 +283,7 @@ class _ChatRoomState extends State<ChatRoom> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
           ),
+
           ListView.builder(
               shrinkWrap: true,
               itemCount: restaurant.members!.length,
@@ -361,62 +367,60 @@ class _ChatRoomState extends State<ChatRoom> {
             },
           ),
         ])),
-        body: Stack(
-          children: [
-            Column(
+        body: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.1),
+                child: chatMessages(),
+            )),
+        bottomSheet: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            width: MediaQuery.of(context).size.width,
+            color: Colors.grey[700],
+            child: Row(
               children: [
-                inOut(),
-                // chat messages here
-                chatMessages(),
+                Expanded(
+                    child: TextFormField(
+                  maxLines: null,
+                  controller: messageController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    hintText: "Send a message...",
+                    hintStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    border: InputBorder.none,
+                  ),
+                )),
+                const SizedBox(
+                  width: 12,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    sendMessage();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                width: MediaQuery.of(context).size.width,
-                color: Colors.grey[700],
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextFormField(
-                      controller: messageController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: "Send a message...",
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 16),
-                        border: InputBorder.none,
-                      ),
-                    )),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        sendMessage();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
+          ),
         ));
   }
 
@@ -436,28 +440,40 @@ class _ChatRoomState extends State<ChatRoom> {
                 child: Center(
                     child: Text(
                   "${getName(restaurant.members[restaurant.members.length - 1])}님이 입장하였습니다.",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 )),
               )
             : Container();
       },
     );
   }
+  bool _needsScroll = false;
+
+  _scrollToEnd() async {
+    if (_needsScroll) {
+      _needsScroll = false;
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    }
+  }
 
   chatMessages() {
     return StreamBuilder(
       stream: chats,
       builder: (context, AsyncSnapshot snapshot) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
         return snapshot.hasData
             ? ListView.builder(
+                controller: _scrollController,
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
+                  _needsScroll = true;
                   return MessageTile(
                       message: snapshot.data.docs[index]['message'],
                       sender: snapshot.data.docs[index]['sender'],
-                      sentByMe:
-                          userName == snapshot.data.docs[index]['sender']);
+                      sentByMe: userName == snapshot.data.docs[index]['sender'],
+                      time: snapshot.data.docs[index]['time']);
                 })
             : Container();
       },
@@ -465,12 +481,11 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   sendMessage() {
-    //userName = DatabaseService().getUserName();
     if (messageController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
-        "time": DateTime.now().millisecondsSinceEpoch,
+        "time": DateFormat("a h:mm:ss", "ko").format(DateTime.now()),
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       setState(() {
@@ -479,14 +494,3 @@ class _ChatRoomState extends State<ChatRoom> {
     }
   }
 }
-
-// Container(
-// child: Column(
-// children: const [
-// Expanded(
-// child: Messages(),
-// ),
-// NewMessage(),
-// ],
-// ),
-// ),

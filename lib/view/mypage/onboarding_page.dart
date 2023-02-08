@@ -21,6 +21,7 @@ class OnboardingPage extends StatelessWidget {
             },
             icon: const Icon(Icons.arrow_back)
         ),
+
         title: const Text('카카오 및 토스 연결 방법'),
       ),
       body: Center(
