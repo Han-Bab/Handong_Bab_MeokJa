@@ -10,6 +10,7 @@ class Restaurant {
   final String maxPeople;
   final String admin;
   final String pickup;
+  final List<dynamic> members;
 
   Restaurant({
     required this.groupName,
@@ -20,7 +21,8 @@ class Restaurant {
     required this.currPeople,
     required this.maxPeople,
     required this.admin,
-    required this.pickup
+    required this.pickup,
+    required this.members
   });
 
   static Restaurant fromSnapshot(DocumentSnapshot snap) {
@@ -33,7 +35,8 @@ class Restaurant {
         currPeople: snap['currPeople'],
         maxPeople: snap['maxPeople'],
         admin: snap['admin'],
-        pickup: snap['pickup']
+        pickup: snap['pickup'],
+        members: snap['members']
     );
     return restaurant;
   }

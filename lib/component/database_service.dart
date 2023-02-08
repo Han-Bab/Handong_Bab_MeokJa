@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/model/restaurant.dart';
@@ -34,10 +35,18 @@ class DatabaseService {
     });
   }
 
+  getUserName() async {
+    var result = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    return result['userName'];
+  }
+
   // getting user data
-  Future gettingUserData(String email) async {
+  Future gettingUserData(String admin) async {
     QuerySnapshot snapshot =
-        await userCollection.where("email", isEqualTo: email).get();
+        await userCollection.where("admin", isEqualTo: admin).get();
     return snapshot;
   }
 
@@ -45,7 +54,7 @@ class DatabaseService {
   getUserGroups() async {
     return userCollection.doc(uid).snapshots();
   }
-  int count=1;
+
   // creating a group
   Future createGroup(String userName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
@@ -56,7 +65,7 @@ class DatabaseService {
       "groupId": "",
       "orderTime": orderTime,
       "pickup": pickup,
-      "currPeople": "$count",
+      "currPeople": "1",
       "maxPeople": maxPeople,
       "imgUrl": "assets/images/$groupName.jpg",
       "date": strToday,
@@ -115,37 +124,49 @@ class DatabaseService {
     }
   }
 
-  // toggling the group join/exit
-  Future groupJoin(
-      String groupId, String userName, String groupName) async {
+  Future groupJoin(String groupId, String userName, String groupName) async {
     // doc reference
     DocumentReference userDocumentReference = userCollection.doc(uid);
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
-    count++;
-    await groupDocumentReference.update({
-      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
-      "currPeople": "$count"
-    });
 
-    // DocumentSnapshot documentSnapshot = await userDocumentReference.get();
-    // List<dynamic> groups = await documentSnapshot['groups'];
-    //
-    // // if user has our groups -> then remove then or also in other part re join
-    // if (groups.contains("${groupId}_$groupName")) {
-    //   await userDocumentReference.update({
-    //     "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
-    //   });
-    //   await groupDocumentReference.update({
-    //     "members": FieldValue.arrayRemove(["${uid}_$userName"])
-    //   });
-    // } else {
-    //   await userDocumentReference.update({
-    //     "groups": FieldValue.arrayUnion(["${groupId}_$groupName"])
-    //   });
-    //   await groupDocumentReference.update({
-    //     "members": FieldValue.arrayUnion(["${uid}_$userName"])
-    //   });
-    //}
+    DocumentSnapshot documentSnapshot = await userDocumentReference.get();
+    List<dynamic> groups = await documentSnapshot['groups'];
+
+    if (!groups.contains("${groupId}_$groupName")) {
+      await userDocumentReference.update({
+        "groups": FieldValue.arrayUnion(["${groupId}_$groupName"])
+      });
+      await groupDocumentReference.update({
+        "members": FieldValue.arrayUnion(["${uid}_$userName"]),
+      });
+      DocumentSnapshot groupDocumentSnapshot =
+          await groupDocumentReference.get();
+      List<dynamic> members = await groupDocumentSnapshot['members'];
+      await groupDocumentReference.update({"currPeople": "${members.length}"});
+    }
+  }
+
+  Future groupOut(String groupId, String userName, String groupName) async {
+    // doc reference
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    DocumentReference groupDocumentReference = groupCollection.doc(groupId);
+
+    DocumentSnapshot documentSnapshot = await userDocumentReference.get();
+    List<dynamic> groups = await documentSnapshot['groups'];
+
+    if (groups.contains("${groupId}_$groupName")) {
+      await userDocumentReference.update({
+        "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
+      });
+      await groupDocumentReference.update({
+        "members": FieldValue.arrayRemove(["${uid}_$userName"]),
+      });
+      DocumentSnapshot groupDocumentSnapshot =
+          await groupDocumentReference.get();
+      List<dynamic> members = await groupDocumentSnapshot['members'];
+      await groupDocumentReference.update({"currPeople": "${members.length}"});
+      if(members.isEmpty) groupCollection.doc(groupId).delete();
+    }
   }
 
   // send message
@@ -167,7 +188,7 @@ class FirestoreDB {
     return _firebaseFirestore
         .collection('groups')
         .where('date', isEqualTo: strToday)
-        .where('orderTime',isGreaterThanOrEqualTo: timeToday)
+        .where('orderTime', isGreaterThanOrEqualTo: timeToday)
         .orderBy('orderTime', descending: false)
         .snapshots()
         .map((snapshot) {
