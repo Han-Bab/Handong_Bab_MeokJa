@@ -24,15 +24,14 @@ class MyPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => MainScreen()),
-        //       );
-        //     },
-        //     icon: const Icon(Icons.refresh)
-        // ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            },
+            icon: const Icon(Icons.refresh)),
         title: const Text("마이페이지"),
         centerTitle: true,
       ),
