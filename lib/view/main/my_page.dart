@@ -564,11 +564,7 @@ class MyPage extends StatelessWidget {
                       color: Colors.black87,
                     ),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const OnboardingPage()),
-                      );
+                      Get.to(() => OnboardingPage());
                     },
                   ),
                 ),
