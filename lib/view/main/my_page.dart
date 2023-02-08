@@ -429,110 +429,111 @@ class MyPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  width: 95,
-                                  child: Text(
-                                    '계좌번호',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                FutureBuilder(
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<dynamic> snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    }
-                                    if (snapshot.hasError) {
-                                      print(snapshot.error.toString());
-                                      return const Text("Error");
-                                    } else {
-                                      // print(snapshot.data);
-                                      return Text(
-                                        snapshot.data.toString(),
-                                      );
-                                    }
-                                  },
-                                  future:
-                                      authController.getUserInfo('userAccount'),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 50,
-                              height: 25,
-                              child: TextButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      var accountController =
-                                          TextEditingController();
-                                      return AlertDialog(
-                                        title: const Text('계좌번호 수정'),
-                                        content: TextFormField(
-                                          controller: accountController,
-                                          decoration: const InputDecoration(
-                                              hintText: '우리 1002233487645'),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text('취소'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              var account =
-                                                  accountController.text;
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('저장'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.only(top: 0),
-                                  shape: const BeveledRectangleBorder(
-                                    borderRadius: BorderRadius.zero,
-                                    side: BorderSide(
-                                      color: Colors.black,
-                                      width: 0.7,
-                                    ),
-                                  ),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.zero,
-                                  child: Text(
-                                    '수정',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        //TODO: 계좌번호 사용 금지
+                        // const SizedBox(
+                        //   height: 30,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.start,
+                        //       children: [
+                        //         const SizedBox(
+                        //           width: 95,
+                        //           child: Text(
+                        //             '계좌번호',
+                        //             style: TextStyle(
+                        //               fontSize: 20,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         FutureBuilder(
+                        //           builder: (BuildContext context,
+                        //               AsyncSnapshot<dynamic> snapshot) {
+                        //             if (snapshot.connectionState ==
+                        //                 ConnectionState.waiting) {
+                        //               return const CircularProgressIndicator();
+                        //             }
+                        //             if (snapshot.hasError) {
+                        //               print(snapshot.error.toString());
+                        //               return const Text("Error");
+                        //             } else {
+                        //               // print(snapshot.data);
+                        //               return Text(
+                        //                 snapshot.data.toString(),
+                        //               );
+                        //             }
+                        //           },
+                        //           future:
+                        //               authController.getUserInfo('userAccount'),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     SizedBox(
+                        //       width: 50,
+                        //       height: 25,
+                        //       child: TextButton(
+                        //         onPressed: () {
+                        //           showDialog(
+                        //             context: context,
+                        //             barrierDismissible: true,
+                        //             builder: (BuildContext context) {
+                        //               var accountController =
+                        //                   TextEditingController();
+                        //               return AlertDialog(
+                        //                 title: const Text('계좌번호 수정'),
+                        //                 content: TextFormField(
+                        //                   controller: accountController,
+                        //                   decoration: const InputDecoration(
+                        //                       hintText: '우리 1002233487645'),
+                        //                 ),
+                        //                 actions: [
+                        //                   TextButton(
+                        //                     onPressed: () =>
+                        //                         Navigator.pop(context),
+                        //                     child: const Text('취소'),
+                        //                   ),
+                        //                   TextButton(
+                        //                     onPressed: () {
+                        //                       var account =
+                        //                           accountController.text;
+                        //                       Navigator.pop(context);
+                        //                     },
+                        //                     child: const Text('저장'),
+                        //                   ),
+                        //                 ],
+                        //               );
+                        //             },
+                        //           );
+                        //         },
+                        //         style: TextButton.styleFrom(
+                        //           padding: const EdgeInsets.only(top: 0),
+                        //           shape: const BeveledRectangleBorder(
+                        //             borderRadius: BorderRadius.zero,
+                        //             side: BorderSide(
+                        //               color: Colors.black,
+                        //               width: 0.7,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         child: const Padding(
+                        //           padding: EdgeInsets.zero,
+                        //           child: Text(
+                        //             '수정',
+                        //             textAlign: TextAlign.center,
+                        //             style: TextStyle(
+                        //               fontSize: 15,
+                        //               color: Colors.black,
+                        //               fontWeight: FontWeight.w200,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(
                           height: 10,
                         ),

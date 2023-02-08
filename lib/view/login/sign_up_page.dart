@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
             },
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.all(40),
+                padding: const EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -321,35 +321,36 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        "주계좌번호",
-                      ),
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        userInfo['userAccount'] = value;
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "사용할 계좌번호를 입력해주세요";
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "ex) 우리 1002452023325",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        contentPadding: EdgeInsets.all(10),
-                      ),
-                      onTap: () {},
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    //TODO: 계좌번호 사용 금지
+                    // const Padding(
+                    //   padding: EdgeInsets.only(bottom: 8.0),
+                    //   child: Text(
+                    //     "주계좌번호",
+                    //   ),
+                    // ),
+                    // TextFormField(
+                    //   onChanged: (value) {
+                    //     userInfo['userAccount'] = value;
+                    //   },
+                    //   validator: (value) {
+                    //     if (value!.isEmpty) {
+                    //       return "사용할 계좌번호를 입력해주세요";
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     hintText: "ex) 우리 1002452023325",
+                    //     hintStyle: TextStyle(fontSize: 12),
+                    //     border: OutlineInputBorder(
+                    //       borderSide: BorderSide(color: Colors.grey),
+                    //     ),
+                    //     contentPadding: EdgeInsets.all(10),
+                    //   ),
+                    //   onTap: () {},
+                    // ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
                     const Divider(
                       color: Colors.grey,
                       thickness: 1,
@@ -441,48 +442,55 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Text("취소"),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _showSpinner = true;
-                              });
-                              _tryValidation();
-                              if (validation) {
-                                AuthController.instance.register(userInfo);
-                              }
-                              setState(() {
-                                _showSpinner = false;
-                              });
-                            },
-                            child: const Text("가입"),
-                          ),
-                        ),
-                      ],
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
                     ),
                   ],
                 ),
               ),
             ),
           ),
+        ),
+      ),
+      bottomSheet: Container(
+        padding: EdgeInsets.all(30),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("취소"),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 1,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _showSpinner = true;
+                  });
+                  _tryValidation();
+                  if (validation) {
+                    AuthController.instance.register(userInfo);
+                  }
+                  setState(() {
+                    _showSpinner = false;
+                  });
+                },
+                child: const Text("가입"),
+              ),
+            ),
+          ],
         ),
       ),
     );

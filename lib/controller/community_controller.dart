@@ -71,10 +71,4 @@ class CommunityController extends GetxController {
     }
     update();
   }
-
-  void addComment(String id, int idx, String comment) {
-    try {} catch (e) {
-      print(e);
-    }
-  }
 }

@@ -60,7 +60,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
             },
             child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(40),
+                padding: EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -222,85 +222,86 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       ),
                       onTap: () {},
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        "주계좌번호",
-                      ),
-                    ),
-                    TextFormField(
-                      key: ValueKey(4),
-                      onChanged: (value) {
-                        userInfo['userAccount'] = value;
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "사용할 계좌번호를 입력해주세요";
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "ex) 우리 1002452023325",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        contentPadding: EdgeInsets.all(10),
-                      ),
-                      onTap: () {},
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    Row(
-                      children: [
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              authController.logout();
-                              authController.logoutGoogle();
-                            },
-                            child: Text("나중에 하기"),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              userInfo['userEmail'] = authController
-                                  .authentication.currentUser!.email
-                                  .toString();
-                              setState(() {
-                                _showSpinner = true;
-                              });
-                              _tryValidation();
-                              if (_validation) {
-                                authController.addInfo(userInfo);
-                                Get.snackbar('알림', '정보가 저장되었습니다.',
-                                    snackPosition: SnackPosition.TOP);
-                                Get.off(() => MainScreen());
-                              }
-                              setState(() {
-                                _showSpinner = false;
-                              });
-                            },
-                            child: Text("저장하기"),
-                          ),
-                        ),
-                      ],
-                    ),
+                    //TODO: 계좌번호 사용 금지
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.only(bottom: 8.0),
+                    //   child: Text(
+                    //     "주계좌번호",
+                    //   ),
+                    // ),
+                    // TextFormField(
+                    //   key: ValueKey(4),
+                    //   onChanged: (value) {
+                    //     userInfo['userAccount'] = value;
+                    //   },
+                    //   validator: (value) {
+                    //     if (value!.isEmpty) {
+                    //       return "사용할 계좌번호를 입력해주세요";
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     hintText: "ex) 우리 1002452023325",
+                    //     hintStyle: TextStyle(fontSize: 12),
+                    //     border: OutlineInputBorder(
+                    //       borderSide: BorderSide(color: Colors.grey),
+                    //     ),
+                    //     contentPadding: EdgeInsets.all(10),
+                    //   ),
+                    //   onTap: () {},
+                    // ),
                   ],
                 ),
               ),
             ),
           ),
+        ),
+      ),
+      bottomSheet: Container(
+        padding: EdgeInsets.all(30),
+        child: Row(
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              child: ElevatedButton(
+                onPressed: () {
+                  authController.logout();
+                  authController.logoutGoogle();
+                },
+                child: Text("나중에 하기"),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: ElevatedButton(
+                onPressed: () {
+                  userInfo['userEmail'] = authController
+                      .authentication.currentUser!.email
+                      .toString();
+                  setState(() {
+                    _showSpinner = true;
+                  });
+                  _tryValidation();
+                  if (_validation) {
+                    authController.addInfo(userInfo);
+                    Get.snackbar('알림', '정보가 저장되었습니다.',
+                        snackPosition: SnackPosition.TOP);
+                    Get.off(() => MainScreen());
+                  }
+                  setState(() {
+                    _showSpinner = false;
+                  });
+                },
+                child: Text("저장하기"),
+              ),
+            ),
+          ],
         ),
       ),
     );

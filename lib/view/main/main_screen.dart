@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/main_bottom_bar_controller.dart';
-import 'package:han_bab/model/main_bottom_bar.dart';
+import 'package:han_bab/view/main/main_bottom_bar.dart';
 import 'package:han_bab/view/main/home_page.dart';
 import 'package:han_bab/view/main/my_page.dart';
 import '../../component/stateful_wrapper.dart';

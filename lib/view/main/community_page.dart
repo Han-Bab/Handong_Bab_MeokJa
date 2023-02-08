@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
+import 'package:han_bab/controller/comment_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
 import '../community/content.dart';
 import '../community/add_post.dart';
@@ -9,6 +10,7 @@ import '../community/add_post.dart';
 class CommunityPage extends StatelessWidget {
   CommunityPage({Key? key}) : super(key: key);
   final communityController = Get.put(CommunityController());
+  final commentController = Get.put(CommentController());
   final authController = Get.put(AuthController());
 
   @override
@@ -56,101 +58,108 @@ class CommunityPage extends StatelessWidget {
                           itemCount: communityController.communityList.length,
                           itemBuilder: (BuildContext context, index) {
                             return GestureDetector(
-                                onTap: () {
-                                  Get.to(() => Content(), arguments: index);
-                                },
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: width * 0.9,
-                                              child: Text(
-                                                communityController
-                                                    .communityList[index].title,
-                                                style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
+                              onTap: () {
+                                commentController.boardID =
+                                    communityController.communityList[index].id;
+                                Get.to(() => Content(), arguments: index);
+                              },
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Text(
+                                              communityController
+                                                  .communityList[index].title,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Text(
+                                              communityController
+                                                  .communityList[index].content,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 18,
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SizedBox(
-                                              width: width * 0.9,
-                                              child: Text(
-                                                communityController
-                                                    .communityList[index]
-                                                    .content,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
+                                          ),
+                                          SizedBox(
+                                            width: width * 0.9,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  child: Text(
+                                                    '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  ),
                                                 ),
-                                              ),
+                                                SizedBox(
+                                                  height: 30,
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        CupertinoIcons
+                                                            .heart_fill,
+                                                        color: Colors.red,
+                                                        size: 18,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                          '${communityController.communityList[index].likeCount}'),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      const Icon(
+                                                        CupertinoIcons
+                                                            .chat_bubble_fill,
+                                                        color: Colors.green,
+                                                        size: 18,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      GetBuilder<
+                                                              CommentController>(
+                                                          builder:
+                                                              (commentController) {
+                                                        return Text(
+                                                            '${communityController.communityList[index].commentCount}');
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(
-                                              width: width * 0.9,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  SizedBox(
-                                                    child: Text(
-                                                      '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
-                                                      style: TextStyle(
-                                                          fontSize: 12),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                    child: Row(
-                                                      children: [
-                                                        const Icon(
-                                                          CupertinoIcons
-                                                              .heart_fill,
-                                                          color: Colors.red,
-                                                          size: 18,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                            '${communityController.communityList[index].likeCount}'),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        const Icon(
-                                                          CupertinoIcons
-                                                              .chat_bubble_fill,
-                                                          color: Colors.green,
-                                                          size: 18,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                            '${communityController.communityList[index].commentCount}'),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                          )
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                ));
+                                ),
+                              ),
+                            );
                           },
                         );
                       },

@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/community_controller.dart';
-import 'package:han_bab/controller/main_bottom_bar_controller.dart';
-import 'package:han_bab/view/main/community_page.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 
 import '../../controller/auth_controller.dart';
