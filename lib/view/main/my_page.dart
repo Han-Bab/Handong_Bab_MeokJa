@@ -5,6 +5,7 @@ import 'package:han_bab/controller/auth_controller.dart';
 import 'package:get/get.dart';
 import '../mypage/onboarding_page.dart';
 import '../mypage/setting_page.dart';
+import 'main_screen.dart';
 
 class MyPage extends StatelessWidget {
   MyPage({Key? key}) : super(key: key);
@@ -23,6 +24,15 @@ class MyPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MainScreen()),
+              );
+            },
+            icon: const Icon(Icons.refresh)
+        ),
         title: const Text("마이페이지"),
         centerTitle: true,
       ),
