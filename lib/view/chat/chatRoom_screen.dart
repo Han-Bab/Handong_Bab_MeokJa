@@ -236,7 +236,7 @@ class _ChatRoomState extends State<ChatRoom> {
             // constraints
             onPressed: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MainScreen()));
+                  MaterialPageRoute(builder: (context) => MainScreen()));
             },
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
@@ -351,7 +351,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                 .groupOut(restaurant.groupId, userName,
                                     restaurant.groupName);
 
-                            Get.to(() => const MainScreen());
+                            Get.to(() => MainScreen());
                           },
                           child: Text("예"),
                         ),

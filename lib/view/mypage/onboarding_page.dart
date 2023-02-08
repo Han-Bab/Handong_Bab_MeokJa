@@ -3,6 +3,7 @@ import 'package:han_bab/view/onboarding/kakao_intro_page.dart';
 import '../main/main_screen.dart';
 import '../main/my_page.dart';
 import '../onboarding/toss_intro_page.dart';
+import 'package:get/get.dart';
 
 
 class OnboardingPage extends StatelessWidget {
@@ -12,16 +13,6 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainScreen()),
-              );
-            },
-            icon: const Icon(Icons.arrow_back)
-        ),
-
         title: const Text('카카오 및 토스 연결 방법'),
       ),
       body: Center(
@@ -57,11 +48,7 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const KakaoIntroPage()),
-                    );
+                    Get.off(() => KakaoIntroPage());
                   },
                 ),
                 const SizedBox(
@@ -88,11 +75,7 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TossIntroPage()),
-                    );
+                    Get.off(() => TossIntroPage());
                   },
                 ),
                 const SizedBox(

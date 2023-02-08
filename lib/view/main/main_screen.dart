@@ -31,7 +31,7 @@ class MainScreen extends StatelessWidget {
               index: mainBottomBarController.selectedIndex.value,
               children: [
                 HomePage(),
-                const CommunityPage(),
+                CommunityPage(),
                 Container(),
                 GroupListViewDemo(),
                 MyPage(),
