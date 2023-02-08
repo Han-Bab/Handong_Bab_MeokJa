@@ -29,7 +29,6 @@ class _ChatRoomState extends State<ChatRoom> {
   StreamController<bool> streamController = StreamController<bool>();
   final ScrollController _scrollController = ScrollController();
 
-
   @override
   initState() {
     getChatandAdmin();
@@ -235,8 +234,8 @@ class _ChatRoomState extends State<ChatRoom> {
             constraints: const BoxConstraints(),
             // constraints
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MainScreen()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MainScreen()));
             },
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
@@ -283,7 +282,6 @@ class _ChatRoomState extends State<ChatRoom> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
           ),
-
           ListView.builder(
               shrinkWrap: true,
               itemCount: restaurant.members!.length,
@@ -351,7 +349,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                 .groupOut(restaurant.groupId, userName,
                                     restaurant.groupName);
 
-                            Get.to(() => const MainScreen());
+                            Get.to(() => MainScreen());
                           },
                           child: Text("예"),
                         ),
@@ -372,9 +370,9 @@ class _ChatRoomState extends State<ChatRoom> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.1),
-                child: chatMessages(),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
+              child: chatMessages(),
             )),
         bottomSheet: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -447,6 +445,7 @@ class _ChatRoomState extends State<ChatRoom> {
       },
     );
   }
+
   bool _needsScroll = false;
 
   _scrollToEnd() async {

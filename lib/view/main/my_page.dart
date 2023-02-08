@@ -28,11 +28,10 @@ class MyPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MainScreen()),
+                MaterialPageRoute(builder: (context) => MainScreen()),
               );
             },
-            icon: const Icon(Icons.refresh)
-        ),
+            icon: const Icon(Icons.refresh)),
         title: const Text("마이페이지"),
         centerTitle: true,
       ),

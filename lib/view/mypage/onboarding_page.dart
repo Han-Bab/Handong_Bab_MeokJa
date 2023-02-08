@@ -4,7 +4,6 @@ import '../main/main_screen.dart';
 import '../main/my_page.dart';
 import '../onboarding/toss_intro_page.dart';
 
-
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
@@ -16,12 +15,10 @@ class OnboardingPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MainScreen()),
+                MaterialPageRoute(builder: (context) => MainScreen()),
               );
             },
-            icon: const Icon(Icons.arrow_back)
-        ),
-
+            icon: const Icon(Icons.arrow_back)),
         title: const Text('카카오 및 토스 연결 방법'),
       ),
       body: Center(
@@ -138,8 +135,7 @@ class OnboardingPage extends StatelessWidget {
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext context) {
-                        var kakaoAccountController =
-                        TextEditingController();
+                        var kakaoAccountController = TextEditingController();
                         return AlertDialog(
                           title: const Text('카카오 계좌 연결'),
                           content: TextFormField(
@@ -149,14 +145,12 @@ class OnboardingPage extends StatelessWidget {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(context),
+                              onPressed: () => Navigator.pop(context),
                               child: const Text('취소'),
                             ),
                             TextButton(
                               onPressed: () {
-                                var kakaoAccount =
-                                    kakaoAccountController.text;
+                                var kakaoAccount = kakaoAccountController.text;
                                 Navigator.pop(context);
                               },
                               child: const Text('저장'),
@@ -195,8 +189,7 @@ class OnboardingPage extends StatelessWidget {
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext context) {
-                        var TossAccountController =
-                        TextEditingController();
+                        var TossAccountController = TextEditingController();
                         return AlertDialog(
                           title: const Text('카카오 계좌 연결'),
                           content: TextFormField(
@@ -206,14 +199,12 @@ class OnboardingPage extends StatelessWidget {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(context),
+                              onPressed: () => Navigator.pop(context),
                               child: const Text('취소'),
                             ),
                             TextButton(
                               onPressed: () {
-                                var TossAccount =
-                                    TossAccountController.text;
+                                var TossAccount = TossAccountController.text;
                                 Navigator.pop(context);
                               },
                               child: const Text('저장'),
