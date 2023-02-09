@@ -14,7 +14,7 @@ class CommentController extends GetxController {
   final authController = Get.put(AuthController());
   final communityController = Get.put(CommunityController());
 
-  Future<void> getData(String boardID) async {
+  Future<void> getData() async {
     try {
       final comments = await FirebaseFirestore.instance
           .collection('community')
@@ -34,6 +34,7 @@ class CommentController extends GetxController {
           comment['timestamp'],
         ));
       }
+
       update();
     } catch (e) {
       Get.snackbar('에러', e.toString(), borderColor: Colors.red);
@@ -58,6 +59,7 @@ class CommentController extends GetxController {
         'regtime': '${dt.hour}:${dt.minute}',
         'timestamp': Timestamp.now(),
       });
+
       final docRef = FirebaseFirestore.instance.collection('community').doc(id);
       int commentCount =
           await docRef.get().then((snapshot) => snapshot['commentCount']);
@@ -65,21 +67,16 @@ class CommentController extends GetxController {
         'commentCount': commentCount + 1,
       });
       communityController.communityList[idx].commentCount += 1;
-      commentList.add(CommentModel(
-        docID,
-        await authController.getUserInfo('uid'),
-        await authController.getUserInfo('userNickName'),
-        comment,
-        '${dt.month}/${dt.day}',
-        '${dt.hour}:${dt.minute}',
-        Timestamp.now(),
-      ));
-      update();
       Get.snackbar("알림", "댓글을 작성하셨습니다",
           backgroundColor: Colors.blue,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1));
+
+      communityController.getData();
+      communityController.update();
+      getData();
+      update();
     } catch (e) {
       Get.snackbar('에러', e.toString(), borderColor: Colors.red);
     }
@@ -87,19 +84,36 @@ class CommentController extends GetxController {
 
   Future<void> deleteComment(int index) async {
     String commentID = commentList[index].id;
-    await FirebaseFirestore.instance
-        .collection('community')
-        .doc(boardID)
-        .collection('comments')
-        .doc(commentID)
-        .delete();
+    try {
+      final docRef =
+          FirebaseFirestore.instance.collection('community').doc(boardID);
+      int commentCount =
+          await docRef.get().then((snapshot) => snapshot['commentCount']);
+      docRef.update({
+        'commentCount': commentCount - 1,
+      });
+      communityController.communityList[index].commentCount -= 1;
 
-    final docRef =
-        FirebaseFirestore.instance.collection('community').doc(boardID);
-    int commentCount =
-        await docRef.get().then((snapshot) => snapshot['commentCount']);
-    docRef.update({
-      'commentCount': commentCount - 1,
+      await FirebaseFirestore.instance
+          .collection('community')
+          .doc(boardID)
+          .collection('comments')
+          .doc(commentID)
+          .delete();
+    } catch (e) {
+      print(e);
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      getData();
+      update();
+      communityController.getData();
+      communityController.update();
+
+      Get.snackbar("알림", "댓글을 삭제하셨습니다",
+          backgroundColor: Colors.blue,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 1));
     });
   }
 }

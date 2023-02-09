@@ -99,41 +99,42 @@ class HomePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           String userName = "";
                           if (homeController
-                              .restaurants[index].members.isNotEmpty) { // <- 필요 없을듯
+                              .restaurants[index].members.isNotEmpty) {
+                            // <- 필요 없을듯
                             return GestureDetector(
                               onTap: () async {
                                 if (homeController
-                                    .restaurants[index].currPeople !=
+                                        .restaurants[index].currPeople !=
                                     homeController
                                         .restaurants[index].maxPeople) {
                                   var result = await FirebaseFirestore.instance
                                       .collection('user')
                                       .doc(FirebaseAuth
-                                      .instance.currentUser!.uid)
+                                          .instance.currentUser!.uid)
                                       .get();
                                   userName = result['userName'];
                                   DatabaseService(
-                                      uid: FirebaseAuth
-                                          .instance.currentUser!.uid)
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
                                       .groupJoin(
-                                      homeController
-                                          .restaurants[index].groupId,
-                                      userName,
-                                      homeController
-                                          .restaurants[index].groupName);
+                                          homeController
+                                              .restaurants[index].groupId,
+                                          userName,
+                                          homeController
+                                              .restaurants[index].groupName);
                                   Get.to(() => ChatRoom(),
                                       arguments:
-                                      homeController.restaurants[index]);
+                                          homeController.restaurants[index]);
                                 } else {
                                   if (!await DatabaseService(
-                                      uid: FirebaseAuth
-                                          .instance.currentUser!.uid)
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
                                       .isUserJoined(
-                                      homeController
-                                          .restaurants[index].groupName,
-                                      homeController
-                                          .restaurants[index].groupId,
-                                      userName)) {
+                                          homeController
+                                              .restaurants[index].groupName,
+                                          homeController
+                                              .restaurants[index].groupId,
+                                          userName)) {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
@@ -154,15 +155,15 @@ class HomePage extends StatelessWidget {
                                   } else {
                                     Get.to(() => ChatRoom(),
                                         arguments:
-                                        homeController.restaurants[index]);
+                                            homeController.restaurants[index]);
                                   }
                                 }
                               },
                               child: Card(
                                 color: (homeController
-                                    .restaurants[index].currPeople ==
-                                    homeController
-                                        .restaurants[index].maxPeople)
+                                            .restaurants[index].currPeople ==
+                                        homeController
+                                            .restaurants[index].maxPeople)
                                     ? Colors.grey
                                     : Colors.white,
                                 child: Row(
@@ -172,27 +173,27 @@ class HomePage extends StatelessWidget {
                                       height: 100,
                                       child: ClipRRect(
                                           borderRadius:
-                                          BorderRadius.circular(20.0),
+                                              BorderRadius.circular(20.0),
                                           child: Image.asset(
                                             homeController
                                                 .restaurants[index].imgUrl,
                                             fit: BoxFit.cover,
                                             errorBuilder:
                                                 (BuildContext? context,
-                                                Object? exception,
-                                                StackTrace? stackTrace) {
+                                                    Object? exception,
+                                                    StackTrace? stackTrace) {
                                               return Container(
                                                 height: 120,
                                                 width: 120,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(width: 3),
                                                   borderRadius:
-                                                  BorderRadius.circular(20),
+                                                      BorderRadius.circular(20),
                                                 ),
                                                 child: ClipRRect(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0),
+                                                        BorderRadius.circular(
+                                                            20.0),
                                                     child: Image.asset(
                                                       'assets/hanbab_icon.png',
                                                       scale: 5,
@@ -207,24 +208,24 @@ class HomePage extends StatelessWidget {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
                                                   Icon(
                                                     Icons.account_circle_sharp,
                                                     color: (homeController
-                                                        .restaurants[
-                                                    index]
-                                                        .currPeople ==
-                                                        homeController
-                                                            .restaurants[
-                                                        index]
-                                                            .maxPeople)
+                                                                .restaurants[
+                                                                    index]
+                                                                .currPeople ==
+                                                            homeController
+                                                                .restaurants[
+                                                                    index]
+                                                                .maxPeople)
                                                         ? Colors.black
                                                         : Colors.grey,
                                                     size: 16,
@@ -239,13 +240,13 @@ class HomePage extends StatelessWidget {
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                       color: (homeController
-                                                          .restaurants[
-                                                      index]
-                                                          .currPeople ==
-                                                          homeController
-                                                              .restaurants[
-                                                                  index]
-                                                              .maxPeople)
+                                                                  .restaurants[
+                                                                      index]
+                                                                  .currPeople ==
+                                                              homeController
+                                                                  .restaurants[
+                                                                      index]
+                                                                  .maxPeople)
                                                           ? Colors.black
                                                           : Colors.grey,
                                                     ),
@@ -279,8 +280,8 @@ class HomePage extends StatelessWidget {
                                                     color: Colors.black),
                                               ),
                                               if (homeController
-                                                  .restaurants[index]
-                                                  .currPeople !=
+                                                      .restaurants[index]
+                                                      .currPeople !=
                                                   homeController
                                                       .restaurants[index]
                                                       .maxPeople)
@@ -289,7 +290,7 @@ class HomePage extends StatelessWidget {
                                                   style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                       color: Colors.red),
                                                 )
                                               else
@@ -298,7 +299,7 @@ class HomePage extends StatelessWidget {
                                                   style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                       color: Colors.black),
                                                 ),
                                             ],
@@ -308,7 +309,7 @@ class HomePage extends StatelessWidget {
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 homeController
@@ -316,13 +317,13 @@ class HomePage extends StatelessWidget {
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   color: (homeController
-                                                      .restaurants[
-                                                  index]
-                                                      .currPeople ==
-                                                      homeController
-                                                          .restaurants[
-                                                      index]
-                                                          .maxPeople)
+                                                              .restaurants[
+                                                                  index]
+                                                              .currPeople ==
+                                                          homeController
+                                                              .restaurants[
+                                                                  index]
+                                                              .maxPeople)
                                                       ? Colors.black
                                                       : Colors.grey,
                                                 ),
@@ -334,12 +335,12 @@ class HomePage extends StatelessWidget {
                                                       const Icon(CupertinoIcons
                                                           .person),
                                                       if (homeController
-                                                          .restaurants[
-                                                      index]
-                                                          .currPeople !=
+                                                              .restaurants[
+                                                                  index]
+                                                              .currPeople !=
                                                           homeController
                                                               .restaurants[
-                                                          index]
+                                                                  index]
                                                               .maxPeople)
                                                         Text(
                                                             '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
@@ -348,12 +349,12 @@ class HomePage extends StatelessWidget {
                                                           '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
                                                           style: const TextStyle(
                                                               decoration:
-                                                              TextDecoration
-                                                                  .lineThrough,
+                                                                  TextDecoration
+                                                                      .lineThrough,
                                                               decorationColor:
-                                                              Colors.red,
+                                                                  Colors.red,
                                                               decorationThickness:
-                                                              3),
+                                                                  3),
                                                         ),
                                                       const SizedBox(
                                                         width: 5,
@@ -431,7 +432,7 @@ class MySearchDelegate extends SearchDelegate {
         color: Colors.blue,
       ),
       onPressed: () {
-        Get.to(() => MainScreen());
+        Get.offAll(() => MainScreen());
       });
 
   @override
@@ -445,38 +446,28 @@ class MySearchDelegate extends SearchDelegate {
                 String userName = "";
                 return GestureDetector(
                   onTap: () async {
-                    if (homeController
-                        .restaurants[index].currPeople !=
-                        homeController
-                            .restaurants[index].maxPeople) {
+                    if (homeController.restaurants[index].currPeople !=
+                        homeController.restaurants[index].maxPeople) {
                       var result = await FirebaseFirestore.instance
                           .collection('user')
-                          .doc(FirebaseAuth
-                          .instance.currentUser!.uid)
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
                           .get();
                       userName = result['userName'];
                       DatabaseService(
-                          uid: FirebaseAuth
-                              .instance.currentUser!.uid)
+                              uid: FirebaseAuth.instance.currentUser!.uid)
                           .groupJoin(
-                          homeController
-                              .restaurants[index].groupId,
-                          userName,
-                          homeController
-                              .restaurants[index].groupName);
+                              homeController.restaurants[index].groupId,
+                              userName,
+                              homeController.restaurants[index].groupName);
                       Get.to(() => ChatRoom(),
-                          arguments:
-                          homeController.restaurants[index]);
+                          arguments: homeController.restaurants[index]);
                     } else {
                       if (!await DatabaseService(
-                          uid: FirebaseAuth
-                              .instance.currentUser!.uid)
+                              uid: FirebaseAuth.instance.currentUser!.uid)
                           .isUserJoined(
-                          homeController
-                              .restaurants[index].groupName,
-                          homeController
-                              .restaurants[index].groupId,
-                          userName)) {
+                              homeController.restaurants[index].groupName,
+                              homeController.restaurants[index].groupId,
+                              userName)) {
                         showDialog(
                             context: context,
                             barrierDismissible: false,
@@ -496,16 +487,13 @@ class MySearchDelegate extends SearchDelegate {
                             });
                       } else {
                         Get.to(() => ChatRoom(),
-                            arguments:
-                            homeController.restaurants[index]);
+                            arguments: homeController.restaurants[index]);
                       }
                     }
                   },
                   child: Card(
-                    color: (homeController
-                        .restaurants[index].currPeople ==
-                        homeController
-                            .restaurants[index].maxPeople)
+                    color: (homeController.restaurants[index].currPeople ==
+                            homeController.restaurants[index].maxPeople)
                         ? Colors.grey
                         : Colors.white,
                     child: Row(
@@ -514,28 +502,22 @@ class MySearchDelegate extends SearchDelegate {
                           width: 100,
                           height: 100,
                           child: ClipRRect(
-                              borderRadius:
-                              BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(20.0),
                               child: Image.asset(
-                                homeController
-                                    .restaurants[index].imgUrl,
+                                homeController.restaurants[index].imgUrl,
                                 fit: BoxFit.cover,
-                                errorBuilder:
-                                    (BuildContext? context,
-                                    Object? exception,
-                                    StackTrace? stackTrace) {
+                                errorBuilder: (BuildContext? context,
+                                    Object? exception, StackTrace? stackTrace) {
                                   return Container(
                                     height: 120,
                                     width: 120,
                                     decoration: BoxDecoration(
                                       border: Border.all(width: 3),
-                                      borderRadius:
-                                      BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: ClipRRect(
                                         borderRadius:
-                                        BorderRadius.circular(
-                                            20.0),
+                                            BorderRadius.circular(20.0),
                                         child: Image.asset(
                                           'assets/hanbab_icon.png',
                                           scale: 5,
@@ -549,25 +531,22 @@ class MySearchDelegate extends SearchDelegate {
                         ),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
                                       Icon(
                                         Icons.account_circle_sharp,
                                         color: (homeController
-                                            .restaurants[
-                                        index]
-                                            .currPeople ==
-                                            homeController
-                                                .restaurants[
-                                            index]
-                                                .maxPeople)
+                                                    .restaurants[index]
+                                                    .currPeople ==
+                                                homeController
+                                                    .restaurants[index]
+                                                    .maxPeople)
                                             ? Colors.black
                                             : Colors.grey,
                                         size: 16,
@@ -577,18 +556,15 @@ class MySearchDelegate extends SearchDelegate {
                                       ),
                                       Text(
                                         getName(homeController
-                                            .restaurants[index]
-                                            .admin),
+                                            .restaurants[index].admin),
                                         style: TextStyle(
                                           fontSize: 15,
                                           color: (homeController
-                                              .restaurants[
-                                          index]
-                                              .currPeople ==
-                                              homeController
-                                                  .restaurants[
-                                              index]
-                                                  .maxPeople)
+                                                      .restaurants[index]
+                                                      .currPeople ==
+                                                  homeController
+                                                      .restaurants[index]
+                                                      .maxPeople)
                                               ? Colors.black
                                               : Colors.grey,
                                         ),
@@ -598,8 +574,7 @@ class MySearchDelegate extends SearchDelegate {
                                   Row(
                                     children: [
                                       Text(homeController
-                                          .restaurants[index]
-                                          .orderTime),
+                                          .restaurants[index].orderTime),
                                       const SizedBox(
                                         width: 5,
                                       ),
@@ -613,26 +588,21 @@ class MySearchDelegate extends SearchDelegate {
                               Row(
                                 children: [
                                   Text(
-                                    homeController
-                                        .restaurants[index]
-                                        .groupName,
+                                    homeController.restaurants[index].groupName,
                                     style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
                                   if (homeController
-                                      .restaurants[index]
-                                      .currPeople !=
+                                          .restaurants[index].currPeople !=
                                       homeController
-                                          .restaurants[index]
-                                          .maxPeople)
+                                          .restaurants[index].maxPeople)
                                     const Text(
                                       " ❯",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          fontWeight:
-                                          FontWeight.bold,
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.red),
                                     )
                                   else
@@ -640,8 +610,7 @@ class MySearchDelegate extends SearchDelegate {
                                       " ❯",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          fontWeight:
-                                          FontWeight.bold,
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     ),
                                 ],
@@ -651,21 +620,16 @@ class MySearchDelegate extends SearchDelegate {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    homeController
-                                        .restaurants[index].pickup,
+                                    homeController.restaurants[index].pickup,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: (homeController
-                                          .restaurants[
-                                      index]
-                                          .currPeople ==
-                                          homeController
-                                              .restaurants[
-                                          index]
-                                              .maxPeople)
+                                      color: (homeController.restaurants[index]
+                                                  .currPeople ==
+                                              homeController
+                                                  .restaurants[index].maxPeople)
                                           ? Colors.black
                                           : Colors.grey,
                                     ),
@@ -674,29 +638,21 @@ class MySearchDelegate extends SearchDelegate {
                                     child: FittedBox(
                                       child: Row(
                                         children: [
-                                          const Icon(CupertinoIcons
-                                              .person),
-                                          if (homeController
-                                              .restaurants[
-                                          index]
-                                              .currPeople !=
+                                          const Icon(CupertinoIcons.person),
+                                          if (homeController.restaurants[index]
+                                                  .currPeople !=
                                               homeController
-                                                  .restaurants[
-                                              index]
-                                                  .maxPeople)
+                                                  .restaurants[index].maxPeople)
                                             Text(
                                                 '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
                                           else
                                             Text(
                                               '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
                                               style: const TextStyle(
-                                                  decoration:
-                                                  TextDecoration
+                                                  decoration: TextDecoration
                                                       .lineThrough,
-                                                  decorationColor:
-                                                  Colors.red,
-                                                  decorationThickness:
-                                                  3),
+                                                  decorationColor: Colors.red,
+                                                  decorationThickness: 3),
                                             ),
                                           const SizedBox(
                                             width: 5,

@@ -115,11 +115,20 @@ class CommunityPage extends StatelessWidget {
                                                       .spaceBetween,
                                               children: [
                                                 SizedBox(
-                                                  child: Text(
-                                                    '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
-                                                    style: const TextStyle(
-                                                        fontSize: 12),
-                                                  ),
+                                                  child: communityController
+                                                          .checkTime(index)
+                                                      ? Text(
+                                                          '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                        )
+                                                      : Text(
+                                                          '${communityController.communityList[index].regdate} | ${communityController.communityList[index].writer}',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                        ),
                                                 ),
                                                 SizedBox(
                                                   height: 30,
@@ -148,13 +157,8 @@ class CommunityPage extends StatelessWidget {
                                                       const SizedBox(
                                                         width: 5,
                                                       ),
-                                                      GetBuilder<
-                                                              CommentController>(
-                                                          builder:
-                                                              (commentController) {
-                                                        return Text(
-                                                            '${communityController.communityList[index].commentCount}');
-                                                      }),
+                                                      Text(
+                                                          '${communityController.communityList[index].commentCount}'),
                                                     ],
                                                   ),
                                                 ),

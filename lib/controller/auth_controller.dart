@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:han_bab/view/login/after_google_login.dart';
@@ -59,7 +58,7 @@ class AuthController extends GetxController {
   void register(Map userInfo) async {
     try {
       print(userInfo);
-      final user = await authentication.createUserWithEmailAndPassword(
+      await authentication.createUserWithEmailAndPassword(
         email: userInfo['userEmail'],
         password: userInfo['userPW'],
       );
@@ -130,7 +129,7 @@ class AuthController extends GetxController {
         'userNickName': userInfo['userNickName'],
         'userAccount': userInfo['userAccount'],
         'groups': [],
-        'uid': user!.uid,
+        'uid': user.uid,
         'kakaoLink': false,
         'tossLink': false,
       });
@@ -184,7 +183,11 @@ class AuthController extends GetxController {
         return await authentication.signInWithCredential(credential);
       } else {
         print("로그인 실패");
-        showToast('한동 계정만 로그인 할 수 있습니다');
+        Get.snackbar("경고", "한동 계정만 로그인 할 수 있습니다",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: Duration(seconds: 1));
         return await _googleSignIn.signOut();
       }
     } catch (e) {
@@ -233,15 +236,4 @@ class AuthController extends GetxController {
   Future<void> resetPassword(String email) async {
     await authentication.sendPasswordResetEmail(email: email);
   }
-}
-
-void showToast(String msg) {
-  Fluttertoast.showToast(
-    msg: msg,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.blue,
-    fontSize: 15,
-    textColor: Colors.white,
-    toastLength: Toast.LENGTH_SHORT,
-  );
 }
