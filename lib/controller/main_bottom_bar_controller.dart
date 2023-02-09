@@ -7,9 +7,15 @@ class MainBottomBarController extends GetxController {
 
   // 현재 선택된 탭 아이템 idx 저장
   final RxInt selectedIndex = 0.obs;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
 
   // tap 이벤트 발생 시 selectedIndex value 변경 함수
   void changeIndex(int index) {
+    print('bottombar index');
     selectedIndex(index);
     if (selectedIndex.value == 2) {
       Get.off(() => AddChatRoom());

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/comment_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
+import '../../controller/content_controller.dart';
 import '../community/content.dart';
 import '../community/add_post.dart';
 
@@ -11,6 +12,7 @@ class CommunityPage extends StatelessWidget {
   CommunityPage({Key? key}) : super(key: key);
   final communityController = Get.put(CommunityController());
   final commentController = Get.put(CommentController());
+  final contentController = Get.put(ContentController());
   final authController = Get.put(AuthController());
 
   @override
@@ -26,7 +28,7 @@ class CommunityPage extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder(
-          future: Future.delayed(const Duration(milliseconds: 200),
+          future: Future.delayed(const Duration(milliseconds: 500),
               () => communityController.getData()),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
@@ -60,6 +62,12 @@ class CommunityPage extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 commentController.boardID =
+                                    communityController.communityList[index].id;
+                                contentController.contentUID =
+                                    communityController
+                                        .communityList[index].uid;
+                                commentController.index = index;
+                                contentController.contentID =
                                     communityController.communityList[index].id;
                                 Get.to(() => Content(), arguments: index);
                               },

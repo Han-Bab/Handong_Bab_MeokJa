@@ -10,6 +10,7 @@ class CommentController extends GetxController {
 
   var commentList = <CommentModel>[];
   var boardID;
+  int index = 0;
   final authController = Get.put(AuthController());
   final communityController = Get.put(CommunityController());
 
@@ -82,5 +83,23 @@ class CommentController extends GetxController {
     } catch (e) {
       Get.snackbar('에러', e.toString(), borderColor: Colors.red);
     }
+  }
+
+  Future<void> deleteComment(int index) async {
+    String commentID = commentList[index].id;
+    await FirebaseFirestore.instance
+        .collection('community')
+        .doc(boardID)
+        .collection('comments')
+        .doc(commentID)
+        .delete();
+
+    final docRef =
+        FirebaseFirestore.instance.collection('community').doc(boardID);
+    int commentCount =
+        await docRef.get().then((snapshot) => snapshot['commentCount']);
+    docRef.update({
+      'commentCount': commentCount - 1,
+    });
   }
 }

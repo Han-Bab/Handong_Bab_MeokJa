@@ -1,11 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:han_bab/controller/auth_controller.dart';
+import 'package:han_bab/controller/community_controller.dart';
+import 'package:han_bab/controller/content_controller.dart';
 import '../../controller/comment_controller.dart';
 
 class Comments extends GetView<CommentController> {
   Comments({Key? key}) : super(key: key);
+  final communityController = Get.put(CommunityController());
   final commentController = Get.put(CommentController());
+  final authController = Get.put(AuthController());
+  final contentController = Get.put(ContentController());
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +47,68 @@ class Comments extends GetView<CommentController> {
                 '${commentController.commentList[index].regdate} | ${commentController.commentList[index].regtime}',
                 style: const TextStyle(fontSize: 13),
               ),
+              trailing: IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: () => iosShowBottomNotification(context, index),
+                icon: const Icon(
+                  CupertinoIcons.ellipsis_vertical,
+                  size: 18,
+                ),
+              ),
             );
           },
         );
       },
+    );
+  }
+
+  Future iosShowBottomNotification(BuildContext context, int index) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: authController.authentication.currentUser?.uid ==
+                commentController.commentList[index].uid
+            ? [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    // commentController.boardID =
+                    //     communityController.communityList[index].id;
+                    // contentController.contentUID =
+                    //     communityController.communityList[index].uid;
+                    // commentController.index = index;
+                    // contentController.contentID =
+                    //     communityController.communityList[index].id;
+                    // Get.snackbar('알림', '댓글을 삭제했습니다',
+                    //     snackPosition: SnackPosition.TOP,
+                    //     duration: const Duration(milliseconds: 1200),
+                    //     backgroundColor: Colors.lightGreen);
+                    // Get.off(() => Content(), arguments: index);
+                    commentController.deleteComment(index);
+                    Get.back(
+                        result: commentController
+                            .getData(commentController.boardID));
+                  },
+                  child: Text("삭제하기"),
+                ),
+              ]
+            : [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.snackbar('알림', '신고가 접수되었습니다.\n감사합니다.',
+                        snackPosition: SnackPosition.TOP,
+                        duration: const Duration(milliseconds: 1200),
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white);
+                  },
+                  child: Text("신고하기"),
+                ),
+              ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text("취소"),
+          onPressed: () => Get.back(),
+        ),
+      ),
     );
   }
 }

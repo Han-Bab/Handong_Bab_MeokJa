@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/comment_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
+import 'package:han_bab/controller/content_controller.dart';
 import 'package:han_bab/view/community/comments.dart';
+import 'package:han_bab/view/community/edit_post.dart';
+
+import '../main/main_screen.dart';
 
 class Content extends StatelessWidget {
   Content({Key? key}) : super(key: key);
@@ -11,17 +15,17 @@ class Content extends StatelessWidget {
   final _commentFocusNode = FocusNode();
 
   final int idx = Get.arguments;
-
   final communityController = Get.put(CommunityController());
-
   final commentController = Get.put(CommentController());
-
+  final contentController = Get.put(ContentController());
   final commentField = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    contentController.onReady();
+
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -33,23 +37,17 @@ class Content extends StatelessWidget {
               '음식게시판',
             ),
             elevation: 2,
-            actions: <Widget>[
-              PopupMenuButton(
-                  onSelected: (String value) {
-                    // do something with the selected value here
-                  },
-                  itemBuilder: (BuildContext ctx) => [
-                        const PopupMenuItem(
-                          value: '0',
-                          child: Text('게시글 수정'),
-                        ),
-                        const PopupMenuItem(value: '1', child: Text('게시글 삭제')),
-                      ])
+            actions: [
+              IconButton(
+                  onPressed: () => iosShowBottomNotification(context),
+                  icon: Icon(CupertinoIcons.ellipsis_vertical))
             ],
           ),
           body: FutureBuilder(
-            future: Future.delayed(const Duration(milliseconds: 200),
-                () => commentController.getData(commentController.boardID)),
+            future: Future.delayed(const Duration(milliseconds: 200), () {
+              commentController.getData(commentController.boardID);
+              communityController.getData();
+            }),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -68,172 +66,225 @@ class Content extends StatelessWidget {
               else {
                 return RefreshIndicator(
                   onRefresh: () async {
+                    await communityController.getData();
                     await commentController.getData(commentController.boardID);
+                    communityController.update();
                     commentController.update();
                   },
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(20, 20, 20, height * 0.08),
-                    child: GetBuilder<CommunityController>(
-                      builder: (communityController) {
-                        return SingleChildScrollView(
-                          child: Column(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Column(
                             children: [
-                              Column(
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      // userinfo
-                                      SizedBox(
-                                        child: Text(
-                                          communityController
-                                              .communityList[idx].writer,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      SizedBox(
-                                        child: Text(
-                                          '${communityController.communityList[idx].regdate} | ${communityController.communityList[idx].regtime}',
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  // CommunityTitle
+                                  // userinfo
                                   SizedBox(
-                                    width: width,
                                     child: Text(
                                       communityController
-                                          .communityList[idx].title,
+                                          .communityList[idx].writer,
                                       style: const TextStyle(
                                         color: Colors.black,
-                                        fontSize: 24,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 10,
+                                    width: 10,
                                   ),
-                                  // CommunityContent
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          communityController
-                                              .communityList[idx].content,
-                                          style: const TextStyle(
-                                            height: 1.5,
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  // 좋아요 댓글 수
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              CupertinoIcons.heart_fill,
-                                              color: Colors.red,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                                '${communityController.communityList[idx].likeCount}'),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            const Icon(
-                                              CupertinoIcons.chat_bubble_fill,
-                                              color: Colors.green,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                                '${communityController.communityList[idx].commentCount}'),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 40,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            communityController.clickHeart(
-                                                communityController
-                                                    .communityList[idx].id,
-                                                idx);
-                                            Get.snackbar(
-                                              '알림',
-                                              '좋아요를 눌렀습니다',
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              colorText: Colors.white,
-                                              backgroundColor: Colors.lightBlue,
-                                              duration: const Duration(
-                                                  milliseconds: 1500),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white70,
-                                          ),
-                                          child: Row(
-                                            children: const [
-                                              Icon(
-                                                CupertinoIcons.heart_fill,
-                                                color: Colors.red,
-                                                size: 24,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                '좋아요',
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    color: Colors.black,
-                                    height: 30,
+                                  SizedBox(
+                                    child: Text(
+                                      '${communityController.communityList[idx].regdate} | ${communityController.communityList[idx].regtime}',
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
                                   ),
                                 ],
                               ),
-                              Comments(),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              // CommunityTitle
+                              SizedBox(
+                                width: width,
+                                child: FutureBuilder(
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator
+                                          .adaptive();
+                                    }
+                                    if (snapshot.hasError) {
+                                      print(snapshot.error.toString());
+                                      return const Text("Error");
+                                    } else {
+                                      // print(snapshot.data);
+                                      return Text(
+                                        snapshot.data.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  future: contentController.getData('title'),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              // CommunityContent
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FutureBuilder(
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<dynamic> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator
+                                            .adaptive();
+                                      }
+                                      if (snapshot.hasError) {
+                                        print(snapshot.error.toString());
+                                        return const Text("Error");
+                                      } else {
+                                        // print(snapshot.data);
+                                        return Expanded(
+                                          child: Text(
+                                            snapshot.data.toString(),
+                                            style: const TextStyle(
+                                              height: 1.5,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    future:
+                                        contentController.getData('content'),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // 좋아요 댓글 수
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          CupertinoIcons.heart_fill,
+                                          color: Colors.red,
+                                          size: 18,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        GetBuilder<CommunityController>(
+                                          builder: (communityController) {
+                                            return Text(
+                                                '${communityController.communityList[idx].likeCount}');
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        const Icon(
+                                          CupertinoIcons.chat_bubble_fill,
+                                          color: Colors.green,
+                                          size: 18,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        GetBuilder<CommunityController>(
+                                          builder: (communityController) {
+                                            return Text(
+                                                '${communityController.communityList[idx].commentCount}');
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        communityController.clickHeart(
+                                            communityController
+                                                .communityList[idx].id,
+                                            idx);
+                                        Get.snackbar(
+                                          '알림',
+                                          '좋아요를 눌렀습니다',
+                                          snackPosition: SnackPosition.BOTTOM,
+                                          colorText: Colors.white,
+                                          backgroundColor: Colors.lightBlue,
+                                          duration: const Duration(
+                                              milliseconds: 1500),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white70,
+                                      ),
+                                      child: Row(
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.heart_fill,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            '좋아요',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Divider(
+                                color: Colors.black,
+                                height: 30,
+                              ),
                             ],
                           ),
-                        );
-                      },
+                          FutureBuilder(
+                            future: commentController
+                                .getData(commentController.boardID),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (snapshot.hasError) {
+                                print(snapshot.error.toString());
+                                return const Text("Error");
+                              } else {
+                                // print(snapshot.data);
+                                return Comments();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -284,6 +335,50 @@ class Content extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Future iosShowBottomNotification(BuildContext context) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: contentController.isContentWriter
+            ? [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.off(() => EditPost(), arguments: idx);
+                  },
+                  child: Text("글 수정"),
+                ),
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    contentController.deleteContent();
+                    Get.snackbar('알림', '게시글을 삭제했습니다',
+                        snackPosition: SnackPosition.TOP,
+                        duration: const Duration(milliseconds: 1500),
+                        backgroundColor: Colors.lightGreen);
+                    Get.off(() => MainScreen(), arguments: 1);
+                  },
+                  child: Text("글 삭제"),
+                ),
+              ]
+            : [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    Get.snackbar('알림', '신고가 접수되었습니다.\n감사합니다.',
+                        snackPosition: SnackPosition.TOP,
+                        duration: const Duration(milliseconds: 1200),
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white);
+                  },
+                  child: Text("신고하기"),
+                ),
+              ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text("취소"),
+          onPressed: () => Get.back(),
         ),
       ),
     );

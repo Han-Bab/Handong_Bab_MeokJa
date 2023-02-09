@@ -15,6 +15,14 @@ class AuthController extends GetxController {
   // 전역적(global)으로 AuthController 에 접근 가능하게 함.
   static AuthController instance = Get.find();
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    print("authInIt");
+    getCurrentUser();
+  }
+
   // 현재 시점에서 초기화되는 것이 아니므로 late 붙혀줌.
   late Rx<User?> _user;
   final FirebaseAuth authentication = FirebaseAuth.instance;
