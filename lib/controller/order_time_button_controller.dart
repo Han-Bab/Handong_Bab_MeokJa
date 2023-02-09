@@ -5,8 +5,8 @@ class OrderTimeButtonController extends GetxController {
 
   final RxString orderTime = '주문 예정 시간을 설정해주세요'.obs;
 
-  void setOrderTime(String? _selectedTime) {
-    orderTime(_selectedTime);
+  void setOrderTime(String? selectedTime) {
+    orderTime(selectedTime);
   }
 
 }

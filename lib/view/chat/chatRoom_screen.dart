@@ -13,7 +13,7 @@ import '../main/main_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class ChatRoom extends StatefulWidget {
-  ChatRoom({Key? key}) : super(key: key);
+  const ChatRoom({Key? key}) : super(key: key);
 
   @override
   State<ChatRoom> createState() => _ChatRoomState();
@@ -64,32 +64,12 @@ class _ChatRoomState extends State<ChatRoom> {
     return res.substring(res.indexOf("_") + 1);
   }
 
-  void nextPage(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: 380,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
-            ),
-          );
-        });
-  }
-
   String getId(String res) {
     return res.substring(0, res.indexOf("_"));
   }
 
   Future<void> payModal(context) async {
     bool visibility = false;
-    // var f = NumberFormat('###,###,###,###');
-    // int price = 1000000;
-    // String toHexValue(int value){
-    //   return (value * 524288).toRadixString(16);
-    // }
     var result = await FirebaseFirestore.instance
         .collection('user')
         .doc(getId(restaurant.admin))
@@ -111,17 +91,16 @@ class _ChatRoomState extends State<ChatRoom> {
                   child: Column(children: [
                     Text(
                       getName(restaurant.admin),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
                     Text(
                       account,
-                      style: TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 15),
                     ),
-                    // Text("${f.format(price)}원", style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
                     const SizedBox(
                       height: 20,
                     ),
@@ -486,9 +465,7 @@ class _ChatRoomState extends State<ChatRoom> {
         "time": DateFormat("a h:mm:ss", "ko").format(DateTime.now()),
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
-      setState(() {
-        messageController.clear();
-      });
+      messageController.clear();
     }
   }
 }
