@@ -106,16 +106,12 @@ class HomePage extends StatelessWidget {
                                     .restaurants[index].currPeople !=
                                     homeController
                                         .restaurants[index].maxPeople) {
-                                  debugPrint(homeController
-                                      .restaurants[index].groupName);
                                   var result = await FirebaseFirestore.instance
                                       .collection('user')
                                       .doc(FirebaseAuth
                                       .instance.currentUser!.uid)
                                       .get();
                                   userName = result['userName'];
-                                  print(
-                                      "${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
                                   DatabaseService(
                                       uid: FirebaseAuth
                                           .instance.currentUser!.uid)
@@ -129,8 +125,6 @@ class HomePage extends StatelessWidget {
                                       arguments:
                                       homeController.restaurants[index]);
                                 } else {
-                                  print(
-                                      "TF:${!await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).isUserJoined(homeController.restaurants[index].groupName, homeController.restaurants[index].groupId, userName)}");
                                   if (!await DatabaseService(
                                       uid: FirebaseAuth
                                           .instance.currentUser!.uid)
@@ -455,16 +449,12 @@ class MySearchDelegate extends SearchDelegate {
                         .restaurants[index].currPeople !=
                         homeController
                             .restaurants[index].maxPeople) {
-                      debugPrint(homeController
-                          .restaurants[index].groupName);
                       var result = await FirebaseFirestore.instance
                           .collection('user')
                           .doc(FirebaseAuth
                           .instance.currentUser!.uid)
                           .get();
                       userName = result['userName'];
-                      print(
-                          "${homeController.restaurants[index].groupId} $userName ${homeController.restaurants[index].groupName}");
                       DatabaseService(
                           uid: FirebaseAuth
                               .instance.currentUser!.uid)
@@ -478,8 +468,6 @@ class MySearchDelegate extends SearchDelegate {
                           arguments:
                           homeController.restaurants[index]);
                     } else {
-                      print(
-                          "TF:${!await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).isUserJoined(homeController.restaurants[index].groupName, homeController.restaurants[index].groupId, userName)}");
                       if (!await DatabaseService(
                           uid: FirebaseAuth
                               .instance.currentUser!.uid)

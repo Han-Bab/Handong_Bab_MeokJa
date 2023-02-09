@@ -165,7 +165,7 @@ class DatabaseService {
           await groupDocumentReference.get();
       List<dynamic> members = await groupDocumentSnapshot['members'];
       await groupDocumentReference.update({"currPeople": "${members.length}"});
-      if(members.isEmpty) groupCollection.doc(groupId).delete();
+      if (members.isEmpty) groupCollection.doc(groupId).delete();
     }
   }
 
@@ -195,4 +195,21 @@ class FirestoreDB {
       return snapshot.docs.map((doc) => Restaurant.fromSnapshot(doc)).toList();
     });
   }
+
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  getMyRestaurants(String myName) {
+    return _firebaseFirestore
+          .collection('groups')
+          .where('members', arrayContains: myName)
+          .snapshots()
+          .map((snapshot) {
+            return snapshot.docs
+                .map((doc) => Restaurant.fromSnapshot(doc))
+                .toList();
+          });
+    }
+
 }
