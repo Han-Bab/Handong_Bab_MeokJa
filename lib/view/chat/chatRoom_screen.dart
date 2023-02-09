@@ -246,6 +246,10 @@ class _ChatRoomState extends State<ChatRoom> {
           ListTile(
             title: Text("픽업장소: ${restaurant.pickup}"),
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 100, right: 100, bottom: 10),
+            child: ElevatedButton(onPressed: () {}, child: const Text("수정하기"), style: ButtonStyle(),),
+          ),
           Container(
               child: Divider(
             color: Colors.grey,
