@@ -37,13 +37,12 @@ class EditPost extends StatelessWidget {
             icon: const Icon(CupertinoIcons.location),
             onPressed: () {
               print('Edit Post');
-              print(contentController.contentID);
               contentController.editData(title.text, content.text, index);
+              Get.back();
               Get.snackbar('알림', '게시글을 수정하였습니다',
                   snackPosition: SnackPosition.TOP,
                   duration: const Duration(milliseconds: 1500),
                   backgroundColor: Colors.lightGreen);
-              Get.back();
             },
           ),
         ],

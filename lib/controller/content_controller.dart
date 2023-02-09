@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
@@ -49,13 +48,28 @@ class ContentController extends GetxController {
       });
       communityController.communityList[index].title = title;
       communityController.communityList[index].content = content;
+
+      getData('title');
+      getData('content');
       update();
+      communityController.getData();
+      communityController.update();
     } catch (e) {
       print(e);
     }
   }
 
   void deleteContent() {
+    FirebaseFirestore.instance
+        .collection('community')
+        .doc(contentID)
+        .collection("comments")
+        .get()
+        .then((snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
     FirebaseFirestore.instance.collection('community').doc(contentID).delete();
   }
 }

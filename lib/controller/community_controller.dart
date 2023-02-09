@@ -46,8 +46,11 @@ class CommunityController extends GetxController {
         'writer': await authController.getUserInfo('userNickName'),
         'title': title,
         'content': content,
-        'regdate': '${dt.month}/${dt.day}',
-        'regtime': '${dt.hour}:${dt.minute}',
+        // 2/2 ==> 02/02
+        'regdate':
+            '${'${dt.month}'.padLeft(2, "0")}/${'${dt.day}'.padLeft(2, '0')}',
+        'regtime':
+            '${'${dt.hour}'.padLeft(2, '0')}:${'${dt.minute}'.padLeft(2, '0')}',
         'timestamp': Timestamp.now(),
         'likeCount': 0,
         'commentCount': 0,
@@ -70,5 +73,15 @@ class CommunityController extends GetxController {
       print(e);
     }
     update();
+  }
+
+  bool checkTime(int index) {
+    DateTime dt = DateTime.now();
+    DateTime contentDate = communityList[index].timestamp.toDate();
+    if (dt.month == contentDate.month && dt.day == contentDate.day) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

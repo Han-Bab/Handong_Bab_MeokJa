@@ -15,6 +15,7 @@ class Comments extends GetView<CommentController> {
 
   @override
   Widget build(BuildContext context) {
+    commentController.getData();
     return GetBuilder<CommentController>(
       builder: (commentController) {
         return ListView.builder(
@@ -72,22 +73,9 @@ class Comments extends GetView<CommentController> {
             ? [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    // commentController.boardID =
-                    //     communityController.communityList[index].id;
-                    // contentController.contentUID =
-                    //     communityController.communityList[index].uid;
-                    // commentController.index = index;
-                    // contentController.contentID =
-                    //     communityController.communityList[index].id;
-                    // Get.snackbar('알림', '댓글을 삭제했습니다',
-                    //     snackPosition: SnackPosition.TOP,
-                    //     duration: const Duration(milliseconds: 1200),
-                    //     backgroundColor: Colors.lightGreen);
-                    // Get.off(() => Content(), arguments: index);
                     commentController.deleteComment(index);
-                    Get.back(
-                        result: commentController
-                            .getData(commentController.boardID));
+                    commentController.update();
+                    Get.back();
                   },
                   child: Text("삭제하기"),
                 ),
