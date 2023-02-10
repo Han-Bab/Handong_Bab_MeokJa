@@ -85,6 +85,27 @@ class DatabaseService {
     });
   }
 
+  getGroupName(String groupId) async {
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['groupName'];
+  }
+  getGroupTime(String groupId) async {
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['orderTime'];
+  }
+  getGroupPick(String groupId) async {
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['pickup'];
+  }
+  getGroupMembers(String groupId) async {
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['members'];
+  }
+
   // getting the chats
   getChats(String groupId) async {
     return groupCollection
@@ -98,11 +119,6 @@ class DatabaseService {
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot['admin'];
-  }
-
-  // get group members
-  getGroupMembers(groupId) async {
-    return groupCollection.doc(groupId).snapshots();
   }
 
   // search
@@ -122,6 +138,19 @@ class DatabaseService {
     } else {
       return false;
     }
+  }
+
+  modifyGroupInfo(String groupId, String groupName, String orderTime, String pickup, String maxPeople) async {
+    DocumentReference groupDocumentReference = groupCollection.doc(groupId);
+
+    await groupDocumentReference.update({
+      "groupName": groupName,
+      "orderTime": orderTime,
+      "pickup": pickup,
+      "maxPeople": maxPeople,
+      "imgUrl": "assets/images/$groupName.jpg"
+    });
+
   }
 
   Future groupJoin(String groupId, String userName, String groupName) async {
