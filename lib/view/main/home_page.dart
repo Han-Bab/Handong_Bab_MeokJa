@@ -121,10 +121,12 @@ class HomePage extends StatelessWidget {
                                               .restaurants[index].groupId,
                                           userName,
                                           homeController
-                                              .restaurants[index].groupName);
-                                  Get.to(() => ChatRoom(),
-                                      arguments:
-                                          homeController.restaurants[index]);
+                                              .restaurants[index].groupName)
+                                      .whenComplete(() => {
+                                            Get.to(() => ChatRoom(),
+                                                arguments: homeController
+                                                    .restaurants[index])
+                                          });
                                 } else {
                                   if (!await DatabaseService(
                                           uid: FirebaseAuth

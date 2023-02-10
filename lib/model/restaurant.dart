@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Restaurant {
-  final String groupName;
+  String groupName;
   final String groupId;
   final String imgUrl;
   final String date;
-  final String orderTime;
+  String orderTime;
   final String currPeople;
-  final String maxPeople;
+  String maxPeople;
   final String admin;
-  final String pickup;
-  final List<dynamic> members;
+  String pickup;
+  List<dynamic> members;
 
   Restaurant({
     required this.groupName,
@@ -24,6 +24,7 @@ class Restaurant {
     required this.pickup,
     required this.members
   });
+
 
   static Restaurant fromSnapshot(DocumentSnapshot snap) {
     Restaurant restaurant = Restaurant(

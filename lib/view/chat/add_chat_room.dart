@@ -118,7 +118,7 @@ class AddChatRoom extends StatelessWidget {
                         ),
                         // OrderTimeButton
                         //Expanded(child: OrderTimeButton()),
-                        Expanded(child: TimerWidget())
+                        Expanded(child: TimerWidget(16))
                       ],
                     ),
                     const SizedBox(
