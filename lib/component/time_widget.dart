@@ -27,11 +27,11 @@ class TimerWidget extends GetView<OrderTimeButtonController> {
         decoration: InputDecoration(
           hintText: '주문 예정 시간을 설정해주세요',
           iconColor: Colors.black,
-          labelText: '주문 예정 시간',
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelStyle: Theme.of(context)
-              .inputDecorationTheme
-              .labelStyle,
+          // labelText: '주문 예정 시간',
+          // floatingLabelBehavior: FloatingLabelBehavior.always,
+          // labelStyle: Theme.of(context)
+          //     .inputDecorationTheme
+          //     .labelStyle,
           hintStyle: Theme.of(context)
               .inputDecorationTheme
               .hintStyle,

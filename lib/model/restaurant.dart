@@ -11,6 +11,7 @@ class Restaurant {
   final String admin;
   String pickup;
   List<dynamic> members;
+  //bool newPerson;
 
   Restaurant({
     required this.groupName,
@@ -22,7 +23,8 @@ class Restaurant {
     required this.maxPeople,
     required this.admin,
     required this.pickup,
-    required this.members
+    required this.members,
+    //required this.newPerson
   });
 
 
@@ -37,7 +39,8 @@ class Restaurant {
         maxPeople: snap['maxPeople'],
         admin: snap['admin'],
         pickup: snap['pickup'],
-        members: snap['members']
+        members: snap['members'],
+        //newPerson: snap['newPerson']
     );
     return restaurant;
   }
