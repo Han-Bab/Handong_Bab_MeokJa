@@ -111,7 +111,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         userInfo['userEmail'] = value;
                       },
                       focusNode: emailFocusNode,
-                      onTap: () {},
                       decoration: const InputDecoration(
                         hintText: "example@handong.ac.kr",
                         hintStyle: TextStyle(fontSize: 14),
@@ -153,7 +152,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       onChanged: (value) {
                         userInfo['userPW'] = value;
                       },
-                      onTap: () {},
                     ),
                     const SizedBox(
                       height: 20,
@@ -180,7 +178,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         contentPadding: EdgeInsets.all(10),
                       ),
                       obscureText: true,
-                      onTap: () {},
                     ),
                     const SizedBox(
                       height: 20,
@@ -209,7 +206,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         contentPadding: EdgeInsets.all(10),
                       ),
-                      onTap: () {},
                     ),
                     const SizedBox(
                       height: 20,
@@ -241,7 +237,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         contentPadding: EdgeInsets.all(10),
                       ),
                       inputFormatters: [MaskedInputFormatter("000-0000-0000")],
-                      onTap: () {},
                     ),
                     const SizedBox(
                       height: 20,
@@ -274,13 +269,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       decoration: InputDecoration(
                         hintText: "닉네임을 입력해주세요",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
+                        hintStyle: const TextStyle(fontSize: 12),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         contentPadding: EdgeInsets.all(10),
                         suffixIcon: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               border:
                                   Border(left: BorderSide(color: Colors.grey))),
                           child: TextButton(
@@ -308,49 +303,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                 }
                               }
                             },
-                            child: Text('중복'),
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.black,
                               // backgroundColor: Colors.grey[300],
                             ),
+                            child: const Text('중복'),
                           ),
                         ),
                       ),
-                      onTap: () {},
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    //TODO: 계좌번호 사용 금지
-                    // const Padding(
-                    //   padding: EdgeInsets.only(bottom: 8.0),
-                    //   child: Text(
-                    //     "주계좌번호",
-                    //   ),
-                    // ),
-                    // TextFormField(
-                    //   onChanged: (value) {
-                    //     userInfo['userAccount'] = value;
-                    //   },
-                    //   validator: (value) {
-                    //     if (value!.isEmpty) {
-                    //       return "사용할 계좌번호를 입력해주세요";
-                    //     }
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: "ex) 우리 1002452023325",
-                    //     hintStyle: TextStyle(fontSize: 12),
-                    //     border: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.grey),
-                    //     ),
-                    //     contentPadding: EdgeInsets.all(10),
-                    //   ),
-                    //   onTap: () {},
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
                     const Divider(
                       color: Colors.grey,
                       thickness: 1,
@@ -442,12 +406,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 1,
+                    const SizedBox(
+                      height: 70,
                     ),
                   ],
                 ),
@@ -457,7 +417,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       bottomSheet: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
         child: Row(
           children: [
             Expanded(

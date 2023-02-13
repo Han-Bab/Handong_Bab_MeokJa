@@ -183,11 +183,11 @@ class AuthController extends GetxController {
         return await authentication.signInWithCredential(credential);
       } else {
         print("로그인 실패");
-        Get.snackbar("경고", "한동 계정만 로그인 할 수 있습니다",
-            snackPosition: SnackPosition.BOTTOM,
+        Get.snackbar("로그인 실패", "한동 이메일로만 로그인 할 수 있습니다",
+            snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.red,
             colorText: Colors.white,
-            duration: Duration(seconds: 1));
+            duration: const Duration(seconds: 2));
         return await _googleSignIn.signOut();
       }
     } catch (e) {

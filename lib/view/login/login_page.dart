@@ -1,289 +1,226 @@
 import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
+import 'package:han_bab/view/login/login_form.dart';
+import 'package:han_bab/view/login/reset_pw.dart';
 import 'package:han_bab/view/login/sign_up_page.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  // 로그인 버튼 이후 딜레이 시간 스피너 지정
-  bool _showSpinner = false;
-  // textfield에 입력한 내용을 관리하기 위함
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _pwController = TextEditingController();
-  Map userInfo = {
-    'userEmail': '',
-    'userPW': '',
-  };
-
-  void _tryValidation() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-    }
-  }
+  final authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    final authController = Get.put(AuthController());
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "한동 밥 먹자",
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-      ),
       // SingleChildScrollView: 키보드가 밀고올라와서 스크린 영역을 침범할때
       // 침범한 영역만큼 스크롤할 수 있게 하는 역할
-      body: ModalProgressHUD(
-        inAsyncCall: _showSpinner,
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: SingleChildScrollView(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(40, 100, 40, 100),
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                ),
-                Center(
+                const Center(
                   child: Image(
-                    image: const AssetImage('assets/images/hanbab_icon.png'),
-                    width: width * 0.7,
+                    image: AssetImage('assets/images/hanbab_icon.png'),
                   ),
                 ),
-                Form(
-                  key: _formKey,
-                  child: Theme(
-                    // ThemeData 안에서 전체 정보입력 양식의 세부적인 디자인을 지정할 수 있음
-                    data: ThemeData(
-                        // form을 눌렀을 때 form의 색상
-                        primaryColor: Colors.teal,
-                        // textfield 위의 사용자에게 정보를 제공하는 텍스트을 꾸미기 위함
-                        inputDecorationTheme: const InputDecorationTheme(
-                          labelStyle: TextStyle(
-                            color: Colors.orangeAccent,
-                            fontSize: 20,
-                          ),
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        )),
-                    child: Container(
-                      padding: const EdgeInsets.all(40),
-                      // 아이콘들을 세로로 지정하기 위함
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // 이메일 입력폼
-                          TextFormField(
-                            controller: _idController,
-                            validator: (value) {
-                              if (value!.isEmpty ||
-                                  !value.contains("@handong.ac.kr")) {
-                                return "한동 이메일을 입력해주세요";
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              userInfo['userEmail'] = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: '한동이메일을 입력하세요',
-                              labelStyle: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .labelStyle,
-                              hintStyle: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .hintStyle,
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          // 비번 입력폼
-                          TextFormField(
-                            controller: _pwController,
-                            validator: (value) {
-                              if (value!.isEmpty || value.length < 6) {
-                                return "비밀번호는 최소 6자 이상 입력해주세요";
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              userInfo['userPW'] = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: '비밀번호를 입력하세요',
-                              labelStyle: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .labelStyle,
-                              hintStyle: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .hintStyle,
-                            ),
-                            keyboardType: TextInputType.text,
-                            // 보안을 위해 화면에 문자를 표시하지 않게 하기 위함
-                            obscureText: true,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ButtonTheme(
-                            minWidth: 100,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // 로그인 버튼 누를 시 스피너 트루 지정
-                                setState(() {
-                                  _showSpinner = true;
-                                });
-                                // 로그인 버튼 기능 구현
-                                _tryValidation();
-                                authController.login(userInfo);
-                                // Stream builder 를  설정해줌으로 인한 중복이동으로 주석처리
-                                // 이동 이후 스피너 false
-                                setState(() {
-                                  _showSpinner = false;
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orangeAccent,
-                              ),
-                              child: const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Theme(
+                  // ThemeData 안에서 전체 정보입력 양식의 세부적인 디자인을 지정할 수 있음
+                  data: ThemeData(
+                    // form을 눌렀을 때 form의 색상
+                    primaryColor: Colors.teal,
+                    // textfield 위의 사용자에게 정보를 제공하는 텍스트을 꾸미기 위함
+                    inputDecorationTheme: const InputDecorationTheme(
+                      labelStyle: TextStyle(
+                        color: Colors.orangeAccent,
+                        fontSize: 20,
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ButtonTheme(
+                        minWidth: 100,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.lightBlue,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4.0),
                               ),
                             ),
+                            padding: const EdgeInsets.all(8),
                           ),
-                          // 구글로그인버튼
-                          ButtonTheme(
-                            minWidth: 100,
-                            height: 50,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(4.0),
+                          onPressed: () {
+                            Get.to(
+                              () => LoginForm(),
+                              transition: Transition.zoom,
+                              duration: const Duration(milliseconds: 500),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Flexible(
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.white,
+                                  child: Image.asset(
+                                    'assets/images/hgulogo.png',
+                                    height: 25,
                                   ),
                                 ),
                               ),
-                              // 구글 로그인
-                              onPressed: () {
-                                setState(() {
-                                  _showSpinner = true;
-                                });
-                                authController.signInWithGoogle();
-                                setState(() {
-                                  _showSpinner = false;
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                              RichText(
+                                  text: const TextSpan(
                                 children: [
-                                  Flexible(
-                                    child: Image.asset(
-                                      'assets/images/glogo.png',
-                                    ),
-                                  ),
-                                  const Text(
-                                    'Login with Google',
+                                  TextSpan(
+                                    text: '한동 이메일',
                                     style: TextStyle(
-                                        color: Colors.black87, fontSize: 15),
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  Flexible(
-                                    child: Opacity(
-                                      opacity: 0.0,
-                                      child: Image.asset(
-                                          'assets/images/glogo.png'),
+                                  TextSpan(
+                                    text: '로 로그인하기',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          // 회원가입 및 비번 찾기 버튼
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                child: const Text("회원가입"),
-                                onTap: () {
-                                  Get.to(() => SignUpPage());
-                                },
-                              ),
-                              GestureDetector(
-                                child: const Text("비밀번호 재생성"),
-                                onTap: () {
-                                  debugPrint("비번찾기");
-                                  String email = '';
-                                  Get.defaultDialog(
-                                    title: '비밀번호 재생성',
-                                    contentPadding:
-                                        EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                    content: Column(
-                                      children: [
-                                        const Text(
-                                          '계정',
-                                        ),
-                                        TextFormField(
-                                          onChanged: (value) {
-                                            email = value;
-                                          },
-                                          decoration: const InputDecoration(
-                                            hintText:
-                                                'ex) 2XX00XXX@handong.ac.kr',
-                                            hintStyle: TextStyle(
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                              )),
+                              Flexible(
+                                child: Opacity(
+                                  opacity: 0.0,
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    child: Image.asset(
+                                      'assets/images/hgulogo.png',
+                                      height: 25,
                                     ),
-                                    textConfirm: '재생성',
-                                    confirmTextColor: Colors.white,
-                                    onConfirm: () {
-                                      if (email.isNotEmpty) {
-                                        try {
-                                          authController.resetPassword(email);
-                                          Get.back();
-                                          Get.snackbar(
-                                              '알림', '비밀번호 재생성 메일을 전송했습니다',
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM);
-                                        } catch (e) {
-                                          Get.snackbar('알림', e.toString());
-                                        }
-                                      }
-                                    },
-                                    textCancel: '취소',
-                                    onCancel: Get.back,
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // 구글로그인버튼
+                      ButtonTheme(
+                        minWidth: 100,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4.0),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(8),
+                          ),
+                          // 구글 로그인
+                          onPressed: () {
+                            authController.signInWithGoogle();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Flexible(
+                                child: Image.asset(
+                                  'assets/images/glogo.png',
+                                  height: 40,
+                                ),
+                              ),
+                              RichText(
+                                  text: const TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Google',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(
+                                    text: '로 간편 로그인하기',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                              Flexible(
+                                child: Opacity(
+                                  opacity: 0.0,
+                                  child: Image.asset('assets/images/glogo.png'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      IntrinsicHeight(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              child: const Text(
+                                "이메일 회원가입",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => const SignUpPage(),
+                                    transition: Transition.downToUp,
+                                    duration:
+                                        const Duration(milliseconds: 800));
+                              },
+                            ),
+                            const VerticalDivider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            GestureDetector(
+                              child: const Text(
+                                "비밀번호 재생성",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => ResetPW(),
+                                    transition: Transition.downToUp,
+                                    duration:
+                                        const Duration(milliseconds: 800));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],
