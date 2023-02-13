@@ -71,6 +71,7 @@ class DatabaseService {
       "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
+      //"newPerson": false
     });
     //update the members
     await groupDocumentReference.update({
@@ -233,12 +234,26 @@ class FirestoreDB {
     return _firebaseFirestore
           .collection('groups')
           .where('members', arrayContains: myName)
+          .orderBy('orderTime', descending: false)
           .snapshots()
           .map((snapshot) {
             return snapshot.docs
                 .map((doc) => Restaurant.fromSnapshot(doc))
                 .toList();
           });
-    }
+  }
+
+  getSearchRestaurants(String groupName) {
+    return _firebaseFirestore
+        .collection('groups')
+        .where('groupName', isEqualTo: groupName)
+        .orderBy('orderTime', descending: false)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Restaurant.fromSnapshot(doc))
+          .toList();
+    });
+  }
 
 }
