@@ -112,9 +112,12 @@ class AuthController extends GetxController {
         Get.snackbar(
           '알림',
           '구글 로그인의 경우 추가 정보 입력이 필요합니다',
-          snackPosition: SnackPosition.TOP,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.lightBlue,
+          colorText: Colors.white,
         );
-        Get.off(() => AfterGoogleLogin());
+        Get.off(() => AfterGoogleLogin(),
+            transition: Transition.zoom, duration: const Duration(seconds: 1));
       }
     });
   }
@@ -151,8 +154,9 @@ class AuthController extends GetxController {
       print(e);
       Get.snackbar('Error Message', 'User Message',
           backgroundColor: Colors.red,
+          snackPosition: SnackPosition.BOTTOM,
           titleText: const Text(
-            'Login is failed',
+            '로그인 실패',
             style: TextStyle(color: Colors.white),
           ),
           messageText: Text(
@@ -183,11 +187,11 @@ class AuthController extends GetxController {
         return await authentication.signInWithCredential(credential);
       } else {
         print("로그인 실패");
-        Get.snackbar("경고", "한동 계정만 로그인 할 수 있습니다",
+        Get.snackbar("로그인 실패", "한동 이메일로만 로그인 할 수 있습니다",
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             colorText: Colors.white,
-            duration: Duration(seconds: 1));
+            duration: const Duration(seconds: 2));
         return await _googleSignIn.signOut();
       }
     } catch (e) {

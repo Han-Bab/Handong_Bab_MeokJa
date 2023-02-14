@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/verify_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
@@ -18,7 +16,7 @@ class VerifyLoginPage extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     if (verifyController.isEmailVerified) {
-      showToast('인증 확인되었습니다. 다시 로그인해주세요');
+      Get.snackbar('알림', '인증 확인되었음. 다시 로그인 바람 ㅇㅇ');
       return LoginPage();
     } else {
       return Scaffold(
@@ -86,15 +84,4 @@ class VerifyLoginPage extends StatelessWidget {
       );
     }
   }
-}
-
-void showToast(String msg) {
-  Fluttertoast.showToast(
-    msg: msg,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.blue,
-    fontSize: 15,
-    textColor: Colors.white,
-    toastLength: Toast.LENGTH_SHORT,
-  );
 }
