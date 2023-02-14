@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -17,9 +18,8 @@ class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
 
   final TextEditingController _restaurantController = TextEditingController();
-
   final TextEditingController _maxPeopleController = TextEditingController();
-
+  Reference get firebaseStorage => FirebaseStorage.instance.ref();
   final authController = AuthController();
 
   final orderTimeController = Get.put(OrderTimeButtonController());
@@ -29,6 +29,8 @@ class AddChatRoom extends StatelessWidget {
   String pickup = "";
 
   String maxPeople = "";
+
+  String imgUrl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +63,7 @@ class AddChatRoom extends StatelessWidget {
                 child: SizedBox(
                   width: 400,
                   height: 200,
-                  child: Image.asset(
-                      "assets/images/${_restaurantController.text}.jpg",
+                  child: Image.network(imgUrl,
                       fit: BoxFit.cover, errorBuilder:
                           (BuildContext context, Object exception,
                               StackTrace? stackTrace) {
@@ -84,11 +85,6 @@ class AddChatRoom extends StatelessWidget {
                         hintText: '가게명을 입력해주세요',
                         icon: const Icon(CupertinoIcons.search, color: Colors.black,),
                         iconColor: Colors.black,
-                        // labelText: '가게명',
-                        // floatingLabelBehavior: FloatingLabelBehavior.always,
-                        // labelStyle: Theme.of(context)
-                        //     .inputDecorationTheme
-                        //     .labelStyle,
                         hintStyle: Theme.of(context)
                             .inputDecorationTheme
                             .hintStyle,
@@ -104,6 +100,12 @@ class AddChatRoom extends StatelessWidget {
                           return '가게명을 입력하세요.';
                         }
                         return null;
+                      },
+                      onChanged: (value) async {
+                        String newName = DatabaseService().getImage(value);
+                        print(newName);
+                        var urlRef = firebaseStorage.child('$newName.jpg');
+                        imgUrl = await urlRef.getDownloadURL();
                       },
                     ),
                     const SizedBox(

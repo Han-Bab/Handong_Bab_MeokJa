@@ -1,8 +1,6 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/model/restaurant.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +11,7 @@ String strToday = formatter.format(now);
 DateFormat formatter1 = DateFormat.Hm();
 String timeToday = formatter1.format(now);
 
-class DatabaseService {
+class DatabaseService  extends GetxService{
   final String? uid;
 
   DatabaseService({this.uid});
@@ -55,9 +53,40 @@ class DatabaseService {
     return userCollection.doc(uid).snapshots();
   }
 
+  Reference get firebaseStorage => FirebaseStorage.instance.ref();
+
+  String getImage(String imgName)  {
+    if(imgName == "BBQ") {
+      return "BBQ";
+    } else if (imgName == "꼬꼬뽀끼") {
+      return "kko";
+    } else if (imgName == "동궁찜닭") {
+      return "dong";
+    } else if (imgName == "땅땅치킨") {
+      return "ddang";
+    } else if (imgName == "류엔돈까스") {
+      return "ryu";
+    } else if (imgName == "명성") {
+      return "myeong";
+    } else if (imgName == "삼촌네") {
+      return "sam";
+    } else if (imgName == "스시요시") {
+      return "su";
+    } else if (imgName == "신전떡볶이") {
+      return "sin";
+    } else if (imgName == "행복한 마라탕") {
+      return "hang";
+    } else {
+      return "no file";
+    }
+  }
+
   // creating a group
   Future createGroup(String userName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
+    var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
+    var imgUrl = await urlRef.getDownloadURL();
+    print("url-------------------$imgUrl");
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
       "admin": "${id}_$userName",
@@ -67,7 +96,7 @@ class DatabaseService {
       "pickup": pickup,
       "currPeople": "1",
       "maxPeople": maxPeople,
-      "imgUrl": "assets/images/$groupName.jpg",
+      "imgUrl": imgUrl,
       "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
@@ -254,18 +283,6 @@ class FirestoreDB {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => Restaurant.fromSnapshot(doc)).toList();
-    });
-  }
-
-  getSearchRestaurantsNumber(String groupName) {
-    return _firebaseFirestore
-        .collection('groups')
-        .where('groupName', isEqualTo: groupName)
-        .where('date', isEqualTo: strToday)
-        .where('orderTime', isGreaterThanOrEqualTo: timeToday)
-        .get()
-        .then((snapshot) {
-      return snapshot.docs.length;
     });
   }
 }

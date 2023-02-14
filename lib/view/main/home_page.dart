@@ -79,12 +79,6 @@ class HomePage extends StatelessWidget {
                                     homeController.restaurants.bindStream(
                                         FirestoreDB().getSearchRestaurants(
                                             submittedText.toUpperCase()));
-                                    Future<int> future = FirestoreDB()
-                                        .getSearchRestaurantsNumber(
-                                            submittedText.toUpperCase());
-                                    future.then((val) {
-                                      count = val;
-                                    });
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -297,7 +291,7 @@ class HomePage extends StatelessWidget {
                                                                             BorderRadius.circular(
                                                                                 20.0),
                                                                         child: Image
-                                                                            .asset(
+                                                                            .network(
                                                                           homeController
                                                                               .restaurants[index]
                                                                               .imgUrl,
@@ -469,7 +463,7 @@ class HomePage extends StatelessWidget {
                                                                           .circular(
                                                                               20.0),
                                                                   child: Image
-                                                                      .asset(
+                                                                      .network(
                                                                     homeController
                                                                         .restaurants[
                                                                             index]
