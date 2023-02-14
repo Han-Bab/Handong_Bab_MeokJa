@@ -30,46 +30,47 @@ class Content extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              '음식게시판',
-            ),
-            elevation: 2,
-            actions: [
-              IconButton(
-                  onPressed: () => iosShowBottomNotification(context),
-                  icon: const Icon(CupertinoIcons.ellipsis_vertical))
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            '음식게시판',
           ),
-          body: FutureBuilder(
-            future: Future.delayed(const Duration(milliseconds: 200), () {
-              communityController.getData();
-            }),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              //error가 발생하게 될 경우 반환하게 되는 부분
-              else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                );
-              }
-              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-              else {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    await communityController.getData();
-                    await commentController.getData();
-                  },
+          elevation: 2,
+          actions: [
+            IconButton(
+                onPressed: () => iosShowBottomNotification(context),
+                icon: const Icon(CupertinoIcons.ellipsis_vertical))
+          ],
+        ),
+        body: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 200), () {
+            communityController.getData();
+          }),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            //error가 발생하게 될 경우 반환하게 되는 부분
+            else if (snapshot.hasError) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Error: ${snapshot.error}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+              );
+            }
+            // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+            else {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  communityController.getData();
+                  await commentController.getData();
+                },
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, height * 0.08),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, height * 0.1),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -270,51 +271,51 @@ class Content extends StatelessWidget {
                       ),
                     ),
                   ),
-                );
-              }
-            },
-          ),
-          bottomSheet: // 댓글 입력창 파트
-              GestureDetector(
-            child: SafeArea(
-              child: Container(
-                height: height * 0.08,
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: GetBuilder<CommentController>(
-                  builder: (commentController) {
-                    return TextFormField(
-                      controller: commentField,
-                      focusNode: _commentFocusNode,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        hintText: "댓글을 입력하세요.",
-                        hintStyle: TextStyle(color: Colors.black26),
-                        suffixIcon: IconButton(
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.blueAccent,
-                          ),
-                          onPressed: () {
-                            commentController.addComment(
-                                communityController.communityList[idx].id,
-                                idx,
-                                commentField.text);
-                            commentField.clear();
-                          },
-                        ),
-                        isDense: true,
-                      ),
-                    );
-                  },
                 ),
+              );
+            }
+          },
+        ),
+        bottomSheet: // 댓글 입력창 파트
+            GestureDetector(
+          child: SafeArea(
+            child: Container(
+              height: height * 0.1,
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 24),
+              child: GetBuilder<CommentController>(
+                builder: (commentController) {
+                  return TextFormField(
+                    controller: commentField,
+                    focusNode: _commentFocusNode,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      hintText: "댓글을 입력하세요.",
+                      hintStyle: TextStyle(color: Colors.black26),
+                      suffixIcon: IconButton(
+                        icon: const Icon(
+                          Icons.send,
+                          color: Colors.blueAccent,
+                        ),
+                        onPressed: () {
+                          commentController.addComment(
+                              communityController.communityList[idx].id,
+                              idx,
+                              commentField.text);
+                          commentField.clear();
+                        },
+                      ),
+                      isDense: true,
+                    ),
+                  );
+                },
               ),
             ),
           ),
