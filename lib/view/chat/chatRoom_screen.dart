@@ -444,7 +444,7 @@ class _ChatRoomState extends State<ChatRoom> {
             constraints: const BoxConstraints(),
             // constraints
             onPressed: () {
-              Get.offAll(() => MainScreen());
+              Get.back();
             },
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
