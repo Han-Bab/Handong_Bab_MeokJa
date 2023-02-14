@@ -91,16 +91,19 @@ class DatabaseService {
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot['groupName'];
   }
+
   getGroupTime(String groupId) async {
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot['orderTime'];
   }
+
   getGroupPick(String groupId) async {
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot['pickup'];
   }
+
   getGroupMembers(String groupId) async {
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
@@ -141,7 +144,8 @@ class DatabaseService {
     }
   }
 
-  modifyGroupInfo(String groupId, String groupName, String orderTime, String pickup, String maxPeople) async {
+  modifyGroupInfo(String groupId, String groupName, String orderTime,
+      String pickup, String maxPeople) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
 
     await groupDocumentReference.update({
@@ -151,7 +155,6 @@ class DatabaseService {
       "maxPeople": maxPeople,
       "imgUrl": "assets/images/$groupName.jpg"
     });
-
   }
 
   Future groupJoin(String groupId, String userName, String groupName) async {
@@ -232,28 +235,37 @@ class FirestoreDB {
 
   getMyRestaurants(String myName) {
     return _firebaseFirestore
-          .collection('groups')
-          .where('members', arrayContains: myName)
-          .orderBy('orderTime', descending: false)
-          .snapshots()
-          .map((snapshot) {
-            return snapshot.docs
-                .map((doc) => Restaurant.fromSnapshot(doc))
-                .toList();
-          });
+        .collection('groups')
+        .where('members', arrayContains: myName)
+        .orderBy('orderTime', descending: false)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Restaurant.fromSnapshot(doc)).toList();
+    });
   }
 
   getSearchRestaurants(String groupName) {
     return _firebaseFirestore
         .collection('groups')
         .where('groupName', isEqualTo: groupName)
+        .where('date', isEqualTo: strToday)
+        .where('orderTime', isGreaterThanOrEqualTo: timeToday)
         .orderBy('orderTime', descending: false)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Restaurant.fromSnapshot(doc))
-          .toList();
+      return snapshot.docs.map((doc) => Restaurant.fromSnapshot(doc)).toList();
     });
   }
 
+  getSearchRestaurantsNumber(String groupName) {
+    return _firebaseFirestore
+        .collection('groups')
+        .where('groupName', isEqualTo: groupName)
+        .where('date', isEqualTo: strToday)
+        .where('orderTime', isGreaterThanOrEqualTo: timeToday)
+        .get()
+        .then((snapshot) {
+      return snapshot.docs.length;
+    });
+  }
 }
