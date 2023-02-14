@@ -35,7 +35,7 @@ class Content extends StatelessWidget {
           title: const Text(
             '음식게시판',
           ),
-          elevation: 2,
+          elevation: 0,
           actions: [
             IconButton(
                 onPressed: () => iosShowBottomNotification(context),
