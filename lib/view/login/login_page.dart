@@ -68,7 +68,6 @@ class LoginPage extends StatelessWidget {
                             Get.to(
                               () => LoginForm(),
                               transition: Transition.zoom,
-                              duration: const Duration(milliseconds: 500),
                             );
                           },
                           child: Row(
@@ -193,10 +192,10 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                Get.to(() => const SignUpPage(),
-                                    transition: Transition.downToUp,
-                                    duration:
-                                        const Duration(milliseconds: 800));
+                                Get.to(
+                                  () => const SignUpPage(),
+                                  transition: Transition.downToUp,
+                                );
                               },
                             ),
                             const VerticalDivider(
@@ -211,10 +210,10 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                Get.to(() => ResetPW(),
-                                    transition: Transition.downToUp,
-                                    duration:
-                                        const Duration(milliseconds: 800));
+                                Get.to(
+                                  () => ResetPW(),
+                                  transition: Transition.downToUp,
+                                );
                               },
                             ),
                           ],
