@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 100,
+                  height: 90,
                 ),
                 Theme(
                   // ThemeData 안에서 전체 정보입력 양식의 세부적인 디자인을 지정할 수 있음
