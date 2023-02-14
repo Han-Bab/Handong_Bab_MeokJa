@@ -18,7 +18,10 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatefulWrapper(
-      onInit: () => mainBottomBarController.changeIndex(index),
+      onInit: () {
+        mainBottomBarController.changeIndex(index);
+        authController.checkInfo();
+      },
       child: Scaffold(
         body: Obx(
           () => SafeArea(

@@ -113,8 +113,11 @@ class AuthController extends GetxController {
           '알림',
           '구글 로그인의 경우 추가 정보 입력이 필요합니다',
           snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.lightBlue,
+          colorText: Colors.white,
         );
-        Get.off(() => AfterGoogleLogin());
+        Get.off(() => AfterGoogleLogin(),
+            transition: Transition.zoom, duration: const Duration(seconds: 1));
       }
     });
   }

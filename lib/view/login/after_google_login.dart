@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:han_bab/controller/auth_controller.dart';
@@ -48,7 +49,17 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('추가 정보 입력'),
+        title: const Text('추가 정보 입력'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            authController.logout();
+            authController.logoutGoogle();
+          },
+          icon: const Icon(CupertinoIcons.chevron_back),
+        ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _showSpinner,
@@ -67,7 +78,10 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                     const Padding(
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Text(
-                        "한동 계정",
+                        "한동 이메일",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -75,7 +89,8 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       child: OutlinedButton(
                         onPressed: null,
                         style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.grey),
+                            backgroundColor: Color(0xffF2F2F5),
+                            side: BorderSide.none,
                             padding:
                                 EdgeInsets.only(top: 16, bottom: 16, left: 10),
                             alignment: Alignment.centerLeft),
@@ -95,6 +110,9 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         "이름",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     TextFormField(
@@ -109,11 +127,11 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                         return null;
                       },
                       decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color(0xffF2F2F5),
                         hintText: "이름을 입력해주세요",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        hintStyle: TextStyle(fontSize: 14),
+                        border: InputBorder.none,
                         contentPadding: EdgeInsets.all(10),
                       ),
                       onTap: () {},
@@ -124,7 +142,10 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                     const Padding(
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Text(
-                        "전화번호",
+                        "휴대폰",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     TextFormField(
@@ -140,11 +161,11 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                         userInfo['userPhone'] = value;
                       },
                       decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color(0xffF2F2F5),
                         hintText: "010-0000-0000",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        hintStyle: TextStyle(fontSize: 14),
+                        border: InputBorder.none,
                         contentPadding: EdgeInsets.all(10),
                       ),
                       inputFormatters: [MaskedInputFormatter("000-0000-0000")],
@@ -157,6 +178,9 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         "닉네임",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     TextFormField(
@@ -179,16 +203,16 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                         return null;
                       },
                       decoration: InputDecoration(
-                        hintText: "ex) 호빵이",
-                        hintStyle: TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        contentPadding: EdgeInsets.all(10),
+                        filled: true,
+                        fillColor: Color(0xffF2F2F5),
+                        hintText: "예 : 한동이",
+                        hintStyle: const TextStyle(fontSize: 14),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(10),
                         suffixIcon: Container(
-                          decoration: BoxDecoration(
-                              border:
-                                  Border(left: BorderSide(color: Colors.grey))),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(color: Colors.white))),
                           child: TextButton(
                             onPressed: () async {
                               _isClicked = true;
@@ -222,37 +246,6 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       ),
                       onTap: () {},
                     ),
-                    //TODO: 계좌번호 사용 금지
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    // const Padding(
-                    //   padding: EdgeInsets.only(bottom: 8.0),
-                    //   child: Text(
-                    //     "주계좌번호",
-                    //   ),
-                    // ),
-                    // TextFormField(
-                    //   key: ValueKey(4),
-                    //   onChanged: (value) {
-                    //     userInfo['userAccount'] = value;
-                    //   },
-                    //   validator: (value) {
-                    //     if (value!.isEmpty) {
-                    //       return "사용할 계좌번호를 입력해주세요";
-                    //     }
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: "ex) 우리 1002452023325",
-                    //     hintStyle: TextStyle(fontSize: 12),
-                    //     border: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.grey),
-                    //     ),
-                    //     contentPadding: EdgeInsets.all(10),
-                    //   ),
-                    //   onTap: () {},
-                    // ),
                   ],
                 ),
               ),

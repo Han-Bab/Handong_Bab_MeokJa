@@ -11,8 +11,6 @@ class ResetPW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String emailAddr = '';
-    String emailUserName = '';
-    String name = '';
 
     void tryValidation() {
       final isValid = _formKey.currentState!.validate();
