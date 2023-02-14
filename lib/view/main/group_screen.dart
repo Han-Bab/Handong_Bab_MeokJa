@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -113,141 +114,146 @@ class GroupListViewDemo extends StatelessWidget {
                   Get.to(() => ChatRoom(),
                       arguments: index);
               },
-              child: Card(
-                elevation: 8.0,
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: SizedBox(
-                            width: 100,
-                            height: 80,
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20.0)),
-                              child: Image.asset(
-                                index.imgUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (BuildContext? context,
-                                    Object? exception, StackTrace? stackTrace) {
-                                  return Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(width: 3),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        child: Image.asset(
-                                          'assets/hanbab_icon.png',
-                                          scale: 5,
-                                        )),
-                                  );
-                                },
-                              ),
-                            ),
-                          )),
-                      Expanded(
-                          flex: 8,
-                          child: Container(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, right: 8),
-                                      child: Text(
-                                        index.groupName,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8, bottom: 8),
+                child: DottedBorder(
+                  color: Colors.grey,
+                  dashPattern: const [5, 3],
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: SizedBox(
+                              width: 100,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20.0)),
+                                child: Image.asset(
+                                  index.imgUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (BuildContext? context,
+                                      Object? exception, StackTrace? stackTrace) {
+                                    return Container(
+                                      height: 120,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 3),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Text(
-                                        index.orderTime,
-                                        style: const TextStyle(fontSize: 14),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: Image.asset(
+                                            'assets/hanbab_icon.png',
+                                            scale: 5,
+                                          )),
+                                    );
+                                  },
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                              ),
+                            )),
+                        Expanded(
+                            flex: 8,
+                            child: Container(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Icon(
-                                        Icons.account_circle_sharp,
-                                        color: Colors.grey,
-                                        size: 16,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, right: 8),
+                                        child: Text(
+                                          index.groupName,
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 8),
-                                        child: Text(getName(index.admin)),
-                                      )
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 5),
+                                        child: Text(
+                                          index.orderTime,
+                                          style: const TextStyle(fontSize: 14),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const Icon(
-                                            Icons.calendar_today,
-                                            color: Colors.grey,
-                                            size: 16,
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 8),
-                                            child: Text(index.date),
-                                          )
-                                        ],
-                                      ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const Icon(
+                                          Icons.account_circle_sharp,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(left: 8),
+                                          child: Text(getName(index.admin)),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, right: 5),
-                                      child: Row(
-                                        children: [
-                                          const Icon(CupertinoIcons.person),
-                                          Text(
-                                              '${index.currPeople}/${index.maxPeople}'),
-                                        ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.grey,
+                                              size: 16,
+                                            ),
+                                            Container(
+                                              margin:
+                                                  const EdgeInsets.only(left: 8),
+                                              child: Text(index.date),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, right: 5),
+                                        child: Row(
+                                          children: [
+                                            const Icon(CupertinoIcons.person, size: 20,),
+                                            Text(
+                                                ' ${index.currPeople}/${index.maxPeople}'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ))
+                      ],
+                    ),
                   ),
                 ),
               ),

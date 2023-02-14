@@ -37,7 +37,7 @@ class AddChatRoom extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "밥채팅 만들기",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -84,11 +84,11 @@ class AddChatRoom extends StatelessWidget {
                         hintText: '가게명을 입력해주세요',
                         icon: const Icon(CupertinoIcons.search, color: Colors.black,),
                         iconColor: Colors.black,
-                        labelText: '가게명',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .labelStyle,
+                        // labelText: '가게명',
+                        // floatingLabelBehavior: FloatingLabelBehavior.always,
+                        // labelStyle: Theme.of(context)
+                        //     .inputDecorationTheme
+                        //     .labelStyle,
                         hintStyle: Theme.of(context)
                             .inputDecorationTheme
                             .hintStyle,
@@ -118,7 +118,7 @@ class AddChatRoom extends StatelessWidget {
                         ),
                         // OrderTimeButton
                         //Expanded(child: OrderTimeButton()),
-                        Expanded(child: TimerWidget())
+                        Expanded(child: TimerWidget(16))
                       ],
                     ),
                     const SizedBox(
@@ -170,10 +170,10 @@ class AddChatRoom extends StatelessWidget {
                                 },
                                 decoration: const InputDecoration(
                                   hintText: "예) 비전관, 오석관 등",
-                                  labelText: "수령 장소",
+                                  //labelText: "수령 장소",
                                   contentPadding: EdgeInsets.all(16),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
+                                  // floatingLabelBehavior:
+                                  //     FloatingLabelBehavior.always,
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 3, color: Colors.grey),
@@ -208,9 +208,9 @@ class AddChatRoom extends StatelessWidget {
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.all(10),
                                   hintText: "예) 2, 3",
-                                  labelText: "최대 인원",
-                                  floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                                  // labelText: "최대 인원",
+                                  // floatingLabelBehavior:
+                                  // FloatingLabelBehavior.always,
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 3, color: Colors.grey),
@@ -248,6 +248,7 @@ class AddChatRoom extends StatelessWidget {
                   Get.off(() => MainScreen());
                 },
                 child: const Text("취소하기"),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)
               ),
             ),
             const SizedBox(
@@ -266,7 +267,7 @@ class AddChatRoom extends StatelessWidget {
                         .createGroup(
                             userName,
                             FirebaseAuth.instance.currentUser!.uid,
-                            _restaurantController.text,
+                            _restaurantController.text.toUpperCase(),
                             orderTimeController.orderTime.value,
                             pickup,
                             maxPeople)
@@ -279,7 +280,7 @@ class AddChatRoom extends StatelessWidget {
                     Get.to(() => MainScreen());
                   }
                 },
-                child: const Text("생성하기"),
+                child: const Text("만들기"),
               ),
             )
           ],

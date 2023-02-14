@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -203,22 +204,252 @@ class _ChatRoomState extends State<ChatRoom> {
         });
   }
 
+  void modifyInfo(groupName, String orderTime, pick, people) {
+    final TextEditingController _restaurantController =
+        TextEditingController(text: groupName);
+    final _formKey = GlobalKey<FormState>();
+    String pickup = pick;
+    String maxPeople = people;
+    DateTime? time = DateFormat("HH:mm").parse(orderTime);
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: 380,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "수정하기",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: Form(
+                          key: _formKey,
+                          child: ListView(
+                            children: [
+                              TextFormField(
+                                controller: _restaurantController,
+                                decoration: InputDecoration(
+                                  hintText: '가게명을 입력해주세요',
+                                  iconColor: Colors.black,
+                                  labelText: '가게명',
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelStyle: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .labelStyle,
+                                  hintStyle: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .hintStyle,
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '가게명을 입력하세요.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              DateTimeField(
+                                format: DateFormat("HH:mm"),
+                                initialValue:
+                                    DateFormat("HH:mm").parse(orderTime),
+                                decoration: InputDecoration(
+                                  hintText: '주문 예정 시간을 설정해주세요',
+                                  iconColor: Colors.black,
+                                  labelText: '주문 예정 시간',
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelStyle: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .labelStyle,
+                                  hintStyle: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .hintStyle,
+                                  contentPadding: EdgeInsets.all(0),
+                                ),
+                                onShowPicker: (context, currentValue) async {
+                                  final time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.fromDateTime(
+                                        currentValue ?? DateTime.now()),
+                                  );
+                                  return DateTimeField.convert(time);
+                                },
+                                validator: (DateTime? selectedDateTime) {
+                                  if (selectedDateTime != null) {
+                                    // If the DateTime difference is negative,
+                                    // this indicates that the selected DateTime is in the past
+                                    var selected = DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day,
+                                        selectedDateTime.hour,
+                                        selectedDateTime.minute);
+                                    if (selected
+                                        .difference(DateTime.now())
+                                        .isNegative) {
+                                      return '이미 지난 시간입니다.';
+                                    }
+                                  } else {
+                                    return '주문 예정 시간을 설정해주세요.';
+                                  }
+                                },
+                                onChanged: (value) {
+                                  time = value;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              TextFormField(
+                                onChanged: (value) {
+                                  pickup = value;
+                                },
+                                initialValue: pickup,
+                                decoration: const InputDecoration(
+                                  hintText: "예) 비전관, 오석관 등",
+                                  labelText: "수령 장소",
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '수령할 장소를 입력하세요.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              TextFormField(
+                                onChanged: (value) {
+                                  maxPeople = value;
+                                },
+                                initialValue: maxPeople,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: "예) 2, 3",
+                                  labelText: "최대 인원",
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '최대 인원을 입력하세요.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text("돌아가기"),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        DatabaseService(
+                                                uid: FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                            .modifyGroupInfo(
+                                                restaurant.groupId,
+                                                _restaurantController.text,
+                                                DateFormat("HH:mm")
+                                                    .format(time!),
+                                                pickup,
+                                                maxPeople);
+                                        Get.back();
+                                        Get.back();
+                                        DatabaseService()
+                                            .getGroupName(restaurant.groupId)
+                                            .then((val) {
+                                          setState(() {
+                                            restaurant.groupName = val;
+                                          });
+                                        });
+                                        DatabaseService()
+                                            .getGroupTime(restaurant.groupId)
+                                            .then((val) {
+                                          setState(() {
+                                            restaurant.orderTime = val;
+                                          });
+                                        });
+                                        DatabaseService()
+                                            .getGroupPick(restaurant.groupId)
+                                            .then((val) {
+                                          setState(() {
+                                            restaurant.pickup = val;
+                                          });
+                                        });
+
+                                        Get.snackbar(
+                                          '수정완료!',
+                                          '채팅방이 수정되었습니다!',
+                                          backgroundColor: Colors.white,
+                                        );
+                                      }
+                                    },
+                                    child: const Text("수정하기"),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          //elevation: 0,
           leading: IconButton(
             padding: EdgeInsets.zero,
             // 패딩 설정
             constraints: const BoxConstraints(),
             // constraints
             onPressed: () {
-              Get.offAll(() => MainScreen());
+              Get.back();
             },
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
           ),
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
           title: Text(
             restaurant.groupName,
             style: const TextStyle(
@@ -230,171 +461,308 @@ class _ChatRoomState extends State<ChatRoom> {
           backgroundColor: Colors.white,
         ),
         endDrawer: Drawer(
-            child: ListView(children: <Widget>[
-          const ListTile(
-            title: Text(
-              '방 정보',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ListTile(
-            title: Text("가게이름: ${restaurant.groupName}"),
-          ),
-          ListTile(
-            title: Text("시간: ${restaurant.orderTime}"),
-          ),
-          ListTile(
-            title: Text("픽업장소: ${restaurant.pickup}"),
-          ),
-          Container(
-              child: Divider(
-            color: Colors.grey,
-            thickness: 1.0,
-            indent: 20,
-            endIndent: 20,
-            height: 1,
-          )),
-          const ListTile(
-            title: Text(
-              '대화상대',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: restaurant.members!.length,
-              itemBuilder: (BuildContext context, int index) {
-                if (restaurant.members[index] == restaurant.admin) {
-                  return ListTile(
-                      leading: Text(
-                        "👑",
-                        style: TextStyle(fontSize: 25),
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                  const ListTile(
+                    title: Text(
+                      '방 정보',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          const Text(
+                            "가게이름: ",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            "${restaurant.groupName}",
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      title: Text(getName(restaurant.members[index])));
-                } else {
-                  return ListTile(
-                    leading: Text(""),
-                    title: Text(getName(restaurant.members[index])),
-                  );
-                }
-              }),
-          Container(
-              child: Divider(
-            color: Colors.grey,
-            thickness: 1.0,
-            indent: 20,
-            endIndent: 20,
-            height: 1,
-          )),
-          ListTile(
-            leading: Icon(CupertinoIcons.money_dollar_circle),
-            title: Text("정산하기"),
-            onTap: () {
-              payModal(context);
-            },
-          ),
-          Container(
-              child: Divider(
-            color: Colors.grey,
-            thickness: 1.0,
-            indent: 20,
-            endIndent: 20,
-            height: 1,
-          )),
-          ListTile(
-            leading: Icon(
-              Icons.logout,
-            ),
-            title: Text('방 나가기'),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext ctx) {
-                    return AlertDialog(
-                      title: Text("나가기"),
-                      content: Text("방에서 나가겠습니까?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            var result = await FirebaseFirestore.instance
-                                .collection('user')
-                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .get();
-                            String userName = result['userName'];
-                            DatabaseService(
-                                    uid: FirebaseAuth.instance.currentUser!.uid)
-                                .groupOut(restaurant.groupId, userName,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          const Text(
+                            "시간: ",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            "${restaurant.orderTime}",
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          const Text(
+                            "픽업장소: ",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            "${restaurant.pickup}",
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100, right: 100, bottom: 10),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        modifyInfo(restaurant.groupName, restaurant.orderTime,
+                            restaurant.pickup, restaurant.maxPeople);
+                      },
+                      child: const Text("수정하기"),
+                      style: ButtonStyle(),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 1.0,
+                    indent: 2,
+                    endIndent: 2,
+                    height: 1,
+                  ),
+                  const ListTile(
+                    title: Text(
+                      '대화상대',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: restaurant.members!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (restaurant.members[index] == restaurant.admin) {
+                                return ListTile(
+                                    leading: Text(
+                                      "👑",
+                                      style: TextStyle(fontSize: 25),
+                                    ),
+                                    title: Text(getName(restaurant.members[index]),
+                                        style: const TextStyle(fontSize: 17)));
+                              } else {
+                                return ListTile(
+                                  leading: Text(""),
+                                  title: Text(getName(restaurant.members[index]),
+                                      style: const TextStyle(fontSize: 17)),
+                                );
+                              }
+                            }),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 1.0,
+                          indent: 2,
+                          endIndent: 2,
+                          height: 1,
+                        ),
+                        ListTile(
+                          title: Row(
+                            children: const [
+                              Icon(CupertinoIcons.money_dollar_circle),
+                              SizedBox(
+                                width: 18,
+                              ),
+                              Text(
+                                "정산하기",
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            payModal(context);
+                          },
+                        ),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 1.0,
+                          indent: 2,
+                          endIndent: 2,
+                          height: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ]),
+              ),
+              ListTile(
+                title: Row(
+                  children: const [
+                    Icon(
+                      Icons.logout,
+                    ),
+                    SizedBox(
+                      width: 18,
+                    ),
+                    Text(
+                      "방 나가기",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext ctx) {
+                        return AlertDialog(
+                          title: Text("나가기"),
+                          content: Text("방에서 나가겠습니까?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () async {
+                                var result = await FirebaseFirestore.instance
+                                    .collection('user')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .get();
+                                String userName = result['userName'];
+                                DatabaseService(
+                                    uid: FirebaseAuth
+                                        .instance.currentUser!.uid)
+                                    .groupOut(restaurant.groupId, userName,
                                     restaurant.groupName);
 
-                            Get.to(() => MainScreen());
-                          },
-                          child: Text("예"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Text("아니오"),
-                        )
-                      ],
-                    );
-                  });
-            },
+                                Get.to(() => MainScreen());
+                              },
+                              child: Text("예"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text("아니오"),
+                            )
+                          ],
+                        );
+                      });
+                },
+              ),
+              const SizedBox(height: 10,)
+            ],
           ),
-        ])),
+        )),
         body: GestureDetector(
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.1),
-              child: chatMessages(),
-            )),
-        bottomSheet: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: MediaQuery.of(context).size.width,
-            color: Colors.grey[700],
-            child: Row(
-              children: [
-                Expanded(
-                    child: TextFormField(
-                  maxLines: null,
-                  controller: messageController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: "Send a message...",
-                    hintStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    border: InputBorder.none,
+            child: Column(children: [
+              Container(
+                alignment: Alignment.topCenter,
+                child: Card(
+                  color: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                )),
-                const SizedBox(
-                  width: 12,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    sendMessage();
-                  },
+                  elevation: 5,
+                  margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
                   child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(30),
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.blue[800],
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "시간: ${restaurant.orderTime}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "장소: ${restaurant.pickup}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "인원: [${restaurant.currPeople}/${restaurant.maxPeople}]",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.1),
+                  child: chatMessages(),
+                ),
+              ),
+            ])),
+        bottomSheet: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: MediaQuery.of(context).size.width,
+              child: TextFormField(
+                controller: messageController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Theme.of(context).primaryColor,
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.white,
-                      ),
-                    ),
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                )
-              ],
+                  hintText: "Send a message...",
+                  hintStyle: const TextStyle(color: Colors.black26),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.send,
+                      color: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      sendMessage();
+                    },
+                  ),
+                  isDense: true,
+                ),
+              ),
             ),
           ),
         ));

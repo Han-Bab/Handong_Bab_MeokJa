@@ -16,7 +16,8 @@ extension TimeOfDayConverter on TimeOfDay {
 class TimerWidget extends GetView<OrderTimeButtonController> {
   final format = DateFormat("HH:mm");
 
-  TimerWidget({super.key});
+  var padding = 16.0;
+  TimerWidget(this.padding, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +27,19 @@ class TimerWidget extends GetView<OrderTimeButtonController> {
         decoration: InputDecoration(
           hintText: '주문 예정 시간을 설정해주세요',
           iconColor: Colors.black,
-          labelText: '주문 예정 시간',
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelStyle: Theme.of(context)
-              .inputDecorationTheme
-              .labelStyle,
+          // labelText: '주문 예정 시간',
+          // floatingLabelBehavior: FloatingLabelBehavior.always,
+          // labelStyle: Theme.of(context)
+          //     .inputDecorationTheme
+          //     .labelStyle,
           hintStyle: Theme.of(context)
               .inputDecorationTheme
               .hintStyle,
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: EdgeInsets.all(padding),
           border: const OutlineInputBorder(
             borderSide:
             BorderSide(width: 3, color: Colors.grey),
-          ),
+          )
         ),
         onShowPicker: (context, currentValue) async {
           final time = await showTimePicker(
