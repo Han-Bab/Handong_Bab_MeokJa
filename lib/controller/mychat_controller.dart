@@ -14,7 +14,7 @@ class MyController extends GetxController {
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    myRestaurant.bindStream(FirestoreDB().getMyRestaurants("${result['uid']}_${result['userName']}"));
+    myRestaurant.bindStream(FirestoreDB().getMyRestaurants("${result['uid']}_${result['userNickName']}"));
     //FirestoreDB().getMyRestaurants(result['groups']);
     super.onInit();
   }

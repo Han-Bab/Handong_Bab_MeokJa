@@ -101,7 +101,7 @@ class AddChatRoom extends StatelessWidget {
                         }
                         return null;
                       },
-                      onChanged: (value) async {
+                      onFieldSubmitted: (value) async {
                         String newName = DatabaseService().getImage(value);
                         print(newName);
                         var urlRef = firebaseStorage.child('$newName.jpg');
@@ -265,9 +265,11 @@ class AddChatRoom extends StatelessWidget {
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .get();
                     String userName = result['userName'];
+                    String nickName = result['userNickName'];
                     DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
                         .createGroup(
                             userName,
+                            nickName,
                             FirebaseAuth.instance.currentUser!.uid,
                             _restaurantController.text.toUpperCase(),
                             orderTimeController.orderTime.value,
@@ -278,6 +280,7 @@ class AddChatRoom extends StatelessWidget {
                       '생성완료!',
                       '채팅방이 생성되었습니다!',
                       backgroundColor: Colors.white,
+                      snackPosition: SnackPosition.BOTTOM
                     );
                     Get.to(() => MainScreen());
                   }

@@ -105,7 +105,7 @@ class HomePage extends StatelessWidget {
           child: Center(
             child: FutureBuilder(
                 future: Future.delayed(
-                  const Duration(milliseconds: 500),
+                  const Duration(milliseconds: 2500),
                 ),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
@@ -128,11 +128,6 @@ class HomePage extends StatelessWidget {
                       onRefresh: () async {
                         homeController.restaurants
                             .bindStream(FirestoreDB().getAllRestaurants());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    '새로고침 되었습니다.')) // refresh 완료시 snackbar 생성
-                            );
                       },
                       child: Column(
                         children: [
@@ -142,32 +137,36 @@ class HomePage extends StatelessWidget {
                           Obx(
                             () => homeController.restaurants.isEmpty
                                 ? Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: IconButton(
-                                              onPressed: () {
-                                                Get.to(() => AddChatRoom());
-                                              },
-                                              icon: const Icon(
-                                                Icons.add_circle,
-                                                size: 60,
-                                              )),
-                                        ),
-                                        const SizedBox(
-                                          height: 30,
-                                        ),
-                                        const Text(
-                                          "현재 생성된 채팅방이 없습니다.",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        const Text("버튼을 클릭해서 채팅방을 추가하세요!",
-                                            style: TextStyle(fontSize: 20)),
-                                      ],
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      children: [Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(height: 150,),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 20),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  Get.to(() => AddChatRoom());
+                                                },
+                                                icon: const Icon(
+                                                  Icons.add_circle,
+                                                  size: 60,
+                                                )),
+                                          ),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          const Text(
+                                            "현재 생성된 채팅방이 없습니다.",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          const Text("버튼을 클릭해서 채팅방을 추가하세요!",
+                                              style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),]
                                     ),
                                   )
                                 : Expanded(
@@ -193,7 +192,7 @@ class HomePage extends StatelessWidget {
                                                             .currentUser!
                                                             .uid)
                                                         .get();
-                                                userName = result['userName'];
+                                                userName = result['userNickName'];
                                                 DatabaseService(
                                                         uid: FirebaseAuth
                                                             .instance
@@ -295,6 +294,18 @@ class HomePage extends StatelessWidget {
                                                                           homeController
                                                                               .restaurants[index]
                                                                               .imgUrl,
+                                                                            // loadingBuilder: (BuildContext? context, Widget? child,
+                                                                            //     ImageChunkEvent? loadingProgress) {
+                                                                            //   if (loadingProgress == null) return child!;
+                                                                            //   return Center(
+                                                                            //     child: CircularProgressIndicator(
+                                                                            //       value: loadingProgress.expectedTotalBytes != null
+                                                                            //           ? loadingProgress.cumulativeBytesLoaded /
+                                                                            //           loadingProgress.expectedTotalBytes!
+                                                                            //           : null,
+                                                                            //     ),
+                                                                            //   );
+                                                                            // },
                                                                           fit: BoxFit
                                                                               .cover,
                                                                           errorBuilder: (BuildContext? context,
@@ -315,7 +326,8 @@ class HomePage extends StatelessWidget {
                                                                                   )),
                                                                             );
                                                                           },
-                                                                        )),
+                                                                        )
+                                                                    ),
                                                               ), //image
                                                               const SizedBox(
                                                                 width: 16,
@@ -468,6 +480,18 @@ class HomePage extends StatelessWidget {
                                                                         .restaurants[
                                                                             index]
                                                                         .imgUrl,
+                                                                    // loadingBuilder: (BuildContext? context, Widget? child,
+                                                                    //     ImageChunkEvent? loadingProgress) {
+                                                                    //   if (loadingProgress == null) return child!;
+                                                                    //   return Center(
+                                                                    //     child: CircularProgressIndicator(
+                                                                    //       value: loadingProgress.expectedTotalBytes != null
+                                                                    //           ? loadingProgress.cumulativeBytesLoaded /
+                                                                    //           loadingProgress.expectedTotalBytes!
+                                                                    //           : null,
+                                                                    //     ),
+                                                                    //   );
+                                                                    // },
                                                                     fit: BoxFit
                                                                         .cover,
                                                                     errorBuilder: (BuildContext?
@@ -650,315 +674,3 @@ class HomePage extends StatelessWidget {
         ));
   }
 }
-//
-// // 검색
-// class MySearchDelegate extends SearchDelegate {
-//   final homeController = Get.put(HomeController());
-//   List<String> searchResults = [
-//     '행복한 마라탕',
-//     '명성',
-//     '신전 떡볶이',
-//     'bbq',
-//     '동궁찜닭',
-//   ];
-//
-//   @override
-//   List<Widget>? buildActions(BuildContext context) => [
-//         IconButton(
-//           icon: const Icon(
-//             Icons.clear,
-//             color: Colors.blue,
-//           ),
-//           onPressed: () {
-//             if (query == "") {
-//               Get.back(); //close searchbar
-//             } else {
-//               showSearch(
-//                 context: context,
-//                 delegate: MySearchDelegate(),
-//               );
-//               query = "";
-//             }
-//           },
-//         ),
-//       ];
-//
-//   @override
-//   Widget? buildLeading(BuildContext context) => IconButton(
-//       icon: const Icon(
-//         // close searchbar
-//         Icons.arrow_back,
-//         color: Colors.blue,
-//       ),
-//       onPressed: () {
-//         Get.offAll(() => MainScreen());
-//       });
-//
-//   @override
-//   Widget buildResults(BuildContext context) => Center(
-//         child: Obx(
-//           () => ListView.builder(
-//             itemCount: homeController.restaurants.length,
-//             itemBuilder: (context, index) {
-//               if (homeController.restaurants[index].groupName.contains(query) &&
-//                   (homeController.restaurants[index].members.isNotEmpty)) {
-//                 String userName = "";
-//                 return GestureDetector(
-//                   onTap: () async {
-//                     if (homeController.restaurants[index].currPeople !=
-//                         homeController.restaurants[index].maxPeople) {
-//                       var result = await FirebaseFirestore.instance
-//                           .collection('user')
-//                           .doc(FirebaseAuth.instance.currentUser!.uid)
-//                           .get();
-//                       userName = result['userName'];
-//                       DatabaseService(
-//                               uid: FirebaseAuth.instance.currentUser!.uid)
-//                           .groupJoin(
-//                               homeController.restaurants[index].groupId,
-//                               userName,
-//                               homeController.restaurants[index].groupName);
-//                       Get.to(() => ChatRoom(),
-//                           arguments: homeController.restaurants[index]);
-//                     } else {
-//                       if (!await DatabaseService(
-//                               uid: FirebaseAuth.instance.currentUser!.uid)
-//                           .isUserJoined(
-//                               homeController.restaurants[index].groupName,
-//                               homeController.restaurants[index].groupId,
-//                               userName)) {
-//                         showDialog(
-//                             context: context,
-//                             barrierDismissible: false,
-//                             builder: (BuildContext ctx) {
-//                               return AlertDialog(
-//                                 title: const Text("정원초과"),
-//                                 content: const Text("인원이 마감되었습니다."),
-//                                 actions: [
-//                                   TextButton(
-//                                     onPressed: () {
-//                                       Get.back();
-//                                     },
-//                                     child: const Text("확인"),
-//                                   ),
-//                                 ],
-//                               );
-//                             });
-//                       } else {
-//                         Get.to(() => ChatRoom(),
-//                             arguments: homeController.restaurants[index]);
-//                       }
-//                     }
-//                   },
-//                   child: Card(
-//                     color: (homeController.restaurants[index].currPeople ==
-//                             homeController.restaurants[index].maxPeople)
-//                         ? Colors.grey
-//                         : Colors.white,
-//                     child: Row(
-//                       children: [
-//                         SizedBox(
-//                           width: 100,
-//                           height: 100,
-//                           child: ClipRRect(
-//                               borderRadius: BorderRadius.circular(20.0),
-//                               child: Image.asset(
-//                                 homeController.restaurants[index].imgUrl,
-//                                 fit: BoxFit.cover,
-//                                 errorBuilder: (BuildContext? context,
-//                                     Object? exception, StackTrace? stackTrace) {
-//                                   return Container(
-//                                     height: 120,
-//                                     width: 120,
-//                                     decoration: BoxDecoration(
-//                                       border: Border.all(width: 3),
-//                                       borderRadius: BorderRadius.circular(20),
-//                                     ),
-//                                     child: ClipRRect(
-//                                         borderRadius:
-//                                             BorderRadius.circular(20.0),
-//                                         child: Image.asset(
-//                                           'assets/hanbab_icon.png',
-//                                           scale: 5,
-//                                         )),
-//                                   );
-//                                 },
-//                               )),
-//                         ), //image
-//                         const SizedBox(
-//                           width: 16,
-//                         ),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Row(
-//                                 mainAxisAlignment:
-//                                     MainAxisAlignment.spaceBetween,
-//                                 children: [
-//                                   Row(
-//                                     children: [
-//                                       Icon(
-//                                         Icons.account_circle_sharp,
-//                                         color: (homeController
-//                                                     .restaurants[index]
-//                                                     .currPeople ==
-//                                                 homeController
-//                                                     .restaurants[index]
-//                                                     .maxPeople)
-//                                             ? Colors.black
-//                                             : Colors.grey,
-//                                         size: 16,
-//                                       ),
-//                                       const SizedBox(
-//                                         width: 8,
-//                                       ),
-//                                       Text(
-//                                         getName(homeController
-//                                             .restaurants[index].admin),
-//                                         style: TextStyle(
-//                                           fontSize: 15,
-//                                           color: (homeController
-//                                                       .restaurants[index]
-//                                                       .currPeople ==
-//                                                   homeController
-//                                                       .restaurants[index]
-//                                                       .maxPeople)
-//                                               ? Colors.black
-//                                               : Colors.grey,
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   Row(
-//                                     children: [
-//                                       Text(homeController
-//                                           .restaurants[index].orderTime),
-//                                       const SizedBox(
-//                                         width: 5,
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ],
-//                               ),
-//                               const SizedBox(
-//                                 height: 10,
-//                               ),
-//                               Row(
-//                                 children: [
-//                                   Text(
-//                                     homeController.restaurants[index].groupName,
-//                                     style: const TextStyle(
-//                                         fontSize: 20,
-//                                         fontWeight: FontWeight.bold,
-//                                         color: Colors.black),
-//                                   ),
-//                                   if (homeController
-//                                           .restaurants[index].currPeople !=
-//                                       homeController
-//                                           .restaurants[index].maxPeople)
-//                                     const Text(
-//                                       " ❯",
-//                                       style: TextStyle(
-//                                           fontSize: 24,
-//                                           fontWeight: FontWeight.bold,
-//                                           color: Colors.red),
-//                                     )
-//                                   else
-//                                     const Text(
-//                                       " ❯",
-//                                       style: TextStyle(
-//                                           fontSize: 24,
-//                                           fontWeight: FontWeight.bold,
-//                                           color: Colors.black),
-//                                     ),
-//                                 ],
-//                               ),
-//                               const SizedBox(
-//                                 height: 8,
-//                               ),
-//                               Row(
-//                                 mainAxisAlignment:
-//                                     MainAxisAlignment.spaceBetween,
-//                                 children: [
-//                                   Text(
-//                                     homeController.restaurants[index].pickup,
-//                                     style: TextStyle(
-//                                       fontSize: 15,
-//                                       color: (homeController.restaurants[index]
-//                                                   .currPeople ==
-//                                               homeController
-//                                                   .restaurants[index].maxPeople)
-//                                           ? Colors.black
-//                                           : Colors.grey,
-//                                     ),
-//                                   ),
-//                                   SizedBox(
-//                                     child: FittedBox(
-//                                       child: Row(
-//                                         children: [
-//                                           const Icon(CupertinoIcons.person),
-//                                           if (homeController.restaurants[index]
-//                                                   .currPeople !=
-//                                               homeController
-//                                                   .restaurants[index].maxPeople)
-//                                             Text(
-//                                                 '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}')
-//                                           else
-//                                             Text(
-//                                               '${homeController.restaurants[index].currPeople}/${homeController.restaurants[index].maxPeople}',
-//                                               style: const TextStyle(
-//                                                   decoration: TextDecoration
-//                                                       .lineThrough,
-//                                                   decorationColor: Colors.red,
-//                                                   decorationThickness: 3),
-//                                             ),
-//                                           const SizedBox(
-//                                             width: 5,
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               } else {
-//                 return const SizedBox(
-//                   height: 1,
-//                 );
-//               }
-//             },
-//           ),
-//         ),
-//       );
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     List<String> suggestions = searchResults.where((searchResult) {
-//       final result = searchResult.toLowerCase();
-//       final input = query.toLowerCase();
-//       return result.contains(input);
-//     }).toList();
-//
-//     return ListView.builder(
-//       itemCount: suggestions.length,
-//       itemBuilder: (context, index) {
-//         final suggestion = suggestions[index];
-//         return ListTile(
-//           title: Text(suggestion),
-//           onTap: () {
-//             query = suggestion;
-//             showResults(context);
-//           },
-//         );
-//       },
-//     );
-//   }
-// }

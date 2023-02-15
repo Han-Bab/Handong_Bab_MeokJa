@@ -38,7 +38,7 @@ class DatabaseService  extends GetxService{
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    return result['userName'];
+    return result['userNickName'];
   }
 
   // getting user data
@@ -82,14 +82,14 @@ class DatabaseService  extends GetxService{
   }
 
   // creating a group
-  Future createGroup(String userName, String id, String groupName,
+  Future createGroup(String userName, String nickName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
     var imgUrl = await urlRef.getDownloadURL();
     print("url-------------------$imgUrl");
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
-      "admin": "${id}_$userName",
+      "admin": "${id}_$nickName",
       "members": [],
       "groupId": "",
       "orderTime": orderTime,
@@ -104,7 +104,7 @@ class DatabaseService  extends GetxService{
     });
     //update the members
     await groupDocumentReference.update({
-      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
+      "members": FieldValue.arrayUnion(["${uid}_$nickName"]),
       "groupId": groupDocumentReference.id,
     });
 
@@ -176,13 +176,14 @@ class DatabaseService  extends GetxService{
   modifyGroupInfo(String groupId, String groupName, String orderTime,
       String pickup, String maxPeople) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
-
+    var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
+    var imgUrl = await urlRef.getDownloadURL();
     await groupDocumentReference.update({
       "groupName": groupName,
       "orderTime": orderTime,
       "pickup": pickup,
       "maxPeople": maxPeople,
-      "imgUrl": "assets/images/$groupName.jpg"
+      "imgUrl": imgUrl
     });
   }
 
@@ -242,7 +243,7 @@ class DatabaseService  extends GetxService{
   }
 }
 
-class FirestoreDB {
+class  FirestoreDB {
   //Initialise Firebase Cloud Firestore
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 

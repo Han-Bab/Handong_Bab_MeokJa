@@ -135,7 +135,7 @@ class GroupListViewDemo extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(20.0)),
-                                child: Image.asset(
+                                child: Image.network(
                                   index.imgUrl,
                                   fit: BoxFit.cover,
                                   errorBuilder: (BuildContext? context,

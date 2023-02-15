@@ -386,36 +386,40 @@ class _ChatRoomState extends State<ChatRoom> {
                                                 DateFormat("HH:mm")
                                                     .format(time!),
                                                 pickup,
-                                                maxPeople);
-                                        Get.back();
-                                        Get.back();
-                                        DatabaseService()
-                                            .getGroupName(restaurant.groupId)
-                                            .then((val) {
-                                          setState(() {
-                                            restaurant.groupName = val;
+                                                maxPeople).whenComplete(() {
+                                          Get.back();
+                                          Get.back();
+                                          DatabaseService()
+                                              .getGroupName(restaurant.groupId)
+                                              .then((val) {
+                                            setState(() {
+                                              print(val);
+                                              restaurant.groupName = val;
+                                            });
                                           });
-                                        });
-                                        DatabaseService()
-                                            .getGroupTime(restaurant.groupId)
-                                            .then((val) {
-                                          setState(() {
-                                            restaurant.orderTime = val;
+                                          DatabaseService()
+                                              .getGroupTime(restaurant.groupId)
+                                              .then((val) {
+                                            setState(() {
+                                              restaurant.orderTime = val;
+                                            });
                                           });
-                                        });
-                                        DatabaseService()
-                                            .getGroupPick(restaurant.groupId)
-                                            .then((val) {
-                                          setState(() {
-                                            restaurant.pickup = val;
+                                          DatabaseService()
+                                              .getGroupPick(restaurant.groupId)
+                                              .then((val) {
+                                            setState(() {
+                                              restaurant.pickup = val;
+                                            });
                                           });
+
+                                          Get.snackbar(
+                                              '수정완료!',
+                                              '채팅방이 수정되었습니다!',
+                                              backgroundColor: Colors.white,
+                                              snackPosition: SnackPosition.BOTTOM
+                                          );
                                         });
 
-                                        Get.snackbar(
-                                          '수정완료!',
-                                          '채팅방이 수정되었습니다!',
-                                          backgroundColor: Colors.white,
-                                        );
                                       }
                                     },
                                     child: const Text("수정하기"),
@@ -644,7 +648,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                     .collection('user')
                                     .doc(FirebaseAuth.instance.currentUser!.uid)
                                     .get();
-                                String userName = result['userName'];
+                                String userName = result['userNickName'];
                                 DatabaseService(
                                     uid: FirebaseAuth
                                         .instance.currentUser!.uid)
