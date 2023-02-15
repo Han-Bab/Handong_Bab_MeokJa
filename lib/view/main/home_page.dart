@@ -1,15 +1,16 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:han_bab/controller/home_controller.dart';
+import 'package:han_bab/controller/search_controller.dart';
 import 'package:han_bab/view/chat/add_chat_room.dart';
 import 'package:intl/intl.dart';
 import '../../component/customToolbarShape.dart';
 import '../../component/database_service.dart';
+import '../../model/search.dart';
 import '../chat/chatRoom_screen.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,7 @@ String getName(String res) {
 
 class HomePage extends StatelessWidget {
   final homeController = Get.put(HomeController());
+  final controller = Get.put(SearchController());
 
   HomePage({Key? key}) : super(key: key);
 
@@ -70,34 +72,96 @@ class HomePage extends StatelessWidget {
                                 )
                               ],
                             ),
-                            child: TextField(
-                                onSubmitted: (submittedText) {
-                                  if (submittedText == "") {
-                                    homeController.restaurants.bindStream(
-                                        FirestoreDB().getAllRestaurants());
-                                  } else {
-                                    homeController.restaurants.bindStream(
-                                        FirestoreDB().getSearchRestaurants(
-                                            submittedText.toUpperCase()));
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    prefixIcon: const Icon(
-                                      Icons.search,
-                                      color: Colors.black38,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.white, width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.white, width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(25))))))),
+                            child: Autocomplete<RestaurantName>(
+                              optionsBuilder: (textEditingValue) {
+                                return controller.countryNames.where((RestaurantName country) =>
+                                    country.name.toLowerCase().startsWith(
+                                        textEditingValue.text.toLowerCase())).toList();
+                              },
+                              displayStringForOption: (RestaurantName country) => country.name,
+                              fieldViewBuilder: (BuildContext context, TextEditingController fieldTextEditingController, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted){
+                                return TextField(
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: const Icon(
+                                        Icons.search,
+                                        color: Colors.black38,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Colors.white, width: 1),
+                                          borderRadius:
+                                          BorderRadius.circular(25)),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Colors.white, width: 1),
+                                          borderRadius:
+                                          BorderRadius.circular(25))),
+                                  controller: fieldTextEditingController,
+                                  focusNode: fieldFocusNode,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                );
+                              },
+                              onSelected: (RestaurantName selection) {
+                                print('Selected: ${selection.name}');
+                              },
+                              // optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<Country> onSelected, Iterable<Country> country) {
+                              //   return Align(
+                              //     alignment: Alignment.topLeft,
+                              //     child: Material(
+                              //       child: Container(
+                              //         width: 360,
+                              //         color: Colors.deepPurpleAccent,
+                              //         child: ListView.builder(
+                              //           padding: EdgeInsets.all(10.0),
+                              //             itemCount: country.length,
+                              //             itemBuilder: (BuildContext context, int index) {
+                              //               final Country option = country.elementAt(index);
+                              //               return GestureDetector(
+                              //                 onTap: () {
+                              //                   onSelected(option);
+                              //                 },
+                              //                 child: ListTile(
+                              //                   title: Text(option.name, style: const TextStyle(color: Colors.white),),
+                              //                 ),
+                              //               );
+                              //             }
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   );
+                              // },
+                            ),
+                            // TextField(
+                            //     onSubmitted: (submittedText) {
+                            //       if (submittedText == "") {
+                            //         homeController.restaurants.bindStream(
+                            //             FirestoreDB().getAllRestaurants());
+                            //       } else {
+                            //         homeController.restaurants.bindStream(
+                            //             FirestoreDB().getSearchRestaurants(
+                            //                 submittedText.toUpperCase()));
+                            //       }
+                            //     },
+                            //     decoration: InputDecoration(
+                            //         filled: true,
+                            //         fillColor: Colors.white,
+                            //         prefixIcon: const Icon(
+                            //           Icons.search,
+                            //           color: Colors.black38,
+                            //         ),
+                            //         focusedBorder: OutlineInputBorder(
+                            //             borderSide: const BorderSide(
+                            //                 color: Colors.white, width: 1),
+                            //             borderRadius:
+                            //                 BorderRadius.circular(25)),
+                            //         enabledBorder: OutlineInputBorder(
+                            //             borderSide: const BorderSide(
+                            //                 color: Colors.white, width: 1),
+                            //             borderRadius:
+                            //                 BorderRadius.circular(25))))
+                        ))),
               ])),
         ),
         body: Padding(
@@ -137,16 +201,18 @@ class HomePage extends StatelessWidget {
                           Obx(
                             () => homeController.restaurants.isEmpty
                                 ? Expanded(
-                                    child: ListView(
-                                      shrinkWrap: true,
-                                      children: [Column(
+                                    child:
+                                        ListView(shrinkWrap: true, children: [
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const SizedBox(height: 150,),
+                                          const SizedBox(
+                                            height: 150,
+                                          ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 20),
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
                                             child: IconButton(
                                                 onPressed: () {
                                                   Get.to(() => AddChatRoom());
@@ -166,8 +232,8 @@ class HomePage extends StatelessWidget {
                                           const Text("버튼을 클릭해서 채팅방을 추가하세요!",
                                               style: TextStyle(fontSize: 20)),
                                         ],
-                                      ),]
-                                    ),
+                                      ),
+                                    ]),
                                   )
                                 : Expanded(
                                     child: ListView.builder(
@@ -192,7 +258,8 @@ class HomePage extends StatelessWidget {
                                                             .currentUser!
                                                             .uid)
                                                         .get();
-                                                userName = result['userNickName'];
+                                                userName =
+                                                    result['userNickName'];
                                                 DatabaseService(
                                                         uid: FirebaseAuth
                                                             .instance
@@ -294,18 +361,18 @@ class HomePage extends StatelessWidget {
                                                                           homeController
                                                                               .restaurants[index]
                                                                               .imgUrl,
-                                                                            // loadingBuilder: (BuildContext? context, Widget? child,
-                                                                            //     ImageChunkEvent? loadingProgress) {
-                                                                            //   if (loadingProgress == null) return child!;
-                                                                            //   return Center(
-                                                                            //     child: CircularProgressIndicator(
-                                                                            //       value: loadingProgress.expectedTotalBytes != null
-                                                                            //           ? loadingProgress.cumulativeBytesLoaded /
-                                                                            //           loadingProgress.expectedTotalBytes!
-                                                                            //           : null,
-                                                                            //     ),
-                                                                            //   );
-                                                                            // },
+                                                                          // loadingBuilder: (BuildContext? context, Widget? child,
+                                                                          //     ImageChunkEvent? loadingProgress) {
+                                                                          //   if (loadingProgress == null) return child!;
+                                                                          //   return Center(
+                                                                          //     child: CircularProgressIndicator(
+                                                                          //       value: loadingProgress.expectedTotalBytes != null
+                                                                          //           ? loadingProgress.cumulativeBytesLoaded /
+                                                                          //           loadingProgress.expectedTotalBytes!
+                                                                          //           : null,
+                                                                          //     ),
+                                                                          //   );
+                                                                          // },
                                                                           fit: BoxFit
                                                                               .cover,
                                                                           errorBuilder: (BuildContext? context,
@@ -326,8 +393,7 @@ class HomePage extends StatelessWidget {
                                                                                   )),
                                                                             );
                                                                           },
-                                                                        )
-                                                                    ),
+                                                                        )),
                                                               ), //image
                                                               const SizedBox(
                                                                 width: 16,
