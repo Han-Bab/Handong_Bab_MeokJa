@@ -153,6 +153,22 @@ class AuthController extends GetxController {
           'userName': info,
         });
       }
+      if (field == 'userNickName') {
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user!.uid)
+            .update({
+          'userNickName': info,
+        });
+      }
+      if (field == 'userPhone') {
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user!.uid)
+            .update({
+          'userPhone': info,
+        });
+      }
       Get.snackbar('알림', '유저 정보가 성공적으로 변경되었습니다',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.lightBlue,

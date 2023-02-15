@@ -22,6 +22,9 @@ class CommunityPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           '음식게시판',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         elevation: 2, // 경계선 없애는 늒임

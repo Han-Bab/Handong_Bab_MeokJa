@@ -39,10 +39,14 @@ class EditPost extends StatelessWidget {
               print('Edit Post');
               contentController.editData(title.text, content.text, index);
               Get.back();
-              Get.snackbar('알림', '게시글을 수정하였습니다',
-                  snackPosition: SnackPosition.TOP,
-                  duration: const Duration(milliseconds: 1500),
-                  backgroundColor: Colors.lightGreen);
+              Get.snackbar(
+                '알림',
+                '게시글을 수정하였습니다',
+                snackPosition: SnackPosition.BOTTOM,
+                duration: const Duration(milliseconds: 1500),
+                backgroundColor: Colors.lightBlue,
+                colorText: Colors.white,
+              );
             },
           ),
         ],

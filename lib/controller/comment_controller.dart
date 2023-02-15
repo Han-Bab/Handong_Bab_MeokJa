@@ -37,7 +37,8 @@ class CommentController extends GetxController {
 
       update();
     } catch (e) {
-      Get.snackbar('에러', e.toString(), borderColor: Colors.red);
+      Get.snackbar('에러', e.toString(),
+          borderColor: Colors.red, snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -68,7 +69,7 @@ class CommentController extends GetxController {
       });
       communityController.communityList[idx].commentCount += 1;
       Get.snackbar("알림", "댓글을 작성하셨습니다",
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.lightBlue,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1));
