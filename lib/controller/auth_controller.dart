@@ -90,8 +90,9 @@ class AuthController extends GetxController {
     CollectionReference<Map<String, dynamic>> collectionReference =
         FirebaseFirestore.instance.collection('user');
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await collectionReference.get();
-
+        await collectionReference
+            .where('visibility', isEqualTo: 'public')
+            .get();
     for (var doc in querySnapshot.docs) {
       if (doc.data()['userNickName'] != null) {
         if (nickName == doc.data()['userNickName']) {
@@ -130,11 +131,11 @@ class AuthController extends GetxController {
         'userName': userInfo['userName'],
         'userPhone': userInfo['userPhone'],
         'userNickName': userInfo['userNickName'],
-        'userAccount': userInfo['userAccount'],
         'groups': [],
         'uid': user.uid,
         'kakaoLink': false,
         'tossLink': false,
+        'visibility': 'public',
       });
     } catch (e) {
       print(e.toString());

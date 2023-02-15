@@ -39,10 +39,11 @@ class TossIntroPage extends StatelessWidget {
         PageViewModel(
             title: "링크 복사",
             body: "위의 화면에서 표시된 버튼을 눌러"
-                "\n토그 송금 링크를 복사하면 끝!",
+                "\n토스 송금 링크를 복사하면 끝!",
             image: Image.asset("assets/images/토스7.png"),
             decoration: getPageDecorationFull()),
       ],
+      showSkipButton: true,
       done: const Text(
         "done",
         style: TextStyle(color: Colors.blue),
@@ -58,7 +59,6 @@ class TossIntroPage extends StatelessWidget {
         "Skip",
         style: TextStyle(color: Colors.blue),
       ),
-      showSkipButton: true,
       dotsDecorator: DotsDecorator(
         color: Colors.lightBlueAccent,
         size: const Size(10, 10),

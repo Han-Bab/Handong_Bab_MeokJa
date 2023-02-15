@@ -49,7 +49,12 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('추가 정보 입력'),
+        title: const Text(
+          '추가 정보 입력',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -97,7 +102,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                         child: Text(
                           authController.authentication.currentUser!.email
                               .toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                           ),
                         ),
@@ -226,21 +231,29 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                               }
                               print(authController.isUniqueNick.value);
                               _tryValidation();
-                              if (userInfo['userNickName'] != '') {
-                                if (authController.isUniqueNick.value) {
-                                  Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
-                                      snackPosition: SnackPosition.BOTTOM);
-                                } else {
-                                  Get.snackbar('알림', '중복된 닉네임입니다!\n다시 작성해주세요',
-                                      snackPosition: SnackPosition.BOTTOM);
-                                }
+                              if (authController.isUniqueNick.value) {
+                                Get.snackbar(
+                                  '알림',
+                                  '사용하실 수 있는 닉네임입니다!',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.lightBlue,
+                                  colorText: Colors.white,
+                                );
+                              } else {
+                                Get.snackbar(
+                                  '알림',
+                                  '중복된 닉네임입니다!\n다시 작성해주세요',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
                               }
                             },
-                            child: Text('중복'),
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.black,
                               // backgroundColor: Colors.grey[300],
                             ),
+                            child: const Text('중복'),
                           ),
                         ),
                       ),

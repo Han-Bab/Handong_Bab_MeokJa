@@ -35,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _visibility = false;
-
   bool _isClicked = false;
 
   void _tryValidation() {
@@ -318,7 +317,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                   } catch (e) {
                                     print(e.toString());
                                   }
-                                  print(authController.isUniqueNick.value);
                                   _tryValidation();
                                   if (userInfo['userNickName'] != '' &&
                                       userInfo['userNickName']
@@ -326,12 +324,21 @@ class _SignUpPageState extends State<SignUpPage> {
                                               .length <=
                                           7) {
                                     if (authController.isUniqueNick.value) {
-                                      Get.snackbar('알림', '사용하실 수 있는 닉네임입니다!',
-                                          snackPosition: SnackPosition.BOTTOM);
+                                      Get.snackbar(
+                                        '알림',
+                                        '사용하실 수 있는 닉네임입니다!',
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.lightBlue,
+                                        colorText: Colors.white,
+                                      );
                                     } else {
                                       Get.snackbar(
-                                          '알림', '중복된 닉네임입니다!\n다시 작성해주세요',
-                                          snackPosition: SnackPosition.BOTTOM);
+                                        '알림',
+                                        '중복된 닉네임입니다!\n다시 작성해주세요',
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white,
+                                      );
                                     }
                                   }
                                 },

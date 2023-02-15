@@ -16,12 +16,20 @@ class VerifyLoginPage extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     if (verifyController.isEmailVerified) {
-      Get.snackbar('알림', '인증 확인되었음. 다시 로그인 바람 ㅇㅇ');
+      Get.snackbar('인증 완료', '인증 확인되었습니다\n다시 로그인해주세요',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.lightBlue,
+          colorText: Colors.white);
       return LoginPage();
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Verify Email"),
+          title: const Text(
+            "한동 이메일 인증",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           centerTitle: true,
         ),
         body: Row(
@@ -31,51 +39,93 @@ class VerifyLoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "인증 메일을 보냈습니다.",
-                  style: TextStyle(fontSize: 20),
+                  "인증 메일을 전송했습니다.",
+                  style: TextStyle(
+                    fontSize: 20,
+                    // fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const Text(
-                  "계정을 인증해주세요",
-                  style: TextStyle(fontSize: 20),
+                  "본인 계정을 인증해주세요.",
+                  style: TextStyle(
+                    fontSize: 20,
+                    // fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 24,
                 ),
                 SizedBox(
-                  width: width * 0.7,
-                  child: Row(
+                  width: 230,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          FirebaseAuth.instance.signOut();
-                        },
-                        icon: const Icon(
-                          Icons.cancel,
-                          size: 24,
-                        ),
-                        label: const Text(
-                          '취소하기',
-                          // style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      ElevatedButton.icon(
+                      ElevatedButton(
                         onPressed: verifyController.canResendEmail
                             ? verifyController.sendVerificationEmail
                             : null,
-                        icon: const Icon(
-                          CupertinoIcons.mail_solid,
-                          size: 24,
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Icon(
+                              CupertinoIcons.mail_solid,
+                              size: 24,
+                            ),
+                            Text(
+                              "인증코드 재전송",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0,
+                              child: Icon(
+                                CupertinoIcons.mail_solid,
+                                size: 24,
+                              ),
+                            ),
+                          ],
                         ),
-                        label: const Text(
-                          "인증코드 재전송",
-                          // style: TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Icon(
+                              Icons.cancel,
+                              size: 24,
+                            ),
+                            Text(
+                              '취소하기',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0,
+                              child: Icon(
+                                Icons.cancel,
+                                size: 24,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 124,
                 ),
               ],
             ),

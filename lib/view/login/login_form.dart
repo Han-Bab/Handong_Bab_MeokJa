@@ -55,8 +55,6 @@ class LoginForm extends StatelessWidget {
                   key: _formKey,
                   child: Theme(
                     data: ThemeData(
-                      // form을 눌렀을 때 form의 색상
-                      primaryColor: Colors.teal,
                       // textfield 위의 사용자에게 정보를 제공하는 텍스트을 꾸미기 위함
                       inputDecorationTheme: const InputDecorationTheme(
                         filled: true,
@@ -132,11 +130,6 @@ class LoginForm extends StatelessWidget {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.lightBlue,
-                              // shape: const RoundedRectangleBorder(
-                              //   borderRadius: BorderRadius.all(
-                              //     Radius.circular(50),
-                              //   ),
-                              // ),
                             ),
                             onPressed: () {
                               // 로그인 버튼 기능 구현
