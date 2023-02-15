@@ -1,21 +1,35 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
+import 'package:han_bab/view/main/main_screen.dart';
+import 'package:han_bab/view/main/my_page.dart';
+import 'package:han_bab/view/mypage/edit_profile_name.dart';
 
 class EditProfile extends StatelessWidget {
   EditProfile({Key? key}) : super(key: key);
 
   final authController = Get.put(AuthController());
+  String userName = '';
+  String userNickName = '';
+  String userPhone = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '프로필 관리',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(CupertinoIcons.chevron_back),
+          onPressed: () {
+            Get.off(() => MainScreen(),
+                arguments: 4, transition: Transition.leftToRight);
+          },
         ),
         elevation: 0,
         backgroundColor: Colors.white,
@@ -71,7 +85,7 @@ class EditProfile extends StatelessWidget {
                             print(snapshot.error.toString());
                             return const Text("Error");
                           } else {
-                            // print(snapshot.data);
+                            userName = snapshot.data.toString();
                             return Text(
                               snapshot.data.toString(),
                               style: const TextStyle(
@@ -91,7 +105,13 @@ class EditProfile extends StatelessWidget {
                   width: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(
+                      () => EditProfileName(),
+                      transition: Transition.downToUp,
+                      arguments: userName,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
                     foregroundColor: Colors.black,

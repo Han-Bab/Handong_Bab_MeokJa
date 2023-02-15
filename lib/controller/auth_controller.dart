@@ -142,6 +142,29 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> editInfo(String field, String info) async {
+    try {
+      final user = authentication.currentUser;
+      if (field == 'userName') {
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user!.uid)
+            .update({
+          'userName': info,
+        });
+      }
+      Get.snackbar('알림', '유저 정보가 성공적으로 변경되었습니다',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.lightBlue,
+          colorText: Colors.white);
+    } catch (e) {
+      Get.snackbar('에러', e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
   void login(Map userInfo) async {
     try {
       await authentication.signInWithEmailAndPassword(

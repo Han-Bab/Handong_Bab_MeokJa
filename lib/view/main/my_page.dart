@@ -303,7 +303,7 @@ class MyPage extends StatelessWidget {
                       width: width,
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.to(() => EditProfile(),
+                          Get.off(() => EditProfile(),
                               transition: Transition.rightToLeft);
                         },
                         style: ElevatedButton.styleFrom(
