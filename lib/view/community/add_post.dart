@@ -35,9 +35,10 @@ class AddPost extends StatelessWidget {
               print('Add Post');
               communityController.addData(title, content);
               Get.snackbar('알림', '새 게시글을 추가하였습니다',
-                  snackPosition: SnackPosition.TOP,
+                  snackPosition: SnackPosition.BOTTOM,
                   duration: const Duration(milliseconds: 1500),
-                  backgroundColor: Colors.lightGreen);
+                  colorText: Colors.white,
+                  backgroundColor: Colors.lightBlue);
               Get.off(() => MainScreen(), arguments: 1);
             },
           ),

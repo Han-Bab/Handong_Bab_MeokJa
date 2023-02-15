@@ -15,9 +15,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  bool validation = false;
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  bool validation = false;
   // delay시간 때 스피너
   bool _showSpinner = false;
   // validation 기능 구현을 위한 세 개의 string 변수

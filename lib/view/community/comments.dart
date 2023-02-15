@@ -84,7 +84,7 @@ class Comments extends GetView<CommentController> {
                 CupertinoActionSheetAction(
                   onPressed: () {
                     Get.snackbar('알림', '신고가 접수되었습니다.\n감사합니다.',
-                        snackPosition: SnackPosition.TOP,
+                        snackPosition: SnackPosition.BOTTOM,
                         duration: const Duration(milliseconds: 1200),
                         backgroundColor: Colors.red,
                         colorText: Colors.white);

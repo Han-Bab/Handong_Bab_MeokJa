@@ -55,8 +55,13 @@ class VerifyController extends GetxController {
       canResendEmail = true;
     } catch (e) {
       print(e);
-      Get.snackbar('error', e.toString(),
-          colorText: Colors.white, backgroundColor: Colors.red);
+      Get.snackbar(
+        'error',
+        e.toString(),
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }

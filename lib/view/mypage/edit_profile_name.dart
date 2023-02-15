@@ -26,7 +26,7 @@ class EditProfileName extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.back();
+              Get.off(() => EditProfile(), transition: Transition.upToDown);
             },
             onLongPress: null,
             child: const Text(

@@ -5,6 +5,8 @@ import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 import 'package:han_bab/view/main/my_page.dart';
 import 'package:han_bab/view/mypage/edit_profile_name.dart';
+import 'package:han_bab/view/mypage/edit_profile_nick.dart';
+import 'package:han_bab/view/mypage/edit_profile_phone.dart';
 
 class EditProfile extends StatelessWidget {
   EditProfile({Key? key}) : super(key: key);
@@ -168,7 +170,7 @@ class EditProfile extends StatelessWidget {
                             print(snapshot.error.toString());
                             return const Text("Error");
                           } else {
-                            // print(snapshot.data);
+                            userNickName = snapshot.data.toString();
                             return Text(
                               snapshot.data.toString(),
                               style: const TextStyle(
@@ -188,7 +190,13 @@ class EditProfile extends StatelessWidget {
                   width: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.off(
+                      () => EditProfileNick(),
+                      arguments: userNickName,
+                      transition: Transition.downToUp,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
                     foregroundColor: Colors.black,
@@ -245,7 +253,7 @@ class EditProfile extends StatelessWidget {
                             print(snapshot.error.toString());
                             return const Text("Error");
                           } else {
-                            // print(snapshot.data);
+                            userPhone = snapshot.data.toString();
                             return Text(
                               snapshot.data.toString(),
                               style: const TextStyle(
@@ -265,7 +273,13 @@ class EditProfile extends StatelessWidget {
                   width: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.off(
+                      () => EditProfilePhone(),
+                      arguments: userPhone,
+                      transition: Transition.downToUp,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
                     foregroundColor: Colors.black,
