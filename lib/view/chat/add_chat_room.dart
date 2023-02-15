@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 import 'package:han_bab/component/time_widget.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
-import 'package:han_bab/view/chat/order_time_button.dart';
 import 'package:han_bab/view/main/main_screen.dart';
-import 'package:get/get.dart';
 import '../../component/database_service.dart';
+import '../../controller/search_controller.dart';
+import '../../model/search.dart';
 
 
 class AddChatRoom extends StatelessWidget {
@@ -21,20 +21,15 @@ class AddChatRoom extends StatelessWidget {
   final TextEditingController _maxPeopleController = TextEditingController();
   Reference get firebaseStorage => FirebaseStorage.instance.ref();
   final authController = AuthController();
-
+  final controller = Get.put(SearchController());
   final orderTimeController = Get.put(OrderTimeButtonController());
-
   final _formKey = GlobalKey<FormState>();
-
   String pickup = "";
-
   String maxPeople = "";
-
   String imgUrl = "";
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(OrderTimeButtonController());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -79,50 +74,125 @@ class AddChatRoom extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: _restaurantController,
-                      decoration: InputDecoration(
-                        hintText: '가게명을 입력해주세요',
-                        icon: const Icon(CupertinoIcons.search, color: Colors.black,),
-                        iconColor: Colors.black,
-                        hintStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .hintStyle,
-                        contentPadding: const EdgeInsets.all(16),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 3, color: Colors.grey),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '가게명을 입력하세요.';
+                    Autocomplete<RestaurantName>(
+                      optionsBuilder: (textEditingValue) {
+                        if (textEditingValue.text != "") {
+                          return controller.countryNames.where((RestaurantName country) => country
+                              .name
+                              .toLowerCase()
+                              .contains(textEditingValue.text
+                              .toLowerCase()))
+                              .toList();
+                        } else {
+                          return controller.countryNames
+                              .where((RestaurantName country) => country
+                              .name
+                              .toLowerCase()
+                              .contains("?"))
+                              .toList();
                         }
-                        return null;
                       },
-                      onFieldSubmitted: (value) async {
-                        String newName = DatabaseService().getImage(value);
-                        print(newName);
-                        var urlRef = firebaseStorage.child('$newName.jpg');
-                        imgUrl = await urlRef.getDownloadURL();
+                      displayStringForOption:
+                          (RestaurantName country) => country.name,
+                      fieldViewBuilder: (BuildContext context,
+                          TextEditingController
+                          fieldTextEditingController,
+                          FocusNode fieldFocusNode,
+                          VoidCallback onFieldSubmitted) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            hintText: '가게명을 입력해주세요',
+                            icon: const Icon(CupertinoIcons.search, color: Colors.black,),
+                            iconColor: Colors.black,
+                            hintStyle: Theme.of(context)
+                                .inputDecorationTheme
+                                .hintStyle,
+                            contentPadding: const EdgeInsets.all(16),
+                            border: const OutlineInputBorder(
+                              borderSide:
+                              BorderSide(width: 3, color: Colors.grey),
+                            ),
+                          ),
+                          controller: fieldTextEditingController,
+                          focusNode: fieldFocusNode,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '가게명을 입력하세요.';
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (value) async {
+                            String newName = DatabaseService().getImage(value);
+                            print(newName);
+                            var urlRef = firebaseStorage.child('$newName.jpg');
+                            imgUrl = await urlRef.getDownloadURL();
+                          },
+                        );
+                      },
+                      onSelected: (RestaurantName selection) {
+                        print('Selected: ${selection.name}');
+                      },
+                      optionsViewBuilder: (BuildContext context,
+                          AutocompleteOnSelected<RestaurantName>
+                          onSelected,
+                          Iterable<RestaurantName> country) {
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 30.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(20)),
+                                width: MediaQuery.of(context).size.width *
+                                    0.79,
+                                child: ListView.builder(
+                                    physics:
+                                    const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(1.0),
+                                    itemCount: country.length,
+                                    itemBuilder: (BuildContext context,
+                                        int index) {
+                                      final RestaurantName option =
+                                      country.elementAt(index);
+                                      return GestureDetector(
+                                        onTap: () {
+                                          onSelected(option);
+                                        },
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              title: Text(
+                                                option.name,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                    FontWeight.bold),
+                                              ),
+                                            ),
+                                            Divider()
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.alarm),
-                        //Text("주문 예정 시간"),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        // OrderTimeButton
-                        //Expanded(child: OrderTimeButton()),
-                        Expanded(child: TimerWidget(16))
-                      ],
-                    ),
+                    TimerWidget(16),
                     const SizedBox(
                       height: 25,
                     ),
@@ -158,80 +228,61 @@ class AddChatRoom extends StatelessWidget {
                     // const SizedBox(
                     //   height: 20,
                     // ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.delivery_dining, size: 30,),
-                            const SizedBox(width: 10,),
-                            Expanded(
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  pickup = value;
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: "예) 비전관, 오석관 등",
-                                  //labelText: "수령 장소",
-                                  contentPadding: EdgeInsets.all(16),
-                                  // floatingLabelBehavior:
-                                  //     FloatingLabelBehavior.always,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 3, color: Colors.grey),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '수령할 장소를 입력하세요.';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
+                    TextFormField(
+                      onChanged: (value) {
+                        pickup = value;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "예) 비전관, 오석관 등",
+                        icon: const Icon(Icons.delivery_dining, color: Colors.black,),
+                        iconColor: Colors.black,
+                        hintStyle: Theme.of(context)
+                            .inputDecorationTheme
+                            .hintStyle,
+                        contentPadding: const EdgeInsets.all(16),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                          BorderSide(width: 3, color: Colors.grey),
                         ),
-                        const SizedBox(
-                          height: 25,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '수령할 장소를 입력하세요.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        maxPeople = value;
+                      },
+                      controller: _maxPeopleController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: "예) 2, 3",
+                        icon: const Icon(Icons.groups_rounded, color: Colors.black,),
+                        iconColor: Colors.black,
+                        hintStyle: Theme.of(context)
+                            .inputDecorationTheme
+                            .hintStyle,
+                        contentPadding: const EdgeInsets.all(16),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                          BorderSide(width: 3, color: Colors.grey),
                         ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.groups_rounded,
-                            ),
-                            const SizedBox(width: 15,),
-                            Expanded(
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  maxPeople = value;
-                                },
-                                controller: _maxPeopleController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.all(10),
-                                  hintText: "예) 2, 3",
-                                  // labelText: "최대 인원",
-                                  // floatingLabelBehavior:
-                                  // FloatingLabelBehavior.always,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 3, color: Colors.grey),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '최대 인원을 입력하세요.';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 60,
-                        ),
-                      ],
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '최대 인원을 입력하세요.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 60,
                     ),
                   ],
                 ),

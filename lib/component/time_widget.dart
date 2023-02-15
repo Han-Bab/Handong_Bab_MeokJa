@@ -26,20 +26,16 @@ class TimerWidget extends GetView<OrderTimeButtonController> {
         format: format,
         decoration: InputDecoration(
           hintText: '주문 예정 시간을 설정해주세요',
+          icon: const Icon(Icons.alarm, color: Colors.black,),
           iconColor: Colors.black,
-          // labelText: '주문 예정 시간',
-          // floatingLabelBehavior: FloatingLabelBehavior.always,
-          // labelStyle: Theme.of(context)
-          //     .inputDecorationTheme
-          //     .labelStyle,
           hintStyle: Theme.of(context)
               .inputDecorationTheme
               .hintStyle,
-          contentPadding: EdgeInsets.all(padding),
+          contentPadding: const EdgeInsets.all(16),
           border: const OutlineInputBorder(
             borderSide:
             BorderSide(width: 3, color: Colors.grey),
-          )
+          ),
         ),
         onShowPicker: (context, currentValue) async {
           final time = await showTimePicker(

@@ -12,7 +12,12 @@ class SearchController extends GetxController {
       RestaurantName(name: "행복한 마라탕"),
       RestaurantName(name: "꼬꼬뽀끼"),
       RestaurantName(name: "BBQ"),
-      RestaurantName(name: "행복해요"),
+      RestaurantName(name: "땅땅치킨"),
+      RestaurantName(name: "동궁찜닭"),
+      RestaurantName(name: "명성"),
+      RestaurantName(name: "류엔돈까스"),
+      RestaurantName(name: "삼촌네"),
+      RestaurantName(name: "신전떡볶이"),
     ];
   }
 }
