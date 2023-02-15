@@ -9,19 +9,12 @@ class KakaoIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     '카카오 계좌 연결 방법',
-      //     style: TextStyle(color: Colors.black87),
-      //   ),
-      //   backgroundColor: Colors.white,
-      // ),
       body: IntroductionScreen(
         pages: [
           PageViewModel(
               title: "카카오톡 접속",
               body: "카카오톡에 접속 후 하단의 5개의 버튼 중"
-                  "\n가장 오른쪽 버튼을 눌러 더보기란으로 이동하고"
+                  "\n5번째 버튼(…)을 눌러 더보기란으로 이동하고"
                   "\n우측 상단 버튼을 클릭합니다.",
               image: Image.asset("assets/images/카카오온보딩1.png"),
               decoration: getPageDecorationCut()),
