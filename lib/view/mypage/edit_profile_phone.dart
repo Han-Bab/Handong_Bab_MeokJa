@@ -81,7 +81,7 @@ class EditProfilePhone extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
         child: ElevatedButton(
           onPressed: () {
-            authController.editInfo('userPhone', userPhone.text);
+            authController.editInfo('userPhone', Get.arguments, userPhone.text);
             Get.off(() => EditProfile(), transition: Transition.upToDown);
           },
           style: ElevatedButton.styleFrom(

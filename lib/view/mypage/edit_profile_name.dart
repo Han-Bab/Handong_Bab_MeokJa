@@ -78,7 +78,7 @@ class EditProfileName extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
         child: ElevatedButton(
           onPressed: () {
-            authController.editInfo('userName', userName.text);
+            authController.editInfo('userName', Get.arguments, userName.text);
             Get.off(() => EditProfile(), transition: Transition.upToDown);
           },
           style: ElevatedButton.styleFrom(
