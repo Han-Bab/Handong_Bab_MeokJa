@@ -56,6 +56,8 @@ dependencies:
   get:
   datetime_picker_formfield_new: ^2.0.0
   firebase_storage: ^11.0.11
+  firebase_messaging: ^14.2.2
+
 
 
 

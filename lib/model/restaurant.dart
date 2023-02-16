@@ -11,6 +11,7 @@ class Restaurant {
   final String admin;
   String pickup;
   List<dynamic> members;
+  String recentMessageSender;
   //bool newPerson;
 
   Restaurant({
@@ -25,6 +26,7 @@ class Restaurant {
     required this.pickup,
     required this.members,
     //required this.newPerson
+    required this.recentMessageSender
   });
 
 
@@ -40,6 +42,7 @@ class Restaurant {
         admin: snap['admin'],
         pickup: snap['pickup'],
         members: snap['members'],
+        recentMessageSender: snap['recentMessageSender'],
         //newPerson: snap['newPerson']
     );
     return restaurant;
