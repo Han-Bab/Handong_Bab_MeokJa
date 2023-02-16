@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -19,7 +18,6 @@ class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
 
   final TextEditingController _maxPeopleController = TextEditingController();
-  Reference get firebaseStorage => FirebaseStorage.instance.ref();
   final authController = AuthController();
   final controller = Get.put(SearchController());
   final orderTimeController = Get.put(OrderTimeButtonController());
@@ -28,13 +26,6 @@ class AddChatRoom extends StatelessWidget {
   String maxPeople = "";
   final imageController = Get.put(ImageController());
   String restaurant = "";
-
-  // searchImage(String value) async {
-  //   restaurant = value;
-  //   String newName = DatabaseService().getImage(value);
-  //   var urlRef = firebaseStorage.child('$newName.jpg');
-  //   imgUrl.image = await urlRef.getDownloadURL();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +70,7 @@ class AddChatRoom extends StatelessWidget {
                             ),
                           );
                         },
-                        fit: BoxFit.cover, errorBuilder:
+                        fit: imageController.flag.value != 1 ? BoxFit.cover : BoxFit.fitHeight, errorBuilder:
                             (BuildContext context, Object exception,
                                 StackTrace? stackTrace) {
                       return Image.asset("assets/hanbab_icon.png",
@@ -146,10 +137,10 @@ class AddChatRoom extends StatelessWidget {
                             restaurant = value;
                             imageController.searchImage(value);
                           },
+                          textInputAction: TextInputAction.next,
                         );
                       },
                       onSelected: (RestaurantName selection) async {
-                        print('Selected: ${selection.name}');
                         restaurant = selection.name;
                         imageController.searchImage(selection.name);
                         },
@@ -272,6 +263,7 @@ class AddChatRoom extends StatelessWidget {
                         }
                         return null;
                       },
+                      textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(
                       height: 25,
@@ -301,65 +293,68 @@ class AddChatRoom extends StatelessWidget {
                         }
                         return null;
                       },
+                      textInputAction: TextInputAction.done,
                     ),
                     const SizedBox(
-                      height: 60,
+                      height: 40,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  imageController.removeData();
+                                  Get.off(() => MainScreen(), transition: Transition.zoom);
+                                },
+                                child: const Text("취소하기"),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if(_formKey.currentState!.validate()){
+                                  var result = await FirebaseFirestore.instance
+                                      .collection('user')
+                                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                                      .get();
+                                  String userName = result['userName'];
+                                  String nickName = result['userNickName'];
+                                  DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                                      .createGroup(
+                                      userName,
+                                      nickName,
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                      restaurant.toUpperCase(),
+                                      orderTimeController.orderTime.value,
+                                      pickup,
+                                      maxPeople);
+                                  Get.snackbar(
+                                      '생성완료!',
+                                      '채팅방이 생성되었습니다!',
+                                      backgroundColor: Colors.white,
+                                      snackPosition: SnackPosition.BOTTOM
+                                  );
+                                  imageController.removeData();
+                                  Get.to(() => MainScreen(), transition: Transition.zoom);
+                                }
+                              },
+                              child: const Text("만들기"),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
               )
             ],
           ),
-        ),
-      ),
-      bottomSheet: Container(
-        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.off(() => MainScreen());
-                },
-                child: const Text("취소하기"),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)
-              ),
-            ),
-            const SizedBox(
-              width: 25,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if(_formKey.currentState!.validate()){
-                    var result = await FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .get();
-                    String userName = result['userName'];
-                    String nickName = result['userNickName'];
-                    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-                        .createGroup(
-                            userName,
-                            nickName,
-                            FirebaseAuth.instance.currentUser!.uid,
-                            restaurant.toUpperCase(),
-                            orderTimeController.orderTime.value,
-                            pickup,
-                            maxPeople);
-                    Get.snackbar(
-                      '생성완료!',
-                      '채팅방이 생성되었습니다!',
-                      backgroundColor: Colors.white,
-                      snackPosition: SnackPosition.BOTTOM
-                    );
-                    Get.to(() => MainScreen());
-                  }
-                },
-                child: const Text("만들기"),
-              ),
-            )
-          ],
         ),
       ),
     );

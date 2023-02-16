@@ -18,7 +18,7 @@ class MainBottomBarController extends GetxController {
     print('bottombar index');
     selectedIndex(index);
     if (selectedIndex.value == 2) {
-      Get.off(() => AddChatRoom());
+      Get.off(() => AddChatRoom(), transition: Transition.zoom);
       selectedIndex(0);
     }
   }

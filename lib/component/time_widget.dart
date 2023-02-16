@@ -59,6 +59,7 @@ class TimerWidget extends GetView<OrderTimeButtonController> {
             return '주문 예정 시간을 설정해주세요.';
           }
         },
+        textInputAction: TextInputAction.next,
       ),
     ]);
   }
