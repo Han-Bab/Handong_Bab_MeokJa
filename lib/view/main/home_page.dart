@@ -218,7 +218,7 @@ class HomePage extends StatelessWidget {
                     //   return const CircularProgressIndicator();
                     // }
                     //error가 발생하게 될 경우 반환하게 되는 부분
-                     if (snapshot.hasError) {
+                    if (snapshot.hasError) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -409,15 +409,14 @@ class HomePage extends StatelessWidget {
                                                                           child:
                                                                               Image.network(
                                                                             homeController.restaurants[index].imgUrl,
-                                                                            loadingBuilder: (BuildContext? context, Widget? child,
+                                                                            loadingBuilder: (BuildContext? context,
+                                                                                Widget? child,
                                                                                 ImageChunkEvent? loadingProgress) {
-                                                                              if (loadingProgress == null) return child!;
+                                                                              if (loadingProgress == null)
+                                                                                return child!;
                                                                               return Center(
                                                                                 child: CircularProgressIndicator(
-                                                                                  value: loadingProgress.expectedTotalBytes != null
-                                                                                      ? loadingProgress.cumulativeBytesLoaded /
-                                                                                      loadingProgress.expectedTotalBytes!
-                                                                                      : null,
+                                                                                  value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                                                                 ),
                                                                               );
                                                                             },
@@ -582,15 +581,15 @@ class HomePage extends StatelessWidget {
                                                                           homeController
                                                                               .restaurants[index]
                                                                               .imgUrl,
-                                                                          loadingBuilder: (BuildContext? context, Widget? child,
+                                                                          loadingBuilder: (BuildContext? context,
+                                                                              Widget? child,
                                                                               ImageChunkEvent? loadingProgress) {
-                                                                            if (loadingProgress == null) return child!;
+                                                                            if (loadingProgress ==
+                                                                                null)
+                                                                              return child!;
                                                                             return Center(
                                                                               child: CircularProgressIndicator(
-                                                                                value: loadingProgress.expectedTotalBytes != null
-                                                                                    ? loadingProgress.cumulativeBytesLoaded /
-                                                                                    loadingProgress.expectedTotalBytes!
-                                                                                    : null,
+                                                                                value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                                                               ),
                                                                             );
                                                                           },
