@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/view/mypage/edit_profile.dart';
+import 'package:han_bab/view/mypage/report_bug.dart';
 import '../mypage/onboarding_page.dart';
 
 class MyPage extends StatelessWidget {
@@ -343,7 +344,7 @@ class MyPage extends StatelessWidget {
             Card(
               child: ListTile(
                 title: const Text(
-                  '개발자에게 건의하기',
+                  '고객센터',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -353,7 +354,9 @@ class MyPage extends StatelessWidget {
                   CupertinoIcons.ellipses_bubble,
                   color: Colors.black87,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => ReportBug(), transition: Transition.rightToLeft);
+                },
               ),
             ),
             Card(
