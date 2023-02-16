@@ -107,21 +107,22 @@ class EditProfile extends StatelessWidget {
                   width: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.to(
-                      () => EditProfileName(),
-                      transition: Transition.downToUp,
-                      arguments: userName,
-                    );
-                  },
+                  onPressed: null,
+                  // () {
+                  // Get.to(
+                  //   () => EditProfileName(),
+                  //   transition: Transition.downToUp,
+                  //   arguments: userName,
+                  // );
+                  // },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
                     elevation: 0,
-                    side: const BorderSide(
-                      color: Colors.black,
-                    ),
+                    // side: const BorderSide(
+                    //   color: Colors.black,
+                    // ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),

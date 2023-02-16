@@ -342,7 +342,8 @@ class Content extends StatelessWidget {
                     Get.snackbar('알림', '게시글을 삭제했습니다',
                         snackPosition: SnackPosition.BOTTOM,
                         duration: const Duration(milliseconds: 1500),
-                        backgroundColor: Colors.lightBlue);
+                        backgroundColor: Colors.lightBlue,
+                        colorText: Colors.white);
                     Get.off(() => MainScreen(), arguments: 1);
                   },
                   child: Text("글 삭제"),
