@@ -90,6 +90,7 @@ class CommunityPage extends StatelessWidget {
                                             child: Text(
                                               communityController
                                                   .communityList[index].title,
+                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,

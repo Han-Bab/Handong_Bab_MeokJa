@@ -142,7 +142,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> editInfo(String field, String info) async {
+  Future<void> editInfo(String field, String oldInfo, String info) async {
     try {
       final user = authentication.currentUser;
       if (field == 'userName') {
@@ -160,6 +160,18 @@ class AuthController extends GetxController {
             .update({
           'userNickName': info,
         });
+        await FirebaseFirestore.instance
+            .collection('community')
+            .where('writer', isEqualTo: oldInfo)
+            .snapshots()
+            .forEach((element) {
+          for (var doc in element.docs) {
+            doc.reference.update({
+              'writer': info,
+            });
+          }
+        });
+        // 댓글 닉네임도 모두 변경해줘야 함.
       }
       if (field == 'userPhone') {
         await FirebaseFirestore.instance
