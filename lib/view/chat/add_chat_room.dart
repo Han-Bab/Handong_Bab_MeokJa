@@ -10,6 +10,7 @@ import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
 import 'package:han_bab/view/main/main_screen.dart';
 import '../../component/database_service.dart';
+import '../../controller/image_controller.dart';
 import '../../controller/search_controller.dart';
 import '../../model/search.dart';
 
@@ -25,8 +26,15 @@ class AddChatRoom extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   String pickup = "";
   String maxPeople = "";
-  String imgUrl = "";
+  final imageController = Get.put(ImageController());
   String restaurant = "";
+
+  // searchImage(String value) async {
+  //   restaurant = value;
+  //   String newName = DatabaseService().getImage(value);
+  //   var urlRef = firebaseStorage.child('$newName.jpg');
+  //   imgUrl.image = await urlRef.getDownloadURL();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +66,26 @@ class AddChatRoom extends StatelessWidget {
                 child: SizedBox(
                   width: 400,
                   height: 200,
-                  child: Image.network(imgUrl,
-                      fit: BoxFit.cover, errorBuilder:
-                          (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                    return Image.asset("assets/hanbab_icon.png",
-                        fit: BoxFit.fitHeight);
-                  }),
+                  child: Obx(() => Image.network(imageController.image.value,
+                        loadingBuilder: (BuildContext? context,
+                            Widget? child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress ==
+                              null)
+                            return child!;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                            ),
+                          );
+                        },
+                        fit: BoxFit.cover, errorBuilder:
+                            (BuildContext context, Object exception,
+                                StackTrace? stackTrace) {
+                      return Image.asset("assets/hanbab_icon.png",
+                          fit: BoxFit.fitHeight);
+                    }),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -123,19 +144,15 @@ class AddChatRoom extends StatelessWidget {
                           },
                           onFieldSubmitted: (value) async {
                             restaurant = value;
-                            String newName = DatabaseService().getImage(value);
-                            var urlRef = firebaseStorage.child('$newName.jpg');
-                            imgUrl = await urlRef.getDownloadURL();
+                            imageController.searchImage(value);
                           },
                         );
                       },
                       onSelected: (RestaurantName selection) async {
                         print('Selected: ${selection.name}');
                         restaurant = selection.name;
-                        String newName = DatabaseService().getImage(selection.name);
-                        var urlRef = firebaseStorage.child('$newName.jpg');
-                        imgUrl = await urlRef.getDownloadURL();
-                      },
+                        imageController.searchImage(selection.name);
+                        },
                       optionsViewBuilder: (BuildContext context,
                           AutocompleteOnSelected<RestaurantName>
                           onSelected,
