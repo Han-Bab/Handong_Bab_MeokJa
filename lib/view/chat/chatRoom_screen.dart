@@ -71,11 +71,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Future<void> payModal(context) async {
     bool visibility = false;
-    var result = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(getId(restaurant.admin))
-        .get();
-    String account = result['userAccount'];
     showDialog(
         context: context,
         builder: (context) {
@@ -97,10 +92,6 @@ class _ChatRoomState extends State<ChatRoom> {
                     ),
                     const SizedBox(
                       height: 5,
-                    ),
-                    Text(
-                      account,
-                      style: const TextStyle(fontSize: 15),
                     ),
                     const SizedBox(
                       height: 20,
@@ -154,35 +145,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                 ),
                                 Text(
                                   "송금",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ))),
-                    TextButton(
-                        onPressed: () {},
-                        child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                visibility = true;
-                                Clipboard.setData(ClipboardData(text: account));
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text(
-                                  "계좌변호 ",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Text(
-                                  "복사",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
@@ -817,6 +779,8 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
+                  print(restaurant.recentMessageSender);
+                  print('최근 ${restaurant.recentMessageSender} user $userName');
                   _needsScroll = true;
                   return MessageTile(
                       message: snapshot.data.docs[index]['message'],
