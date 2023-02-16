@@ -17,7 +17,6 @@ import '../../model/search.dart';
 class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
 
-  final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _maxPeopleController = TextEditingController();
   Reference get firebaseStorage => FirebaseStorage.instance.ref();
   final authController = AuthController();
@@ -27,6 +26,7 @@ class AddChatRoom extends StatelessWidget {
   String pickup = "";
   String maxPeople = "";
   String imgUrl = "";
+  String restaurant = "";
 
   @override
   Widget build(BuildContext context) {
@@ -122,15 +122,19 @@ class AddChatRoom extends StatelessWidget {
                             return null;
                           },
                           onFieldSubmitted: (value) async {
+                            restaurant = value;
                             String newName = DatabaseService().getImage(value);
-                            print(newName);
                             var urlRef = firebaseStorage.child('$newName.jpg');
                             imgUrl = await urlRef.getDownloadURL();
                           },
                         );
                       },
-                      onSelected: (RestaurantName selection) {
+                      onSelected: (RestaurantName selection) async {
                         print('Selected: ${selection.name}');
+                        restaurant = selection.name;
+                        String newName = DatabaseService().getImage(selection.name);
+                        var urlRef = firebaseStorage.child('$newName.jpg');
+                        imgUrl = await urlRef.getDownloadURL();
                       },
                       optionsViewBuilder: (BuildContext context,
                           AutocompleteOnSelected<RestaurantName>
@@ -322,11 +326,10 @@ class AddChatRoom extends StatelessWidget {
                             userName,
                             nickName,
                             FirebaseAuth.instance.currentUser!.uid,
-                            _restaurantController.text.toUpperCase(),
+                            restaurant.toUpperCase(),
                             orderTimeController.orderTime.value,
                             pickup,
-                            maxPeople)
-                        .whenComplete(() {});
+                            maxPeople);
                     Get.snackbar(
                       '생성완료!',
                       '채팅방이 생성되었습니다!',

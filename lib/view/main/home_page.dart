@@ -210,15 +210,15 @@ class HomePage extends StatelessWidget {
             child: Center(
               child: FutureBuilder(
                   future: Future.delayed(
-                    const Duration(milliseconds: 2500),
+                    const Duration(milliseconds: 2),
                   ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
+                    // if (snapshot.connectionState == ConnectionState.waiting) {
+                    //   return const CircularProgressIndicator();
+                    // }
                     //error가 발생하게 될 경우 반환하게 되는 부분
-                    else if (snapshot.hasError) {
+                     if (snapshot.hasError) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -409,18 +409,18 @@ class HomePage extends StatelessWidget {
                                                                           child:
                                                                               Image.network(
                                                                             homeController.restaurants[index].imgUrl,
-                                                                            // loadingBuilder: (BuildContext? context, Widget? child,
-                                                                            //     ImageChunkEvent? loadingProgress) {
-                                                                            //   if (loadingProgress == null) return child!;
-                                                                            //   return Center(
-                                                                            //     child: CircularProgressIndicator(
-                                                                            //       value: loadingProgress.expectedTotalBytes != null
-                                                                            //           ? loadingProgress.cumulativeBytesLoaded /
-                                                                            //           loadingProgress.expectedTotalBytes!
-                                                                            //           : null,
-                                                                            //     ),
-                                                                            //   );
-                                                                            // },
+                                                                            loadingBuilder: (BuildContext? context, Widget? child,
+                                                                                ImageChunkEvent? loadingProgress) {
+                                                                              if (loadingProgress == null) return child!;
+                                                                              return Center(
+                                                                                child: CircularProgressIndicator(
+                                                                                  value: loadingProgress.expectedTotalBytes != null
+                                                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                                                      loadingProgress.expectedTotalBytes!
+                                                                                      : null,
+                                                                                ),
+                                                                              );
+                                                                            },
                                                                             fit:
                                                                                 BoxFit.cover,
                                                                             errorBuilder: (BuildContext? context,
@@ -582,18 +582,18 @@ class HomePage extends StatelessWidget {
                                                                           homeController
                                                                               .restaurants[index]
                                                                               .imgUrl,
-                                                                          // loadingBuilder: (BuildContext? context, Widget? child,
-                                                                          //     ImageChunkEvent? loadingProgress) {
-                                                                          //   if (loadingProgress == null) return child!;
-                                                                          //   return Center(
-                                                                          //     child: CircularProgressIndicator(
-                                                                          //       value: loadingProgress.expectedTotalBytes != null
-                                                                          //           ? loadingProgress.cumulativeBytesLoaded /
-                                                                          //           loadingProgress.expectedTotalBytes!
-                                                                          //           : null,
-                                                                          //     ),
-                                                                          //   );
-                                                                          // },
+                                                                          loadingBuilder: (BuildContext? context, Widget? child,
+                                                                              ImageChunkEvent? loadingProgress) {
+                                                                            if (loadingProgress == null) return child!;
+                                                                            return Center(
+                                                                              child: CircularProgressIndicator(
+                                                                                value: loadingProgress.expectedTotalBytes != null
+                                                                                    ? loadingProgress.cumulativeBytesLoaded /
+                                                                                    loadingProgress.expectedTotalBytes!
+                                                                                    : null,
+                                                                              ),
+                                                                            );
+                                                                          },
                                                                           fit: BoxFit
                                                                               .cover,
                                                                           errorBuilder: (BuildContext? context,
