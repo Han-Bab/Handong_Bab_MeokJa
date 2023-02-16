@@ -56,7 +56,6 @@ dependencies:
   checkbox_formfield: ^0.2.0
   sort: ^0.0.2
   datetime_picker_formfield_new: ^2.0.0
-  firebase_storage: ^11.0.11
   firebase_messaging: ^14.2.2
   flutter_email_sender: ^5.2.0
   device_info_plus: ^8.1.0
