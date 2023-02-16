@@ -126,7 +126,8 @@ class _EditProfileNickState extends State<EditProfileNick> {
             }
             _tryValidation();
             if (validation) {
-              authController.editInfo('userNickName', userNickName.text);
+              authController.editInfo(
+                  'userNickName', Get.arguments, userNickName.text);
               Get.off(() => EditProfile(), transition: Transition.upToDown);
             }
           },
