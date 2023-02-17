@@ -27,7 +27,7 @@ class CommunityPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        elevation: 2, // 경계선 없애는 늒임
+        elevation: 0, // 경계선 없애는 늒임
       ),
       body: Center(
         child: FutureBuilder(

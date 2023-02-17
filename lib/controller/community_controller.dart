@@ -26,6 +26,7 @@ class CommunityController extends GetxController {
           board['writer'],
           board['regdate'],
           board['regtime'],
+          board['visibility'],
           board['timestamp'],
           board['likeCount'],
           board['commentCount'],
@@ -51,6 +52,7 @@ class CommunityController extends GetxController {
             '${'${dt.month}'.padLeft(2, "0")}/${'${dt.day}'.padLeft(2, '0')}',
         'regtime':
             '${'${dt.hour}'.padLeft(2, '0')}:${'${dt.minute}'.padLeft(2, '0')}',
+        'visibility': 'public',
         'timestamp': Timestamp.now(),
         'likeCount': 0,
         'commentCount': 0,

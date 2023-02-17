@@ -160,18 +160,10 @@ class AuthController extends GetxController {
             .update({
           'userNickName': info,
         });
-        await FirebaseFirestore.instance
-            .collection('community')
-            .where('writer', isEqualTo: oldInfo)
-            .snapshots()
-            .forEach((element) {
-          for (var doc in element.docs) {
-            doc.reference.update({
-              'writer': info,
-            });
-          }
-        });
-        // 댓글 닉네임도 모두 변경해줘야 함.
+        // 게시글 작성자 닉네임도 변경
+        editContentInfo(oldInfo, info);
+        // 댓글 작성자 닉네임도 변경
+        editCommentInfo(oldInfo, info);
       }
       if (field == 'userPhone') {
         await FirebaseFirestore.instance
@@ -191,6 +183,41 @@ class AuthController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
+  }
+
+  Future<void> editContentInfo(String oldInfo, String info) async {
+    await FirebaseFirestore.instance
+        .collection('community')
+        .where('writer', isEqualTo: oldInfo)
+        .snapshots()
+        .forEach((element) {
+      for (var doc in element.docs) {
+        doc.reference.update({
+          'writer': info,
+        });
+      }
+    });
+  }
+
+  Future<void> editCommentInfo(String oldInfo, String info) async {
+    // 댓글 닉네임도 모두 변경해줘야 함.
+    await FirebaseFirestore.instance
+        .collection('community')
+        .where('visibility', isEqualTo: "public")
+        .snapshots()
+        .forEach((community) {
+      for (var commuDoc in community.docs) {
+        commuDoc.reference
+            .collection('comments')
+            .where('writer', isEqualTo: oldInfo)
+            .snapshots()
+            .forEach((comments) {
+          for (var comment in comments.docs) {
+            comment.reference.update({'writer': info});
+          }
+        });
+      }
+    });
   }
 
   void login(Map userInfo) async {

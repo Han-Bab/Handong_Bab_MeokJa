@@ -8,6 +8,7 @@ class CommunityModel {
   String writer;
   String regdate;
   String regtime;
+  String visibility;
   Timestamp timestamp;
   int likeCount;
   int commentCount;
@@ -20,6 +21,7 @@ class CommunityModel {
       this.writer,
       this.regdate,
       this.regtime,
+      this.visibility,
       this.timestamp,
       this.likeCount,
       this.commentCount);
