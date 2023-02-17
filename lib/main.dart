@@ -21,7 +21,6 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
-
 }
 
 class _MyAppState extends State<MyApp> {
@@ -46,7 +45,12 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'fonts',
         brightness: Brightness.light,
+        //appBarTheme: AppBarTheme(color: Colors.orange,),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.orange[300],
+        ),
       ),
+
       //themeMode: ThemeMode.system,
     );
   }
