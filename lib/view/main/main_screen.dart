@@ -24,17 +24,15 @@ class MainScreen extends StatelessWidget {
       },
       child: Scaffold(
         body: Obx(
-          () => SafeArea(
-            child: IndexedStack(
-              index: mainBottomBarController.selectedIndex.value,
-              children: [
-                HomePage(),
-                CommunityPage(),
-                Container(),
-                GroupListViewDemo(),
-                MyPage(),
-              ],
-            ),
+          () => IndexedStack(
+            index: mainBottomBarController.selectedIndex.value,
+            children: [
+              HomePage(),
+              CommunityPage(),
+              Container(),
+              GroupListViewDemo(),
+              MyPage(),
+            ],
           ),
         ),
         bottomNavigationBar: const MainBottomBar(),
