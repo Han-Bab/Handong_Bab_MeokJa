@@ -133,7 +133,7 @@ class AddChatRoom extends StatelessWidget {
                             }
                             return null;
                           },
-                          onFieldSubmitted: (value) async {
+                          onChanged: (value) async {
                             restaurant = value;
                             imageController.searchImage(value);
                           },

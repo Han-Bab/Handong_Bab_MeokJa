@@ -85,7 +85,13 @@ class DatabaseService  extends GetxService{
   Future createGroup(String userName, String nickName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
-    var imgUrl = await urlRef.getDownloadURL();
+    var imgUrl;
+    try {
+      imgUrl = await urlRef.getDownloadURL();
+    }catch(e) {
+      var urlRef = firebaseStorage.child('hanbab_icon.png');
+      imgUrl = await urlRef.getDownloadURL();
+    }
     print("url-------------------$imgUrl");
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
@@ -100,6 +106,7 @@ class DatabaseService  extends GetxService{
       "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
+      "recentMessageTime": "",
       //"newPerson": false
     });
     //update the members

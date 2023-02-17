@@ -393,53 +393,63 @@ class HomePage extends StatelessWidget {
                                                                     width: 100,
                                                                     height: 100,
                                                                     child:
-                                                                    ClipRRect(
-                                                                        borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20.0),
-                                                                        child: ImageFiltered(
-                                                                          imageFilter: ImageFilter.blur(
-                                                                              sigmaX: 1,
-                                                                              sigmaY: 1),
-                                                                          child: Image
-                                                                              .network(
-                                                                            homeController
-                                                                                .restaurants[index]
-                                                                                .imgUrl,
-                                                                            loadingBuilder: (BuildContext? context,
-                                                                                Widget? child,
-                                                                                ImageChunkEvent? loadingProgress) {
-                                                                              if (loadingProgress ==
-                                                                                  null)
-                                                                                return child!;
-                                                                              return Center(
-                                                                                child: CircularProgressIndicator(
-                                                                                  value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                                                ),
-                                                                              );
-                                                                            },
-                                                                            fit: BoxFit
-                                                                                .cover,
-                                                                            errorBuilder: (BuildContext? context,
-                                                                                Object? exception,
-                                                                                StackTrace? stackTrace) {
-                                                                              return Container(
-                                                                                height: 120,
-                                                                                width: 120,
-                                                                                decoration: BoxDecoration(
-                                                                                  border: Border.all(width: 3),
-                                                                                  borderRadius: BorderRadius.circular(20),
-                                                                                ),
-                                                                                child: ClipRRect(
-                                                                                    borderRadius: BorderRadius.circular(20.0),
-                                                                                    child: Image.asset(
-                                                                                      'assets/hanbab_icon.png',
-                                                                                      scale: 5,
-                                                                                    )),
-                                                                              );
-                                                                            },
+                                                                    Container(
+                                                                      decoration: homeController
+                                                                          .restaurants[index]
+                                                                          .imgUrl.contains("hanbab_icon.png") ? BoxDecoration(
+                                                                          border: Border.all(
+                                                                              color: Colors.orange
                                                                           ),
-                                                                        )),
+                                                                          borderRadius: BorderRadius.circular(20)
+                                                                      ) : const BoxDecoration(),
+                                                                      child: ClipRRect(
+                                                                          borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20.0),
+                                                                          child: ImageFiltered(
+                                                                            imageFilter: ImageFilter.blur(
+                                                                                sigmaX: 1,
+                                                                                sigmaY: 1),
+                                                                            child: Image
+                                                                                .network(
+                                                                              homeController
+                                                                                  .restaurants[index]
+                                                                                  .imgUrl,
+                                                                              loadingBuilder: (BuildContext? context,
+                                                                                  Widget? child,
+                                                                                  ImageChunkEvent? loadingProgress) {
+                                                                                if (loadingProgress ==
+                                                                                    null)
+                                                                                  return child!;
+                                                                                return Center(
+                                                                                  child: CircularProgressIndicator(
+                                                                                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                              fit: BoxFit
+                                                                                  .cover,
+                                                                              errorBuilder: (BuildContext? context,
+                                                                                  Object? exception,
+                                                                                  StackTrace? stackTrace) {
+                                                                                return Container(
+                                                                                  height: 120,
+                                                                                  width: 120,
+                                                                                  decoration: BoxDecoration(
+                                                                                    border: Border.all(width: 3),
+                                                                                    borderRadius: BorderRadius.circular(20),
+                                                                                  ),
+                                                                                  child: ClipRRect(
+                                                                                      borderRadius: BorderRadius.circular(20.0),
+                                                                                      child: Image.asset(
+                                                                                        'assets/hanbab_icon.png',
+                                                                                        scale: 5,
+                                                                                      )),
+                                                                                );
+                                                                              },
+                                                                            ),
+                                                                          )),
+                                                                    ),
                                                                   ), //image
                                                                   const SizedBox(
                                                                     width: 18,
@@ -626,48 +636,58 @@ class HomePage extends StatelessWidget {
                                                                     width: 100,
                                                                     height: 100,
                                                                     child:
-                                                                        ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(
-                                                                                    20.0),
-                                                                            child: Image
-                                                                                .network(
-                                                                              homeController
-                                                                                  .restaurants[index]
-                                                                                  .imgUrl,
-                                                                              loadingBuilder: (BuildContext? context,
-                                                                                  Widget? child,
-                                                                                  ImageChunkEvent? loadingProgress) {
-                                                                                if (loadingProgress ==
-                                                                                    null)
-                                                                                  return child!;
-                                                                                return Center(
-                                                                                  child: CircularProgressIndicator(
-                                                                                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                              fit: BoxFit
-                                                                                  .cover,
-                                                                              errorBuilder: (BuildContext? context,
-                                                                                  Object? exception,
-                                                                                  StackTrace? stackTrace) {
-                                                                                return Container(
-                                                                                  height: 120,
-                                                                                  width: 120,
-                                                                                  decoration: BoxDecoration(
-                                                                                    border: Border.all(width: 3),
-                                                                                    borderRadius: BorderRadius.circular(20),
-                                                                                  ),
-                                                                                  child: ClipRRect(
-                                                                                      borderRadius: BorderRadius.circular(20.0),
-                                                                                      child: Image.asset(
-                                                                                        'assets/hanbab_icon.png',
-                                                                                        scale: 5,
-                                                                                      )),
-                                                                                );
-                                                                              },
-                                                                            )),
+                                                                        Container(
+                                                                          decoration: homeController
+                                                                              .restaurants[index]
+                                                                              .imgUrl.contains("hanbab_icon.png") ? BoxDecoration(
+                                                                            border: Border.all(
+                                                                              color: Colors.orange
+                                                                            ),
+                                                                            borderRadius: BorderRadius.circular(20)
+                                                                          ) : BoxDecoration(),
+                                                                          child: ClipRRect(
+                                                                              borderRadius:
+                                                                                  BorderRadius.circular(
+                                                                                      20.0),
+                                                                              child: Image
+                                                                                  .network(
+                                                                                homeController
+                                                                                    .restaurants[index]
+                                                                                    .imgUrl,
+                                                                                loadingBuilder: (BuildContext? context,
+                                                                                    Widget? child,
+                                                                                    ImageChunkEvent? loadingProgress) {
+                                                                                  if (loadingProgress ==
+                                                                                      null)
+                                                                                    return child!;
+                                                                                  return Center(
+                                                                                    child: CircularProgressIndicator(
+                                                                                      value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                                                    ),
+                                                                                  );
+                                                                                },
+                                                                                fit: BoxFit
+                                                                                    .cover,
+                                                                                errorBuilder: (BuildContext? context,
+                                                                                    Object? exception,
+                                                                                    StackTrace? stackTrace) {
+                                                                                  return Container(
+                                                                                    height: 120,
+                                                                                    width: 120,
+                                                                                    decoration: BoxDecoration(
+                                                                                      border: Border.all(width: 3),
+                                                                                      borderRadius: BorderRadius.circular(20),
+                                                                                    ),
+                                                                                    child: ClipRRect(
+                                                                                        borderRadius: BorderRadius.circular(20.0),
+                                                                                        child: Image.asset(
+                                                                                          'assets/hanbab_icon.png',
+                                                                                          scale: 5,
+                                                                                        )),
+                                                                                  );
+                                                                                },
+                                                                              )),
+                                                                        ),
                                                                   ), //image
                                                                   const SizedBox(
                                                                     width: 18,
