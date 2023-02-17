@@ -66,9 +66,9 @@ class CommunityController extends GetxController {
     try {
       final docRef = FirebaseFirestore.instance.collection('community').doc(id);
       int likeCount =
-          await docRef.get().then((snapshot) => snapshot['likeCount']);
+          await docRef.get().then((snapshot) => snapshot['likeCount']) + 1;
       docRef.update({
-        'likeCount': likeCount + 1,
+        'likeCount': likeCount,
       });
       communityList[idx].likeCount += 1;
     } catch (e) {

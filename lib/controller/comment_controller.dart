@@ -84,23 +84,24 @@ class CommentController extends GetxController {
   }
 
   Future<void> deleteComment(int index) async {
+    String board = communityController.communityList[index].id;
     String commentID = commentList[index].id;
     try {
       final docRef =
-          FirebaseFirestore.instance.collection('community').doc(boardID);
+          FirebaseFirestore.instance.collection('community').doc(board);
       int commentCount =
           await docRef.get().then((snapshot) => snapshot['commentCount']);
+      commentCount -= 1;
       docRef.update({
-        'commentCount': commentCount - 1,
+        'commentCount': commentCount,
       });
-      communityController.communityList[index].commentCount -= 1;
-
       await FirebaseFirestore.instance
           .collection('community')
-          .doc(boardID)
+          .doc(board)
           .collection('comments')
           .doc(commentID)
           .delete();
+      communityController.communityList[index].commentCount -= 1;
     } catch (e) {
       print(e);
     }
@@ -109,7 +110,6 @@ class CommentController extends GetxController {
       update();
       communityController.getData();
       communityController.update();
-
       Get.snackbar("알림", "댓글을 삭제하셨습니다",
           backgroundColor: Colors.blue,
           colorText: Colors.white,
