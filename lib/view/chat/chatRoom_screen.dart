@@ -13,6 +13,10 @@ import '../../component/database_service.dart';
 import '../main/main_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+DateTime now = DateTime.now();
+DateFormat formatter = DateFormat('yyyy-M-dd');
+String strToday = formatter.format(now);
+
 class ChatRoom extends StatefulWidget {
   const ChatRoom({Key? key}) : super(key: key);
 
@@ -348,7 +352,8 @@ class _ChatRoomState extends State<ChatRoom> {
                                                 DateFormat("HH:mm")
                                                     .format(time!),
                                                 pickup,
-                                                maxPeople).whenComplete(() {
+                                                maxPeople)
+                                            .whenComplete(() {
                                           Get.back();
                                           Get.back();
                                           DatabaseService()
@@ -374,14 +379,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                             });
                                           });
 
-                                          Get.snackbar(
-                                              '수정완료!',
-                                              '채팅방이 수정되었습니다!',
+                                          Get.snackbar('수정완료!', '채팅방이 수정되었습니다!',
                                               backgroundColor: Colors.white,
-                                              snackPosition: SnackPosition.BOTTOM
-                                          );
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM);
                                         });
-
                                       }
                                     },
                                     child: const Text("수정하기"),
@@ -433,152 +435,161 @@ class _ChatRoomState extends State<ChatRoom> {
             children: [
               Expanded(
                 child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                  const ListTile(
-                    title: Text(
-                      '방 정보',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "가게이름: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.groupName}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "시간: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.orderTime}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "픽업장소: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.pickup}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 100, right: 100, bottom: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        modifyInfo(restaurant.groupName, restaurant.orderTime,
-                            restaurant.pickup, restaurant.maxPeople);
-                      },
-                      child: const Text("수정하기"),
-                      style: ButtonStyle(),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.grey[300],
-                    thickness: 1.0,
-                    indent: 2,
-                    endIndent: 2,
-                    height: 1,
-                  ),
-                  const ListTile(
-                    title: Text(
-                      '대화상대',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: restaurant.members!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (restaurant.members[index] == restaurant.admin) {
-                                return ListTile(
-                                    leading: Text(
-                                      "👑",
-                                      style: TextStyle(fontSize: 25),
-                                    ),
-                                    title: Text(getName(restaurant.members[index]),
-                                        style: const TextStyle(fontSize: 17)));
-                              } else {
-                                return ListTile(
-                                  leading: Text(""),
-                                  title: Text(getName(restaurant.members[index]),
-                                      style: const TextStyle(fontSize: 17)),
-                                );
-                              }
-                            }),
-                        Divider(
-                          color: Colors.grey[300],
-                          thickness: 1.0,
-                          indent: 2,
-                          endIndent: 2,
-                          height: 1,
+                      const ListTile(
+                        title: Text(
+                          '방 정보',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
                         ),
-                        ListTile(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
                           title: Row(
-                            children: const [
-                              Icon(CupertinoIcons.money_dollar_circle),
-                              SizedBox(
-                                width: 18,
+                            children: [
+                              const Text(
+                                "가게이름: ",
+                                style: TextStyle(fontSize: 15),
                               ),
                               Text(
-                                "정산하기",
-                                style: TextStyle(fontSize: 17),
+                                "${restaurant.groupName}",
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                          onTap: () {
-                            payModal(context);
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              const Text(
+                                "시간: ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                "${restaurant.orderTime}",
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              const Text(
+                                "픽업장소: ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                "${restaurant.pickup}",
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 100, right: 100, bottom: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            modifyInfo(
+                                restaurant.groupName,
+                                restaurant.orderTime,
+                                restaurant.pickup,
+                                restaurant.maxPeople);
                           },
+                          child: const Text("수정하기"),
+                          style: ButtonStyle(),
                         ),
-                        Divider(
-                          color: Colors.grey[300],
-                          thickness: 1.0,
-                          indent: 2,
-                          endIndent: 2,
-                          height: 1,
+                      ),
+                      Divider(
+                        color: Colors.grey[300],
+                        thickness: 1.0,
+                        indent: 2,
+                        endIndent: 2,
+                        height: 1,
+                      ),
+                      const ListTile(
+                        title: Text(
+                          '대화상대',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
                         ),
-                      ],
-                    ),
-                  ),
-
-                ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: restaurant.members!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (restaurant.members[index] ==
+                                      restaurant.admin) {
+                                    return ListTile(
+                                        leading: Text(
+                                          "👑",
+                                          style: TextStyle(fontSize: 25),
+                                        ),
+                                        title: Text(
+                                            getName(restaurant.members[index]),
+                                            style:
+                                                const TextStyle(fontSize: 17)));
+                                  } else {
+                                    return ListTile(
+                                      leading: Text(""),
+                                      title: Text(
+                                          getName(restaurant.members[index]),
+                                          style: const TextStyle(fontSize: 17)),
+                                    );
+                                  }
+                                }),
+                            Divider(
+                              color: Colors.grey[300],
+                              thickness: 1.0,
+                              indent: 2,
+                              endIndent: 2,
+                              height: 1,
+                            ),
+                            ListTile(
+                              title: Row(
+                                children: const [
+                                  Icon(CupertinoIcons.money_dollar_circle),
+                                  SizedBox(
+                                    width: 18,
+                                  ),
+                                  Text(
+                                    "정산하기",
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                payModal(context);
+                              },
+                            ),
+                            Divider(
+                              color: Colors.grey[300],
+                              thickness: 1.0,
+                              indent: 2,
+                              endIndent: 2,
+                              height: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
               ),
               ListTile(
                 title: Row(
@@ -612,10 +623,10 @@ class _ChatRoomState extends State<ChatRoom> {
                                     .get();
                                 String userName = result['userNickName'];
                                 DatabaseService(
-                                    uid: FirebaseAuth
-                                        .instance.currentUser!.uid)
+                                        uid: FirebaseAuth
+                                            .instance.currentUser!.uid)
                                     .groupOut(restaurant.groupId, userName,
-                                    restaurant.groupName);
+                                        restaurant.groupName);
 
                                 Get.to(() => MainScreen());
                               },
@@ -632,7 +643,9 @@ class _ChatRoomState extends State<ChatRoom> {
                       });
                 },
               ),
-              const SizedBox(height: 10,)
+              const SizedBox(
+                height: 10,
+              )
             ],
           ),
         )),
@@ -779,14 +792,19 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
-                  print(restaurant.recentMessageSender);
-                  print('최근 ${restaurant.recentMessageSender} user $userName');
                   _needsScroll = true;
-                  return MessageTile(
-                      message: snapshot.data.docs[index]['message'],
-                      sender: snapshot.data.docs[index]['sender'],
-                      sentByMe: userName == snapshot.data.docs[index]['sender'],
-                      time: snapshot.data.docs[index]['time']);
+                  return Column(
+                    children: [
+                      MessageTile(
+                          message: snapshot.data.docs[index]['message'],
+                          sender: snapshot.data.docs[index]['sender'],
+                          sentByMe:
+                              userName == snapshot.data.docs[index]['sender'],
+                          time: snapshot.data.docs[index]['time'],
+                          recentMessageTime: snapshot.data.docs[index]['recentTime']
+                      ),
+                    ],
+                  );
                 })
             : Container();
       },
@@ -798,10 +816,12 @@ class _ChatRoomState extends State<ChatRoom> {
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
-        "time": DateFormat("a h:mm:ss", "ko").format(DateTime.now()),
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+        "recentTime": restaurant.recentMessageTime
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       messageController.clear();
+      restaurant.recentMessageTime =  DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now());
     }
   }
 }

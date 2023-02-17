@@ -18,7 +18,12 @@ class ImageController extends GetxController {
   searchImage(String value) async {
     String newName = DatabaseService().getImage(value);
     var urlRef = firebaseStorage.child('$newName.jpg');
-    image.value = await urlRef.getDownloadURL();
+    try {
+      image.value = await urlRef.getDownloadURL();
+    } catch(e) {
+      var urlRef = firebaseStorage.child('hanbab_icon.png');
+      image.value = await urlRef.getDownloadURL();
+    }
   }
   removeData() async {
     var urlRef = firebaseStorage.child('hanbab_icon.png');
