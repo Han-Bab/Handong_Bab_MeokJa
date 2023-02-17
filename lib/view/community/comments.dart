@@ -51,7 +51,8 @@ class Comments extends GetView<CommentController> {
               trailing: IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                onPressed: () => iosShowBottomNotification(context, index),
+                onPressed: () =>
+                    iosShowBottomNotification(context, commentController.index),
                 icon: const Icon(
                   CupertinoIcons.ellipsis_vertical,
                   size: 18,
