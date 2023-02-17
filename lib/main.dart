@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:han_bab/view/main/main_screen.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
+
 }
 
 class _MyAppState extends State<MyApp> {
@@ -41,6 +43,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: LoginPage(),
+      theme: ThemeData(
+        fontFamily: 'fonts',
+        brightness: Brightness.light,
+      ),
+      //themeMode: ThemeMode.system,
     );
   }
 }
