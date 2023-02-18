@@ -324,11 +324,9 @@ class AddChatRoom extends StatelessWidget {
                                       .doc(FirebaseAuth.instance.currentUser!.uid)
                                       .get();
                                   String userName = result['userName'];
-                                  String nickName = result['userNickName'];
                                   DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
                                       .createGroup(
                                       userName,
-                                      nickName,
                                       FirebaseAuth.instance.currentUser!.uid,
                                       restaurant.toUpperCase(),
                                       orderTimeController.orderTime.value,
