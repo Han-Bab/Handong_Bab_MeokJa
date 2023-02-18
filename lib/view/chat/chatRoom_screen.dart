@@ -801,7 +801,8 @@ class _ChatRoomState extends State<ChatRoom> {
                           sentByMe:
                               userName == snapshot.data.docs[index]['sender'],
                           time: snapshot.data.docs[index]['time'],
-                          recentMessageTime: snapshot.data.docs[index]['recentTime']
+                          recentMessageTime: snapshot.data.docs[index]['recentTime'],
+                          recentMessageUser: snapshot.data.docs[index]['recentUser']
                       ),
                     ],
                   );
@@ -811,17 +812,24 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
-  sendMessage() {
+  sendMessage() async {
     if (messageController.text.isNotEmpty) {
+      DocumentReference d = FirebaseFirestore.instance.collection("groups").doc(restaurant.groupId);
+      DocumentSnapshot documentSnapshot = await d.get();
+      var sender = documentSnapshot['recentMessageSender'];
+      var time = documentSnapshot['recentMessageTime'];
+
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
         "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
-        "recentTime": restaurant.recentMessageTime
+        "recentTime": time,
+        "recentUser": sender
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       messageController.clear();
-      restaurant.recentMessageTime =  DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now());
+      // restaurant.recentMessageTime =  DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now());
+      // restaurant.recentMessageSender = userName;
     }
   }
 }
