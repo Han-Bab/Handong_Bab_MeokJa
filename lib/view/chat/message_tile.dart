@@ -7,15 +7,14 @@ class MessageTile extends StatefulWidget {
   final String time;
   final String recentMessageTime;
 
-  const MessageTile(
-      {Key? key,
-        required this.message,
-        required this.sender,
-        required this.sentByMe,
-        required this.time,
-        required this.recentMessageTime,
-      })
-      : super(key: key);
+  const MessageTile({
+    Key? key,
+    required this.message,
+    required this.sender,
+    required this.sentByMe,
+    required this.time,
+    required this.recentMessageTime,
+  }) : super(key: key);
 
   @override
   State<MessageTile> createState() => _MessageTileState();
@@ -26,7 +25,12 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-            widget.recentMessageTime == "" ? Container(
+        //|| widget.recentMessageTime.substring(0, 9) != widget.time.substring(0, 9)
+        widget.recentMessageTime == "" ||
+                (widget.recentMessageTime != "" &&
+                    widget.recentMessageTime.substring(0, 9) !=
+                        widget.time.substring(0, 9))
+            ? Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.only(
                     top: 10, bottom: 10, left: 20, right: 20),
@@ -47,6 +51,7 @@ class _MessageTileState extends State<MessageTile> {
                         const SizedBox(
                           width: 5,
                         ),
+                        // Text('${widget.recentMessageTime.substring(0, 9)} ${widget.time.substring(0, 9)}'),
                         Text(
                           '${widget.time.substring(0, 4)}년 ${widget.time.substring(5, 6)}월 ${widget.time.substring(7, 9)}일',
                           style: const TextStyle(
@@ -56,7 +61,8 @@ class _MessageTileState extends State<MessageTile> {
                     )
                   ],
                 ),
-              ) : Container(),
+              )
+            : Container(),
         Align(
           alignment:
               widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
