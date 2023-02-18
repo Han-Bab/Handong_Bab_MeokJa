@@ -70,7 +70,7 @@ class AddChatRoom extends StatelessWidget {
                             ),
                           );
                         },
-                        fit: imageController.flag.value != 1 ? BoxFit.cover : BoxFit.fitHeight, errorBuilder:
+                        fit: imageController.image.value.contains("hanbab_icon.png") ? BoxFit.fitHeight : BoxFit.cover, errorBuilder:
                             (BuildContext context, Object exception,
                                 StackTrace? stackTrace) {
                       return Image.asset("assets/hanbab_icon.png",
@@ -111,33 +111,35 @@ class AddChatRoom extends StatelessWidget {
                           fieldTextEditingController,
                           FocusNode fieldFocusNode,
                           VoidCallback onFieldSubmitted) {
-                        return TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '가게명을 입력해주세요',
-                            icon: const Icon(CupertinoIcons.search, color: Colors.black,),
-                            iconColor: Colors.black,
-                            hintStyle: Theme.of(context)
-                                .inputDecorationTheme
-                                .hintStyle,
-                            contentPadding: const EdgeInsets.all(16),
-                            border: const OutlineInputBorder(
-                              borderSide:
-                              BorderSide(width: 3, color: Colors.grey),
+                        return Focus(
+                          onFocusChange: (bool hasFocus) {
+                            restaurant = fieldTextEditingController.text;
+                            imageController.searchImage(fieldTextEditingController.text);
+                          },
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '가게명을 입력해주세요',
+                              icon: const Icon(CupertinoIcons.search, color: Colors.black,),
+                              iconColor: Colors.black,
+                              hintStyle: Theme.of(context)
+                                  .inputDecorationTheme
+                                  .hintStyle,
+                              contentPadding: const EdgeInsets.all(16),
+                              border: const OutlineInputBorder(
+                                borderSide:
+                                BorderSide(width: 3, color: Colors.grey),
+                              ),
                             ),
+                            controller: fieldTextEditingController,
+                            focusNode: fieldFocusNode,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return '가게명을 입력하세요.';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
                           ),
-                          controller: fieldTextEditingController,
-                          focusNode: fieldFocusNode,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '가게명을 입력하세요.';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) async {
-                            restaurant = value;
-                            imageController.searchImage(value);
-                          },
-                          textInputAction: TextInputAction.next,
                         );
                       },
                       onSelected: (RestaurantName selection) async {
@@ -324,11 +326,9 @@ class AddChatRoom extends StatelessWidget {
                                       .doc(FirebaseAuth.instance.currentUser!.uid)
                                       .get();
                                   String userName = result['userName'];
-                                  String nickName = result['userNickName'];
                                   DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
                                       .createGroup(
                                       userName,
-                                      nickName,
                                       FirebaseAuth.instance.currentUser!.uid,
                                       restaurant.toUpperCase(),
                                       orderTimeController.orderTime.value,

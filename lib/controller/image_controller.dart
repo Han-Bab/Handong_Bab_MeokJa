@@ -5,7 +5,6 @@ import '../component/database_service.dart';
 
 class ImageController extends GetxController {
   var image = "".obs;
-  var flag = 0.obs;
 
   Reference get firebaseStorage => FirebaseStorage.instance.ref();
 
@@ -15,19 +14,19 @@ class ImageController extends GetxController {
     super.onInit();
   }
 
-  searchImage(String value) async {
-    String newName = DatabaseService().getImage(value);
-    var urlRef = firebaseStorage.child('$newName.jpg');
-    try {
-      image.value = await urlRef.getDownloadURL();
-    } catch(e) {
-      var urlRef = firebaseStorage.child('hanbab_icon.png');
-      image.value = await urlRef.getDownloadURL();
+  searchImage(String name) async {
+    String newName = DatabaseService().getImage(name);
+    Reference urlRef;
+
+    if(newName == "no file") {
+      urlRef = firebaseStorage.child('hanbab_icon.png');
+    } else {
+      urlRef = firebaseStorage.child('$newName.jpg');
     }
+    image.value = await urlRef.getDownloadURL();
   }
   removeData() async {
     var urlRef = firebaseStorage.child('hanbab_icon.png');
     image.value = await urlRef.getDownloadURL();
-    flag.value = 1;
   }
 }

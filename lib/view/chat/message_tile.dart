@@ -25,7 +25,6 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        //|| widget.recentMessageTime.substring(0, 9) != widget.time.substring(0, 9)
         widget.recentMessageTime == "" ||
                 (widget.recentMessageTime != "" &&
                     widget.recentMessageTime.substring(0, 9) !=
@@ -51,7 +50,6 @@ class _MessageTileState extends State<MessageTile> {
                         const SizedBox(
                           width: 5,
                         ),
-                        // Text('${widget.recentMessageTime.substring(0, 9)} ${widget.time.substring(0, 9)}'),
                         Text(
                           '${widget.time.substring(0, 4)}년 ${widget.time.substring(5, 6)}월 ${widget.time.substring(7, 9)}일',
                           style: const TextStyle(

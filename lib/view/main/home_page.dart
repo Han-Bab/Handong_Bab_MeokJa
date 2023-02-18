@@ -300,7 +300,7 @@ class HomePage extends StatelessWidget {
                                                               .uid)
                                                           .get();
                                                   userName =
-                                                      result['userNickName'];
+                                                      result['userName'];
                                                   DatabaseService(
                                                           uid: FirebaseAuth
                                                               .instance

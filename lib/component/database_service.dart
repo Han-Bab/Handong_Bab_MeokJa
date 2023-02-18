@@ -38,7 +38,7 @@ class DatabaseService  extends GetxService{
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    return result['userNickName'];
+    return result['userName'];
   }
 
   // getting user data
@@ -82,7 +82,7 @@ class DatabaseService  extends GetxService{
   }
 
   // creating a group
-  Future createGroup(String userName, String nickName, String id, String groupName,
+  Future createGroup(String userName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
     var imgUrl;
@@ -92,10 +92,9 @@ class DatabaseService  extends GetxService{
       var urlRef = firebaseStorage.child('hanbab_icon.png');
       imgUrl = await urlRef.getDownloadURL();
     }
-    print("url-------------------$imgUrl");
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
-      "admin": "${id}_$nickName",
+      "admin": "${id}_$userName",
       "members": [],
       "groupId": "",
       "orderTime": orderTime,
@@ -111,7 +110,7 @@ class DatabaseService  extends GetxService{
     });
     //update the members
     await groupDocumentReference.update({
-      "members": FieldValue.arrayUnion(["${uid}_$nickName"]),
+      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
       "groupId": groupDocumentReference.id,
     });
 
