@@ -13,8 +13,7 @@ class Restaurant {
   List<dynamic> members;
   String recentMessageSender;
   String recentMessageTime;
-
-  //bool newPerson;
+  // String newPerson;
 
   Restaurant({
     required this.groupName,
@@ -27,10 +26,9 @@ class Restaurant {
     required this.admin,
     required this.pickup,
     required this.members,
-    //required this.newPerson
+    // required this.newPerson,
     required this.recentMessageSender,
     required this.recentMessageTime
-
   });
 
 
@@ -48,7 +46,7 @@ class Restaurant {
         members: snap['members'],
         recentMessageSender: snap['recentMessageSender'],
         recentMessageTime: snap['recentMessageTime'],
-        //newPerson: snap['newPerson']
+        // newPerson: snap['newPerson'],
     );
     return restaurant;
   }

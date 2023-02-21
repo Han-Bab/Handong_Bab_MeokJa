@@ -27,8 +27,8 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        widget.recentMessageTime == "" ||
-                (widget.recentMessageTime != "" &&
+        widget.recentMessageTime == "first" ||
+                (widget.recentMessageTime != "first" && widget.recentMessageTime != "" &&
                     widget.recentMessageTime.substring(0, 9) !=
                         widget.time.substring(0, 9))
             ? Container(
