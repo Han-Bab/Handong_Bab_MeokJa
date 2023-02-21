@@ -187,7 +187,13 @@ class DatabaseService  extends GetxService{
       String pickup, String maxPeople) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
-    var imgUrl = await urlRef.getDownloadURL();
+    var imgUrl;
+    try {
+      imgUrl = await urlRef.getDownloadURL();
+    }catch(e) {
+      var urlRef = firebaseStorage.child('hanbab_icon.png');
+      imgUrl = await urlRef.getDownloadURL();
+    }
     await groupDocumentReference.update({
       "groupName": groupName,
       "orderTime": orderTime,

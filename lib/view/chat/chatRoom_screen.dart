@@ -498,7 +498,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 100, right: 100, bottom: 10),
-                        child: ElevatedButton(
+                        child: getName(restaurant.admin) == userName ? ElevatedButton(
                           onPressed: () {
                             modifyInfo(
                                 restaurant.groupName,
@@ -506,8 +506,12 @@ class _ChatRoomState extends State<ChatRoom> {
                                 restaurant.pickup,
                                 restaurant.maxPeople);
                           },
+                          style: const ButtonStyle(),
                           child: const Text("수정하기"),
+                        ) : const ElevatedButton(
+                          onPressed: null,
                           style: ButtonStyle(),
+                          child: Text("수정하기"),
                         ),
                       ),
                       Divider(
