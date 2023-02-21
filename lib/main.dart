@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:han_bab/view/main/main_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +29,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     initialization();
+    initializeDateFormatting("ko", null);
   }
 
   void initialization() async {

@@ -6,6 +6,7 @@ class MessageTile extends StatefulWidget {
   final bool sentByMe;
   final String time;
   final String recentMessageTime;
+  final String recentMessageUser;
 
   const MessageTile({
     Key? key,
@@ -14,6 +15,7 @@ class MessageTile extends StatefulWidget {
     required this.sentByMe,
     required this.time,
     required this.recentMessageTime,
+    required this.recentMessageUser,
   }) : super(key: key);
 
   @override
@@ -25,8 +27,8 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        widget.recentMessageTime == "" ||
-                (widget.recentMessageTime != "" &&
+        widget.recentMessageTime == "first" ||
+                (widget.recentMessageTime != "first" && widget.recentMessageTime != "" &&
                     widget.recentMessageTime.substring(0, 9) !=
                         widget.time.substring(0, 9))
             ? Container(
@@ -61,7 +63,7 @@ class _MessageTileState extends State<MessageTile> {
                 ),
               )
             : Container(),
-        Align(
+        widget.recentMessageUser != widget.sender ? Align(
           alignment:
               widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
@@ -77,7 +79,7 @@ class _MessageTileState extends State<MessageTile> {
               ),
             ),
           ),
-        ),
+        ) : Container(),
         Container(
           padding: EdgeInsets.only(
               bottom: 4,

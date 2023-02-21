@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
                         const SizedBox(width: 10,),
                         const Text(
                           "한동 밥먹자",
-                          style: TextStyle(color: Colors.white, fontSize: 30),
+                          style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700),
                         ),
                       ],
                     ),

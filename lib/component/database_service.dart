@@ -105,15 +105,19 @@ class DatabaseService  extends GetxService{
       "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
-      "recentMessageTime": "",
-      //"newPerson": false
+      "recentMessageTime": "first",
+      // "newPerson": "",
     });
     //update the members
     await groupDocumentReference.update({
       "members": FieldValue.arrayUnion(["${uid}_$userName"]),
       "groupId": groupDocumentReference.id,
     });
-
+    groupCollection.doc(groupDocumentReference.id).collection("messages").add({
+      "newPerson": "${uid}_$userName",
+      "inOut": "in",
+      "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+    });
     DocumentReference userDocumentReference = userCollection.doc(uid);
     return await userDocumentReference.update({
       "groups":
@@ -212,6 +216,16 @@ class DatabaseService  extends GetxService{
           await groupDocumentReference.get();
       List<dynamic> members = await groupDocumentSnapshot['members'];
       await groupDocumentReference.update({"currPeople": "${members.length}"});
+      groupCollection.doc(groupId).collection("messages").add({
+        "newPerson": "${uid}_$userName",
+        "inOut": "in",
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+      });
+      groupCollection.doc(groupId).update({
+        "recentMessage": "",
+        "recentMessageSender": "",
+        "recentMessageTime": "",
+      });
     }
   }
 
@@ -229,6 +243,16 @@ class DatabaseService  extends GetxService{
       });
       await groupDocumentReference.update({
         "members": FieldValue.arrayRemove(["${uid}_$userName"]),
+      });
+      groupCollection.doc(groupId).collection("messages").add({
+        "newPerson": "${uid}_$userName",
+        "inOut": "out",
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+      });
+      groupCollection.doc(groupId).update({
+        "recentMessage": "",
+        "recentMessageSender": "",
+        "recentMessageTime": "",
       });
       DocumentSnapshot groupDocumentSnapshot =
           await groupDocumentReference.get();

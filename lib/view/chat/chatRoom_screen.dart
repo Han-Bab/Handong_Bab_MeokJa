@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../component/database_service.dart';
 import '../main/main_screen.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 DateTime now = DateTime.now();
 DateFormat formatter = DateFormat('yyyy-M-dd');
@@ -31,14 +30,12 @@ class _ChatRoomState extends State<ChatRoom> {
   TextEditingController messageController = TextEditingController();
   String admin = "";
   String userName = "";
-  StreamController<bool> streamController = StreamController<bool>();
   final ScrollController _scrollController = ScrollController();
 
   @override
   initState() {
     getChatandAdmin();
     super.initState();
-    initializeDateFormatting("ko", null);
   }
 
   getChatandAdmin() {
@@ -621,7 +618,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                     .collection('user')
                                     .doc(FirebaseAuth.instance.currentUser!.uid)
                                     .get();
-                                String userName = result['userNickName'];
+                                String userName = result['userName'];
                                 DatabaseService(
                                         uid: FirebaseAuth
                                             .instance.currentUser!.uid)
@@ -747,30 +744,6 @@ class _ChatRoomState extends State<ChatRoom> {
         ));
   }
 
-  inOut() {
-    return StreamBuilder(
-      stream: streamController.stream,
-      builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue[300],
-                ),
-                width: MediaQuery.of(context).size.width - 10,
-                height: 28,
-                child: Center(
-                    child: Text(
-                  "${getName(restaurant.members[restaurant.members.length - 1])}님이 입장하였습니다.",
-                  style: const TextStyle(color: Colors.white),
-                )),
-              )
-            : Container();
-      },
-    );
-  }
-
   bool _needsScroll = false;
 
   _scrollToEnd() async {
@@ -795,13 +768,44 @@ class _ChatRoomState extends State<ChatRoom> {
                   _needsScroll = true;
                   return Column(
                     children: [
-                      MessageTile(
-                          message: snapshot.data.docs[index]['message'],
-                          sender: snapshot.data.docs[index]['sender'],
-                          sentByMe:
-                              userName == snapshot.data.docs[index]['sender'],
-                          time: snapshot.data.docs[index]['time'],
-                          recentMessageTime: snapshot.data.docs[index]['recentTime']
+                      snapshot.data.docs[index]['newPerson'] == ""
+                          ? MessageTile(
+                              message: snapshot.data.docs[index]['message'],
+                              sender: snapshot.data.docs[index]['sender'],
+                              sentByMe: userName ==
+                                  snapshot.data.docs[index]['sender'],
+                              time: snapshot.data.docs[index]['time'],
+                              recentMessageTime: snapshot.data.docs[index]
+                                  ['recentTime'],
+                              recentMessageUser: snapshot.data.docs[index]
+                                  ['recentUser'])
+                          : snapshot.data.docs[index]['inOut'] == "in" ?
+                      Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.only(
+                                  top: 10, bottom: 10, left: 20, right: 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue[300],
+                              ),
+                              child: Text(
+                                "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하였습니다.",
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13),
+                              ),
+                            ) : Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.only(
+                            top: 10, bottom: 10, left: 20, right: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.blue[300],
+                        ),
+                        child: Text(
+                          "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하였습니다.",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13),
+                        ),
                       ),
                     ],
                   );
@@ -811,17 +815,25 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
-  sendMessage() {
+  sendMessage() async {
     if (messageController.text.isNotEmpty) {
+      DocumentReference d = FirebaseFirestore.instance
+          .collection("groups")
+          .doc(restaurant.groupId);
+      DocumentSnapshot documentSnapshot = await d.get();
+      var sender = documentSnapshot['recentMessageSender'];
+      var time = documentSnapshot['recentMessageTime'];
+
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
         "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
-        "recentTime": restaurant.recentMessageTime
+        "recentTime": time,
+        "recentUser": sender,
+        "newPerson": ""
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       messageController.clear();
-      restaurant.recentMessageTime =  DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now());
     }
   }
 }
