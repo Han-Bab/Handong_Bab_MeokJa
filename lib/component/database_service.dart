@@ -176,14 +176,14 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
 
     List<dynamic> groups = await documentSnapshot['groups'];
-    if (groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.contains(groupId)).isNotEmpty) {
       return true;
     } else {
       return false;
     }
   }
 
-  modifyGroupInfo(String groupId, String groupName, String orderTime,
+  modifyGroupInfo(String groupId, String prevGroupName, String groupName, String orderTime,
       String pickup, String maxPeople) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
@@ -211,7 +211,7 @@ class DatabaseService  extends GetxService{
       "recentMessageSender": "",
       "recentMessageTime": "",
     });
-
+    DocumentReference userDocumentReference = userCollection.doc(uid);
   }
 
   Future groupJoin(String groupId, String userName, String groupName) async {
@@ -222,7 +222,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (groups.where((name) => name.startWith(groupId)).isEmpty) {
+    if (groups.where((name) => name.contains(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayUnion(["${groupId}_$groupName"])
       });
@@ -254,7 +254,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (groups.where((name) => name.startWith(groupId)).isEmpty) {
+    if (groups.where((name) => name.contains(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
       });
