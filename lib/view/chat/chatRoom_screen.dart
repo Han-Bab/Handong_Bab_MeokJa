@@ -375,7 +375,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                               restaurant.pickup = val;
                                             });
                                           });
-
                                           Get.snackbar('수정완료!', '채팅방이 수정되었습니다!',
                                               backgroundColor: Colors.white,
                                               snackPosition:
@@ -498,21 +497,23 @@ class _ChatRoomState extends State<ChatRoom> {
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 100, right: 100, bottom: 10),
-                        child: getName(restaurant.admin) == userName ? ElevatedButton(
-                          onPressed: () {
-                            modifyInfo(
-                                restaurant.groupName,
-                                restaurant.orderTime,
-                                restaurant.pickup,
-                                restaurant.maxPeople);
-                          },
-                          style: const ButtonStyle(),
-                          child: const Text("수정하기"),
-                        ) : const ElevatedButton(
-                          onPressed: null,
-                          style: ButtonStyle(),
-                          child: Text("수정하기"),
-                        ),
+                        child: getName(restaurant.admin) == userName
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  modifyInfo(
+                                      restaurant.groupName,
+                                      restaurant.orderTime,
+                                      restaurant.pickup,
+                                      restaurant.maxPeople);
+                                },
+                                style: const ButtonStyle(),
+                                child: const Text("수정하기"),
+                              )
+                            : const ElevatedButton(
+                                onPressed: null,
+                                style: ButtonStyle(),
+                                child: Text("수정하기"),
+                              ),
                       ),
                       Divider(
                         color: Colors.grey[300],
@@ -783,34 +784,59 @@ class _ChatRoomState extends State<ChatRoom> {
                                   ['recentTime'],
                               recentMessageUser: snapshot.data.docs[index]
                                   ['recentUser'])
-                          : snapshot.data.docs[index]['inOut'] == "in" ?
-                      Container(
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 20, right: 20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.blue[300],
-                              ),
-                              child: Text(
-                                "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하였습니다.",
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 13),
-                              ),
-                            ) : Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.blue[300],
-                        ),
-                        child: Text(
-                          "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하였습니다.",
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 13),
-                        ),
-                      ),
+                          : snapshot.data.docs[index]['inOut'] == "in"
+                              ? Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, left: 20, right: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.blue[300],
+                                  ),
+                                  child: Text(
+                                    "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하였습니다.",
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 13),
+                                  ),
+                                )
+                              : snapshot.data.docs[index]['inOut'] == "out"
+                                  ? Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 20,
+                                          right: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue[300],
+                                      ),
+                                      child: Text(
+                                        "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하였습니다.",
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 13),
+                                      ),
+                                    )
+                                  : Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 20,
+                                          right: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue[300],
+                                      ),
+                                      child: const Text(
+                                        "방 정보가 수정되었습니다.",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 13),
+                                      ),
+                                    )
                     ],
                   );
                 })

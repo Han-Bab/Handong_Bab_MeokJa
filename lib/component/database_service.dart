@@ -201,6 +201,17 @@ class DatabaseService  extends GetxService{
       "maxPeople": maxPeople,
       "imgUrl": imgUrl
     });
+    groupCollection.doc(groupId).collection("messages").add({
+      "newPerson": "modify",
+      "inOut": "modify",
+      "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+    });
+    groupCollection.doc(groupId).update({
+      "recentMessage": "",
+      "recentMessageSender": "",
+      "recentMessageTime": "",
+    });
+
   }
 
   Future groupJoin(String groupId, String userName, String groupName) async {
@@ -211,7 +222,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (!groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.startWith(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayUnion(["${groupId}_$groupName"])
       });
@@ -243,7 +254,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.startWith(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
       });
