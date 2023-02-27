@@ -4,8 +4,8 @@ import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:han_bab/controller/chat_info_controller.dart';
 import 'package:han_bab/view/chat/message_tile.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,11 +31,20 @@ class _ChatRoomState extends State<ChatRoom> {
   String admin = "";
   String userName = "";
   final ScrollController _scrollController = ScrollController();
+  final chatInfoController = Get.put(ChatInfoController());
 
   @override
   initState() {
     getChatandAdmin();
     super.initState();
+    chatInfoController.setInfo(
+        restaurant.groupName,
+        restaurant.orderTime,
+        restaurant.pickup,
+        restaurant.currPeople,
+        restaurant.maxPeople,
+        restaurant.members);
+    print(chatInfoController.restaurantName.value);
   }
 
   getChatandAdmin() {
@@ -168,9 +177,9 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   void modifyInfo(groupName, String orderTime, pick, people) {
-    final TextEditingController _restaurantController =
+    final TextEditingController restaurantController =
         TextEditingController(text: groupName);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     String pickup = pick;
     String maxPeople = people;
     DateTime? time = DateFormat("HH:mm").parse(orderTime);
@@ -200,11 +209,11 @@ class _ChatRoomState extends State<ChatRoom> {
                       ),
                       Expanded(
                         child: Form(
-                          key: _formKey,
+                          key: formKey,
                           child: ListView(
                             children: [
                               TextFormField(
-                                controller: _restaurantController,
+                                controller: restaurantController,
                                 decoration: InputDecoration(
                                   hintText: '가게명을 입력해주세요',
                                   iconColor: Colors.black,
@@ -245,7 +254,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                   hintStyle: Theme.of(context)
                                       .inputDecorationTheme
                                       .hintStyle,
-                                  contentPadding: EdgeInsets.all(0),
+                                  contentPadding: const EdgeInsets.all(0),
                                 ),
                                 onShowPicker: (context, currentValue) async {
                                   final time = await showTimePicker(
@@ -339,13 +348,14 @@ class _ChatRoomState extends State<ChatRoom> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
+                                      if (formKey.currentState!.validate()) {
                                         DatabaseService(
                                                 uid: FirebaseAuth
                                                     .instance.currentUser!.uid)
                                             .modifyGroupInfo(
                                                 restaurant.groupId,
-                                                _restaurantController.text,
+                                                groupName,
+                                                restaurantController.text,
                                                 DateFormat("HH:mm")
                                                     .format(time!),
                                                 pickup,
@@ -353,28 +363,13 @@ class _ChatRoomState extends State<ChatRoom> {
                                             .whenComplete(() {
                                           Get.back();
                                           Get.back();
-                                          DatabaseService()
-                                              .getGroupName(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              print(val);
-                                              restaurant.groupName = val;
-                                            });
-                                          });
-                                          DatabaseService()
-                                              .getGroupTime(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              restaurant.orderTime = val;
-                                            });
-                                          });
-                                          DatabaseService()
-                                              .getGroupPick(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              restaurant.pickup = val;
-                                            });
-                                          });
+                                          chatInfoController.setInfo(
+                                              restaurantController.text,
+                                              DateFormat("HH:mm").format(time!),
+                                              pickup,
+                                              restaurant.currPeople,
+                                              maxPeople,
+                                              restaurant.members);
                                           Get.snackbar('수정완료!', '채팅방이 수정되었습니다!',
                                               backgroundColor: Colors.white,
                                               snackPosition:
@@ -414,12 +409,13 @@ class _ChatRoomState extends State<ChatRoom> {
             color: Colors.black,
           ),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Text(
-            restaurant.groupName,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          title: Obx(() => Text(
+              chatInfoController.restaurantName.value,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
           backgroundColor: Colors.white,
@@ -449,10 +445,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "가게이름: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Text(
-                                "${restaurant.groupName}",
-                                style: const TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              Obx(() => Text(
+                                  chatInfoController.restaurantName.value,
+                                  style: const TextStyle(
+                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ],
                           ),
@@ -467,10 +464,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "시간: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Text(
-                                "${restaurant.orderTime}",
-                                style: const TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              Obx(() => Text(
+                                  chatInfoController.orderTime.value,
+                                  style: const TextStyle(
+                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                ),
                               )
                             ],
                           ),
@@ -485,10 +483,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "픽업장소: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Text(
-                                "${restaurant.pickup}",
-                                style: const TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              Obx(() => Text(
+                                  chatInfoController.pickUp.value,
+                                  style: const TextStyle(
+                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                ),
                               )
                             ],
                           ),
@@ -501,10 +500,10 @@ class _ChatRoomState extends State<ChatRoom> {
                             ? ElevatedButton(
                                 onPressed: () {
                                   modifyInfo(
-                                      restaurant.groupName,
-                                      restaurant.orderTime,
-                                      restaurant.pickup,
-                                      restaurant.maxPeople);
+                                      chatInfoController.restaurantName.value,
+                                      chatInfoController.orderTime.value,
+                                      chatInfoController.pickUp.value,
+                                      chatInfoController.maxPeople.value);
                                 },
                                 style: const ButtonStyle(),
                                 child: const Text("수정하기"),
@@ -533,30 +532,34 @@ class _ChatRoomState extends State<ChatRoom> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Column(
                           children: [
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: restaurant.members!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (restaurant.members[index] ==
-                                      restaurant.admin) {
-                                    return ListTile(
-                                        leading: Text(
-                                          "👑",
-                                          style: TextStyle(fontSize: 25),
-                                        ),
+                            Obx(() => ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      chatInfoController.member.value!.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    if (chatInfoController.member.value[index] ==
+                                        restaurant.admin) {
+                                      return ListTile(
+                                          leading: const Text(
+                                            "👑",
+                                            style: TextStyle(fontSize: 25),
+                                          ),
+                                          title: Text(
+                                              getName(chatInfoController
+                                                  .member.value[index]),
+                                              style:
+                                                  const TextStyle(fontSize: 17)));
+                                    } else {
+                                      return ListTile(
+                                        leading: const Text(""),
                                         title: Text(
-                                            getName(restaurant.members[index]),
-                                            style:
-                                                const TextStyle(fontSize: 17)));
-                                  } else {
-                                    return ListTile(
-                                      leading: Text(""),
-                                      title: Text(
-                                          getName(restaurant.members[index]),
-                                          style: const TextStyle(fontSize: 17)),
-                                    );
-                                  }
-                                }),
+                                            getName(chatInfoController
+                                                .member.value[index]),
+                                            style: const TextStyle(fontSize: 17)),
+                                      );
+                                    }
+                                  }),
+                            ),
                             Divider(
                               color: Colors.grey[300],
                               thickness: 1.0,
@@ -614,8 +617,8 @@ class _ChatRoomState extends State<ChatRoom> {
                       barrierDismissible: false,
                       builder: (BuildContext ctx) {
                         return AlertDialog(
-                          title: Text("나가기"),
-                          content: Text("방에서 나가겠습니까?"),
+                          title: const Text("나가기"),
+                          content: const Text("방에서 나가겠습니까?"),
                           actions: [
                             TextButton(
                               onPressed: () async {
@@ -628,17 +631,17 @@ class _ChatRoomState extends State<ChatRoom> {
                                         uid: FirebaseAuth
                                             .instance.currentUser!.uid)
                                     .groupOut(restaurant.groupId, userName,
-                                        restaurant.groupName);
+                                        chatInfoController.restaurantName.value);
 
                                 Get.to(() => MainScreen());
                               },
-                              child: Text("예"),
+                              child: const Text("예"),
                             ),
                             TextButton(
                               onPressed: () {
                                 Get.back();
                               },
-                              child: Text("아니오"),
+                              child: const Text("아니오"),
                             )
                           ],
                         );
@@ -665,7 +668,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   ),
                   elevation: 5,
                   margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
-                  child: Container(
+                  child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       child: Row(
@@ -680,23 +683,26 @@ class _ChatRoomState extends State<ChatRoom> {
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "시간: ${restaurant.orderTime}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(() => Text(
+                              "시간: ${chatInfoController.orderTime.value}",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "장소: ${restaurant.pickup}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(() => Text(
+                              "장소: ${chatInfoController.pickUp.value}",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "인원: [${restaurant.currPeople}/${restaurant.maxPeople}]",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(() => Text(
+                              "인원: [${chatInfoController.currPeople.value}/${chatInfoController.maxPeople.value}]",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       )),
@@ -755,7 +761,7 @@ class _ChatRoomState extends State<ChatRoom> {
     if (_needsScroll) {
       _needsScroll = false;
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
     }
   }
 

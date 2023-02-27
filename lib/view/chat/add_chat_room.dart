@@ -13,7 +13,6 @@ import '../../controller/image_controller.dart';
 import '../../controller/search_controller.dart';
 import '../../model/search.dart';
 
-
 class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
 
@@ -49,33 +48,107 @@ class AddChatRoom extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              DottedBorder(
-                color: Colors.grey,
-                dashPattern: const [5, 3],
-                borderType: BorderType.RRect,
-                radius: const Radius.circular(10),
+              Container(
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade400, spreadRadius: 1)
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
                 child: SizedBox(
                   width: 400,
                   height: 200,
-                  child: Obx(() => Image.network(imageController.image.value,
-                        loadingBuilder: (BuildContext? context,
-                            Widget? child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress ==
-                              null)
-                            return child!;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                  child: Obx(
+                    () => imageController.image.value
+                            .contains("hanbab_icon.png")
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                //Image.asset("assets/vector.png", scale: 2,),
+                                Text(
+                                  String.fromCharCode(
+                                      CupertinoIcons.placemark.codePoint),
+                                  style: TextStyle(
+                                    inherit: false,
+                                    color: Colors.grey[300],
+                                    fontSize: 45.0,
+                                    fontWeight: FontWeight.w100,
+                                    fontFamily:
+                                        CupertinoIcons.placemark.fontFamily,
+                                    package:
+                                        CupertinoIcons.placemark.fontPackage,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "일치하는 이미지가 없습니다",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w100,
+                                      color: Colors.grey[600]),
+                                )
+                              ],
                             ),
-                          );
-                        },
-                        fit: imageController.image.value.contains("hanbab_icon.png") ? BoxFit.fitHeight : BoxFit.cover, errorBuilder:
-                            (BuildContext context, Object exception,
-                                StackTrace? stackTrace) {
-                      return Image.asset("assets/hanbab_icon.png",
-                          fit: BoxFit.fitHeight);
-                    }),
+                          )
+                        : Image.network(imageController.image.value,
+                            loadingBuilder: (BuildContext? context,
+                                Widget? child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child!;
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                            fit: imageController.image.value
+                                    .contains("hanbab_icon.png")
+                                ? BoxFit.fitHeight
+                                : BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    //Image.asset("assets/vector.png", scale: 2,),
+                                    Text(
+                                      String.fromCharCode(
+                                          CupertinoIcons.placemark.codePoint),
+                                      style: TextStyle(
+                                        inherit: false,
+                                        color: Colors.grey[300],
+                                        fontSize: 45.0,
+                                        fontWeight: FontWeight.w100,
+                                        fontFamily:
+                                            CupertinoIcons.placemark.fontFamily,
+                                        package: CupertinoIcons
+                                            .placemark.fontPackage,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "가게를 검색하세요",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w100,
+                                          color: Colors.grey[600]),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
                   ),
                 ),
               ),
@@ -89,37 +162,38 @@ class AddChatRoom extends StatelessWidget {
                     Autocomplete<RestaurantName>(
                       optionsBuilder: (textEditingValue) {
                         if (textEditingValue.text != "") {
-                          return controller.countryNames.where((RestaurantName country) => country
-                              .name
-                              .toLowerCase()
-                              .contains(textEditingValue.text
-                              .toLowerCase()))
+                          return controller.countryNames
+                              .where((RestaurantName country) => country.name
+                                  .toLowerCase()
+                                  .contains(
+                                      textEditingValue.text.toLowerCase()))
                               .toList();
                         } else {
                           return controller.countryNames
-                              .where((RestaurantName country) => country
-                              .name
-                              .toLowerCase()
-                              .contains("?"))
+                              .where((RestaurantName country) =>
+                                  country.name.toLowerCase().contains("?"))
                               .toList();
                         }
                       },
-                      displayStringForOption:
-                          (RestaurantName country) => country.name,
+                      displayStringForOption: (RestaurantName country) =>
+                          country.name,
                       fieldViewBuilder: (BuildContext context,
-                          TextEditingController
-                          fieldTextEditingController,
+                          TextEditingController fieldTextEditingController,
                           FocusNode fieldFocusNode,
                           VoidCallback onFieldSubmitted) {
                         return Focus(
                           onFocusChange: (bool hasFocus) {
                             restaurant = fieldTextEditingController.text;
-                            imageController.searchImage(fieldTextEditingController.text);
+                            imageController
+                                .searchImage(fieldTextEditingController.text);
                           },
                           child: TextFormField(
                             decoration: InputDecoration(
                               hintText: '가게명을 입력해주세요',
-                              icon: const Icon(CupertinoIcons.search, color: Colors.black,),
+                              icon: Icon(
+                                CupertinoIcons.search,
+                                color: Colors.grey[500],
+                              ),
                               iconColor: Colors.black,
                               hintStyle: Theme.of(context)
                                   .inputDecorationTheme
@@ -127,7 +201,7 @@ class AddChatRoom extends StatelessWidget {
                               contentPadding: const EdgeInsets.all(16),
                               border: const OutlineInputBorder(
                                 borderSide:
-                                BorderSide(width: 3, color: Colors.grey),
+                                    BorderSide(width: 3, color: Color(0xffC2C2C2)),
                               ),
                             ),
                             controller: fieldTextEditingController,
@@ -145,10 +219,9 @@ class AddChatRoom extends StatelessWidget {
                       onSelected: (RestaurantName selection) async {
                         restaurant = selection.name;
                         imageController.searchImage(selection.name);
-                        },
+                      },
                       optionsViewBuilder: (BuildContext context,
-                          AutocompleteOnSelected<RestaurantName>
-                          onSelected,
+                          AutocompleteOnSelected<RestaurantName> onSelected,
                           Iterable<RestaurantName> country) {
                         return Align(
                           alignment: Alignment.topLeft,
@@ -163,20 +236,18 @@ class AddChatRoom extends StatelessWidget {
                                       width: 1,
                                       color: Colors.blueAccent,
                                     ),
-                                    borderRadius:
-                                    BorderRadius.circular(20)),
-                                width: MediaQuery.of(context).size.width *
-                                    0.79,
+                                    borderRadius: BorderRadius.circular(20)),
+                                width: MediaQuery.of(context).size.width * 0.79,
                                 child: ListView.builder(
                                     physics:
-                                    const NeverScrollableScrollPhysics(),
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(1.0),
                                     itemCount: country.length,
-                                    itemBuilder: (BuildContext context,
-                                        int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       final RestaurantName option =
-                                      country.elementAt(index);
+                                          country.elementAt(index);
                                       return GestureDetector(
                                         onTap: () {
                                           onSelected(option);
@@ -189,7 +260,7 @@ class AddChatRoom extends StatelessWidget {
                                                 style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight:
-                                                    FontWeight.bold),
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             Divider()
@@ -247,16 +318,17 @@ class AddChatRoom extends StatelessWidget {
                         pickup = value;
                       },
                       decoration: InputDecoration(
-                        hintText: "예) 비전관, 오석관 등",
-                        icon: const Icon(Icons.delivery_dining, color: Colors.black,),
+                        hintText: "수령할 장소를 입력하세요",
+                        icon: Icon(
+                          Icons.delivery_dining,
+                          color: Colors.grey[500],
+                        ),
                         iconColor: Colors.black,
-                        hintStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .hintStyle,
+                        hintStyle:
+                            Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
-                          borderSide:
-                          BorderSide(width: 3, color: Colors.grey),
+                          borderSide: BorderSide(width: 3, color: Color(0xffC2C2C2)),
                         ),
                       ),
                       validator: (value) {
@@ -277,16 +349,16 @@ class AddChatRoom extends StatelessWidget {
                       controller: _maxPeopleController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        hintText: "예) 2, 3",
-                        icon: const Icon(Icons.groups_rounded, color: Colors.black,),
-                        iconColor: Colors.black,
-                        hintStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .hintStyle,
+                        hintText: "최대 인원을 입력하세요",
+                        icon: Icon(
+                          Icons.groups_rounded,
+                          color: Colors.grey[500],
+                        ),
+                        hintStyle:
+                            Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
-                          borderSide:
-                          BorderSide(width: 3, color: Colors.grey),
+                          borderSide: BorderSide(width: 3, color: Color(0xffC2C2C2)),
                         ),
                       ),
                       validator: (value) {
@@ -308,11 +380,12 @@ class AddChatRoom extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () {
                                   imageController.removeData();
-                                  Get.off(() => MainScreen(), transition: Transition.zoom);
+                                  Get.off(() => MainScreen(),
+                                      transition: Transition.zoom);
                                 },
                                 child: const Text("취소하기"),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)
-                            ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey)),
                           ),
                           const SizedBox(
                             width: 25,
@@ -320,28 +393,30 @@ class AddChatRoom extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () async {
-                                if(_formKey.currentState!.validate()){
+                                if (_formKey.currentState!.validate()) {
                                   var result = await FirebaseFirestore.instance
                                       .collection('user')
-                                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.uid)
                                       .get();
                                   String userName = result['userName'];
-                                  DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                                  DatabaseService(
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
                                       .createGroup(
-                                      userName,
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      restaurant.toUpperCase(),
-                                      orderTimeController.orderTime.value,
-                                      pickup,
-                                      maxPeople);
-                                  Get.snackbar(
-                                      '생성완료!',
-                                      '채팅방이 생성되었습니다!',
+                                          userName,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          restaurant.toUpperCase(),
+                                          orderTimeController.orderTime.value,
+                                          pickup,
+                                          maxPeople);
+                                  Get.snackbar('생성완료!', '채팅방이 생성되었습니다!',
                                       backgroundColor: Colors.white,
-                                      snackPosition: SnackPosition.BOTTOM
-                                  );
+                                      snackPosition: SnackPosition.BOTTOM);
                                   imageController.removeData();
-                                  Get.to(() => MainScreen(), transition: Transition.zoom);
+                                  Get.to(() => MainScreen(),
+                                      transition: Transition.zoom);
                                 }
                               },
                               child: const Text("만들기"),
