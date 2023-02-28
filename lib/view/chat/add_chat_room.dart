@@ -93,62 +93,65 @@ class AddChatRoom extends StatelessWidget {
                               ],
                             ),
                           )
-                        : Image.network(imageController.image.value,
-                            loadingBuilder: (BuildContext? context,
-                                Widget? child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child!;
-                              }
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                            fit: imageController.image.value
-                                    .contains("hanbab_icon.png")
-                                ? BoxFit.fitHeight
-                                : BoxFit.cover,
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    //Image.asset("assets/vector.png", scale: 2,),
-                                    Text(
-                                      String.fromCharCode(
-                                          CupertinoIcons.placemark.codePoint),
-                                      style: TextStyle(
-                                        inherit: false,
-                                        color: Colors.grey[300],
-                                        fontSize: 45.0,
-                                        fontWeight: FontWeight.w100,
-                                        fontFamily:
-                                            CupertinoIcons.placemark.fontFamily,
-                                        package: CupertinoIcons
-                                            .placemark.fontPackage,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "가게를 검색하세요",
-                                      style: TextStyle(
-                                          fontSize: 16,
+                        : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(imageController.image.value,
+                              loadingBuilder: (BuildContext? context,
+                                  Widget? child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child!;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              fit: imageController.image.value
+                                      .contains("hanbab_icon.png")
+                                  ? BoxFit.fitHeight
+                                  : BoxFit.cover,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      //Image.asset("assets/vector.png", scale: 2,),
+                                      Text(
+                                        String.fromCharCode(
+                                            CupertinoIcons.placemark.codePoint),
+                                        style: TextStyle(
+                                          inherit: false,
+                                          color: Colors.grey[300],
+                                          fontSize: 45.0,
                                           fontWeight: FontWeight.w100,
-                                          color: Colors.grey[600]),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
+                                          fontFamily:
+                                              CupertinoIcons.placemark.fontFamily,
+                                          package: CupertinoIcons
+                                              .placemark.fontPackage,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "가게를 검색하세요",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w100,
+                                            color: Colors.grey[600]),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
                   ),
                 ),
               ),
@@ -192,16 +195,19 @@ class AddChatRoom extends StatelessWidget {
                               hintText: '가게명을 입력해주세요',
                               icon: Icon(
                                 CupertinoIcons.search,
-                                color: Colors.grey[500],
+                                color: Color(0xff717171),
                               ),
-                              iconColor: Colors.black,
                               hintStyle: Theme.of(context)
                                   .inputDecorationTheme
                                   .hintStyle,
                               contentPadding: const EdgeInsets.all(16),
                               border: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1, color: Color(0xffC2C2C2)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                                    BorderSide(width: 1, color: Colors.black87),
                               ),
                             ),
                             controller: fieldTextEditingController,
@@ -228,16 +234,36 @@ class AddChatRoom extends StatelessWidget {
                           child: Material(
                             type: MaterialType.transparency,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 30.0),
+                              padding: const EdgeInsets.only(left: 40.12),
                               child: Container(
+                                transform: Matrix4.translationValues(0.0, -3.0, 0.0),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.blueAccent,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20)),
-                                width: MediaQuery.of(context).size.width * 0.79,
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.black87,
+                                  ),
+                                  // Border(
+                                  //     left: BorderSide(
+                                  //       width: 1,
+                                  //       color: Colors.black87,
+                                  //     ),
+                                  //     right: BorderSide(
+                                  //       width: 1,
+                                  //       color: Colors.black87,
+                                  //     ),
+                                  //     bottom: BorderSide(
+                                  //       width: 1,
+                                  //       color: Colors.black87,
+                                  //     ),
+                                  // ),
+                                  // borderRadius: BorderRadius.only(bottomRight: Radius.circular(20))
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20))
+                                ),
+                                width:
+                                    MediaQuery.of(context).size.width * 0.745,
                                 child: ListView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
@@ -255,15 +281,40 @@ class AddChatRoom extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             ListTile(
-                                              title: Text(
-                                                option.name,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                              title: Row(
+                                                children: [
+                                                  Text(
+                                                    String.fromCharCode(
+                                                        CupertinoIcons.placemark
+                                                            .codePoint),
+                                                    style: TextStyle(
+                                                      inherit: false,
+                                                      color: Color(0xff919191),
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.w100,
+                                                      fontFamily: CupertinoIcons
+                                                          .placemark.fontFamily,
+                                                      package: CupertinoIcons
+                                                          .placemark
+                                                          .fontPackage,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    option.name,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xff919191),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Divider()
                                           ],
                                         ),
                                       );
@@ -319,16 +370,20 @@ class AddChatRoom extends StatelessWidget {
                       },
                       decoration: InputDecoration(
                         hintText: "수령할 장소를 입력하세요",
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delivery_dining,
-                          color: Colors.grey[500],
+                          color: Color(0xff717171),
                         ),
-                        iconColor: Colors.black,
                         hintStyle:
                             Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
-                          borderSide: BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                          borderSide:
+                              BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.black87),
                         ),
                       ),
                       validator: (value) {
@@ -350,15 +405,20 @@ class AddChatRoom extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: "최대 인원을 입력하세요",
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.groups_rounded,
-                          color: Colors.grey[500],
+                          color: Color(0xff717171),
                         ),
                         hintStyle:
                             Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
-                          borderSide: BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                          borderSide:
+                              BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.black87),
                         ),
                       ),
                       validator: (value) {
