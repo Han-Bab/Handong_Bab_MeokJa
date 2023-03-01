@@ -125,6 +125,7 @@ class GroupListViewDemo extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         left: 14.0, right: 14.0),
                     child: Container(
+                      color: Colors.transparent,
                       padding: const EdgeInsets.all(8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
