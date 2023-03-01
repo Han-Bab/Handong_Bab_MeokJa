@@ -76,6 +76,8 @@ class DatabaseService  extends GetxService{
       return "sin";
     } else if (imgName == "행복한 마라탕") {
       return "hang";
+    } else if (imgName == "공차") {
+      return "gong";
     } else {
       return "no file";
     }
