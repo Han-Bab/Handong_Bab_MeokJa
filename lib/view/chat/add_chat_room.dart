@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/component/time_widget.dart';
 import 'package:han_bab/controller/auth_controller.dart';
@@ -112,10 +111,7 @@ class AddChatRoom extends StatelessWidget {
                                   ),
                                 );
                               },
-                              fit: imageController.image.value
-                                      .contains("hanbab_icon.png")
-                                  ? BoxFit.fitHeight
-                                  : BoxFit.cover,
+                              fit: BoxFit.fill,
                               errorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
                                 return Center(
@@ -193,7 +189,7 @@ class AddChatRoom extends StatelessWidget {
                           child: TextFormField(
                             decoration: InputDecoration(
                               hintText: '가게명을 입력해주세요',
-                              icon: Icon(
+                              icon: const Icon(
                                 CupertinoIcons.search,
                                 color: Color(0xff717171),
                               ),
@@ -243,21 +239,6 @@ class AddChatRoom extends StatelessWidget {
                                     width: 1,
                                     color: Colors.black87,
                                   ),
-                                  // Border(
-                                  //     left: BorderSide(
-                                  //       width: 1,
-                                  //       color: Colors.black87,
-                                  //     ),
-                                  //     right: BorderSide(
-                                  //       width: 1,
-                                  //       color: Colors.black87,
-                                  //     ),
-                                  //     bottom: BorderSide(
-                                  //       width: 1,
-                                  //       color: Colors.black87,
-                                  //     ),
-                                  // ),
-                                  // borderRadius: BorderRadius.only(bottomRight: Radius.circular(20))
                                   borderRadius: const BorderRadius.only(
                                       bottomLeft: Radius.circular(20),
                                       bottomRight: Radius.circular(20))
