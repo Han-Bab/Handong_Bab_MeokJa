@@ -79,6 +79,38 @@ class _ChatRoomState extends State<ChatRoom> {
     return res.substring(0, res.indexOf("_"));
   }
 
+  noBaeMin(context, groupName) {
+      DatabaseService().baeMinPhoneNumber(groupName).then((phoneNumber) {
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                contentPadding: const EdgeInsets.only(top: 10.0),
+                content: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.28,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 50,),
+                      const Text("배민에 등록되어", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
+                      const Text("있지 않은 가게입니다.", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
+                      const SizedBox(height: 10,),
+                      const Text("전화번호: ", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
+                      Text(phoneNumber, style: const TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
+                      const SizedBox(height: 30,),
+                      TextButton(onPressed: (){Get.back();}, child: const Text("확인", style: TextStyle(color: Color(0xff75B165), fontSize: 18),))
+                    ],
+                  ),
+                ),
+              );
+            });
+      });
+
+  }
+
   Future<void> payModal(context) async {
     bool visibility = false;
     showDialog(
@@ -409,13 +441,42 @@ class _ChatRoomState extends State<ChatRoom> {
             color: Colors.black,
           ),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Obx(() => Text(
-              chatInfoController.restaurantName.value,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+          title: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  chatInfoController.restaurantName.value,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    DatabaseService()
+                        .baeMinUrl(chatInfoController.restaurantName.value)
+                        .then((url) {
+                      _url = Uri.parse(url);
+                      if(url == "") {
+                        return noBaeMin(context, chatInfoController.restaurantName.value);
+                      }
+                      else {
+                        return _launchUrl();
+                      }
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.cyan,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30))),
+                  child: const Text("배민"),
+                )
+              ],
             ),
           ),
           backgroundColor: Colors.white,
@@ -445,10 +506,12 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "가게이름: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Obx(() => Text(
+                              Obx(
+                                () => Text(
                                   chatInfoController.restaurantName.value,
                                   style: const TextStyle(
-                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -464,10 +527,12 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "시간: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Obx(() => Text(
+                              Obx(
+                                () => Text(
                                   chatInfoController.orderTime.value,
                                   style: const TextStyle(
-                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               )
                             ],
@@ -483,10 +548,12 @@ class _ChatRoomState extends State<ChatRoom> {
                                 "픽업장소: ",
                                 style: TextStyle(fontSize: 15),
                               ),
-                              Obx(() => Text(
+                              Obx(
+                                () => Text(
                                   chatInfoController.pickUp.value,
                                   style: const TextStyle(
-                                      fontSize: 17, fontWeight: FontWeight.bold),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               )
                             ],
@@ -532,12 +599,15 @@ class _ChatRoomState extends State<ChatRoom> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Column(
                           children: [
-                            Obx(() => ListView.builder(
+                            Obx(
+                              () => ListView.builder(
                                   shrinkWrap: true,
                                   itemCount:
                                       chatInfoController.member.value!.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    if (chatInfoController.member.value[index] ==
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    if (chatInfoController
+                                            .member.value[index] ==
                                         restaurant.admin) {
                                       return ListTile(
                                           leading: const Text(
@@ -547,15 +617,16 @@ class _ChatRoomState extends State<ChatRoom> {
                                           title: Text(
                                               getName(chatInfoController
                                                   .member.value[index]),
-                                              style:
-                                                  const TextStyle(fontSize: 17)));
+                                              style: const TextStyle(
+                                                  fontSize: 17)));
                                     } else {
                                       return ListTile(
                                         leading: const Text(""),
                                         title: Text(
                                             getName(chatInfoController
                                                 .member.value[index]),
-                                            style: const TextStyle(fontSize: 17)),
+                                            style:
+                                                const TextStyle(fontSize: 17)),
                                       );
                                     }
                                   }),
@@ -630,8 +701,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                 DatabaseService(
                                         uid: FirebaseAuth
                                             .instance.currentUser!.uid)
-                                    .groupOut(restaurant.groupId, userName,
-                                        chatInfoController.restaurantName.value);
+                                    .groupOut(
+                                        restaurant.groupId,
+                                        userName,
+                                        chatInfoController
+                                            .restaurantName.value);
 
                                 Get.to(() => MainScreen());
                               },
@@ -683,25 +757,31 @@ class _ChatRoomState extends State<ChatRoom> {
                           const SizedBox(
                             width: 15,
                           ),
-                          Obx(() => Text(
+                          Obx(
+                            () => Text(
                               "시간: ${chatInfoController.orderTime.value}",
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Obx(() => Text(
+                          Obx(
+                            () => Text(
                               "장소: ${chatInfoController.pickUp.value}",
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Obx(() => Text(
+                          Obx(
+                            () => Text(
                               "인원: [${chatInfoController.currPeople.value}/${chatInfoController.maxPeople.value}]",
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
