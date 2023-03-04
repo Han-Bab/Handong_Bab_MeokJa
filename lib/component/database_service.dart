@@ -83,6 +83,17 @@ class DatabaseService  extends GetxService{
     }
   }
 
+  baeMinUrl(groupName) async {
+    DocumentReference d = FirebaseFirestore.instance.collection("restaurants").doc(groupName);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['url'];
+  }
+  baeMinPhoneNumber(groupName) async {
+    DocumentReference d = FirebaseFirestore.instance.collection("restaurants").doc(groupName);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['phoneNumber'];
+  }
+
   // creating a group
   Future createGroup(String userName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
