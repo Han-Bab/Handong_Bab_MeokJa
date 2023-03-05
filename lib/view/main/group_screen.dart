@@ -1,7 +1,7 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:han_bab/component/customToolbarRect.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import '../../controller/mychat_controller.dart';
@@ -16,18 +16,11 @@ class GroupListViewDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "주문내역",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(200),
+          child: CustomToolbarRect(
+            title: "주문내역",
+          )),
       body: Obx(
         () => GroupedListView<dynamic, String>(
           elements: myController.myRestaurant.value,
@@ -122,8 +115,7 @@ class GroupListViewDemo extends StatelessWidget {
                     Get.to(() => const ChatRoom(), arguments: index);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14.0, right: 14.0),
+                    padding: const EdgeInsets.only(left: 14.0, right: 14.0),
                     child: Container(
                       color: Colors.transparent,
                       padding: const EdgeInsets.all(8),

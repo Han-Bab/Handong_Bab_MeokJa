@@ -267,7 +267,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (groups.where((name) => name.contains(groupId)).isEmpty) {
+    if (groups.where((name) => name.contains(groupId)).isNotEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
       });
