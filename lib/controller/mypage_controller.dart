@@ -16,7 +16,7 @@ class MypageController extends GetxController {
     final Email email = Email(
       body: body,
       subject: '[한밥 어플리케이션 제보 및 문의]',
-      recipients: ['lovehyungee0721@gmail.com'],
+      recipients: ['21900215@handong.ac.kr'],
       cc: [],
       bcc: [],
       attachmentPaths: [],
@@ -31,7 +31,7 @@ class MypageController extends GetxController {
           "죄송합니다 \u{1F625}\n\n기본 메일앱을 사용할 수 없어서\n앱에서 바로 문의메일을 전송하기\n어렵습니다.\n\n아래 명시된 이메일로 연락주시면\n친절하고 빠르게 답변해드리도록\n하겠습니다 \u{1F60A}\n";
       Get.defaultDialog(
         title: title,
-        titlePadding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+        titlePadding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
         content: SizedBox(
           height: 300,
           width: double.infinity,
@@ -40,20 +40,23 @@ class MypageController extends GetxController {
               Text(
                 message,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                 ),
               ),
+              const SizedBox(
+                height: 30,
+              ),
               const Text(
-                "lovehyungee0721@gmail.com",
+                "21900215@handong.ac.kr",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               )
             ],
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(40, 0, 40, 20),
+        contentPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       );
     }
   }

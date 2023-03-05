@@ -72,8 +72,6 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         // centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: ModalProgressHUD(
@@ -92,6 +90,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        RichText(
+                            text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '한밥',
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 23,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '을 통해 행복한 식사에\n동참해보세요',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 116, 116, 116),
+                                fontSize: 23,
+                              ),
+                            ),
+                          ],
+                        )),
+                        const SizedBox(
+                          height: 30,
+                        ),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 8.0),
                           child: Text(
@@ -145,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         // 비밀번호 입력폼
                         TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty || value!.length < 6) {
+                            if (value!.isEmpty || value.length < 6) {
                               return "비밀번호는 최소 6자 이상 입력해주세요";
                             }
                             return null;
@@ -242,7 +262,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.phone,
                           validator: (value) {
-                            if (value!.isEmpty || value!.length != 13) {
+                            if (value!.isEmpty || value.length != 13) {
                               return "올바른 전화번호를 입력해주세요";
                             }
                             return null;
@@ -299,8 +319,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintStyle: const TextStyle(fontSize: 14),
                             border: InputBorder.none,
                             filled: true,
-                            fillColor: Color(0xffF2F2F5),
-                            contentPadding: EdgeInsets.all(10),
+                            fillColor: const Color(0xffF2F2F5),
+                            contentPadding: const EdgeInsets.all(10),
                             suffixIcon: Container(
                               decoration: const BoxDecoration(
                                   border: Border(
@@ -396,8 +416,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     _isChecked1 = value!;
                                   });
                                 },
-                                activeColor: Colors.blue,
-                                checkColor: Colors.black,
+                                activeColor: Colors.black,
+                                checkColor: Colors.white,
                                 checkboxShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25),
                                 ),
@@ -407,14 +427,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             IconButton(
                               onPressed: () {
-                                Get.to(() => AccountTerm());
+                                Get.to(() => const AccountTerm());
                               },
                               icon: const Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 size: 12,
                               ),
-                              padding: EdgeInsets.only(left: 20), // 패딩 설정
-                              constraints: BoxConstraints(),
+                              padding: const EdgeInsets.only(left: 20), // 패딩 설정
+                              constraints: const BoxConstraints(),
                             ),
                           ],
                         ),
@@ -435,8 +455,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     _isChecked2 = value!;
                                   });
                                 },
-                                activeColor: Colors.blue,
-                                checkColor: Colors.black,
+                                activeColor: Colors.black,
+                                checkColor: Colors.white,
                                 checkboxShape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25)),
                                 controlAffinity:
@@ -445,14 +465,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             IconButton(
                               onPressed: () {
-                                Get.to(() => PrivacyTerm());
+                                Get.to(() => const PrivacyTerm());
                               },
                               icon: const Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 size: 12,
                               ),
-                              padding: EdgeInsets.only(left: 20), // 패딩 설정
-                              constraints: BoxConstraints(),
+                              padding: const EdgeInsets.only(left: 20), // 패딩 설정
+                              constraints: const BoxConstraints(),
                             ),
                           ],
                         ),
@@ -482,40 +502,25 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       bottomSheet: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("취소"),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              flex: 1,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showSpinner = true;
-                  });
-                  _tryValidation();
-                  if (validation) {
-                    AuthController.instance.register(userInfo);
-                  }
-                  setState(() {
-                    _showSpinner = false;
-                  });
-                },
-                child: const Text("가입"),
-              ),
-            ),
-          ],
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+        child: SizedBox(
+          width: double.infinity,
+          height: 45,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _showSpinner = true;
+              });
+              _tryValidation();
+              if (validation) {
+                AuthController.instance.register(userInfo);
+              }
+              setState(() {
+                _showSpinner = false;
+              });
+            },
+            child: const Text("가입"),
+          ),
         ),
       ),
     );

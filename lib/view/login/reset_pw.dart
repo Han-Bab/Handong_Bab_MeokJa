@@ -43,8 +43,6 @@ class ResetPW extends StatelessWidget {
           ),
         ),
         // centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: GestureDetector(
@@ -88,7 +86,7 @@ class ResetPW extends StatelessWidget {
                     authController.resetPassword(emailAddr);
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                   ),
                   child: const Text(
                     "재설정 메일 보내기",

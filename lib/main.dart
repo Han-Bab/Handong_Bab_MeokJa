@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; //안드로이드 디자인
-import 'package:flutter/cupertino.dart'; //IOS 디자인홈 화면 함수 불러오기 불러오기
+//IOS 디자인홈 화면 함수 불러오기 불러오기
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
+    // MARK: implement initState
     super.initState();
     initialization();
     initializeDateFormatting("ko", null);
@@ -45,10 +45,34 @@ class _MyAppState extends State<MyApp> {
       home: LoginPage(),
       theme: ThemeData(
         fontFamily: 'fonts',
+        primarySwatch: Colors.orange,
         brightness: Brightness.light,
-        //appBarTheme: AppBarTheme(color: Colors.orange,),
+        splashColor: Colors.orange,
+        appBarTheme: const AppBarTheme(
+          color: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange[300],
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xffF2F2F5),
+          border: InputBorder.none,
+          hintStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
         ),
       ),
 
