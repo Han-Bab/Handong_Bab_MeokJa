@@ -18,6 +18,7 @@ class SearchController extends GetxController {
       RestaurantName(name: "류엔돈까스"),
       RestaurantName(name: "삼촌네"),
       RestaurantName(name: "신전떡볶이"),
+      RestaurantName(name: "공차"),
     ];
   }
 }

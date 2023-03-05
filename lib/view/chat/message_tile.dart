@@ -5,13 +5,18 @@ class MessageTile extends StatefulWidget {
   final String sender;
   final bool sentByMe;
   final String time;
+  final String recentMessageTime;
+  final String recentMessageUser;
 
-  const MessageTile({Key? key,
+  const MessageTile({
+    Key? key,
     required this.message,
     required this.sender,
     required this.sentByMe,
-    required this.time})
-      : super(key: key);
+    required this.time,
+    required this.recentMessageTime,
+    required this.recentMessageUser,
+  }) : super(key: key);
 
   @override
   State<MessageTile> createState() => _MessageTileState();
@@ -22,10 +27,49 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
+        widget.recentMessageTime == "first" ||
+                (widget.recentMessageTime != "first" && widget.recentMessageTime != "" &&
+                    widget.recentMessageTime.substring(0, 9) !=
+                        widget.time.substring(0, 9))
+            ? Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 10, left: 20, right: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.blue[300],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.calendar_month_outlined,
+                          size: 20,
+                          color: Colors.white70,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          '${widget.time.substring(0, 4)}년 ${widget.time.substring(5, 6)}월 ${widget.time.substring(7, 9)}일',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            : Container(),
+        widget.recentMessageUser != widget.sender ? Align(
+          alignment:
+              widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
-            margin: widget.sentByMe ? const EdgeInsets.only(right: 25, top: 5) : const EdgeInsets.only(left: 25, top: 5),
+            margin: widget.sentByMe
+                ? const EdgeInsets.only(right: 25, top: 5)
+                : const EdgeInsets.only(left: 25, top: 5),
             child: Text(
               widget.sender.toUpperCase(),
               style: const TextStyle(
@@ -35,23 +79,24 @@ class _MessageTileState extends State<MessageTile> {
               ),
             ),
           ),
-        ),
+        ) : Container(),
         Container(
           padding: EdgeInsets.only(
               bottom: 4,
               left: widget.sentByMe ? 0 : 24,
               right: widget.sentByMe ? 24 : 0),
           child: Row(
-            mainAxisAlignment:
-            widget.sentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: widget.sentByMe
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             children: [
               widget.sentByMe
                   ? Container(
-                margin: const EdgeInsets.only(left: 50, top: 45),
-                child: Text(
-                  widget.time.substring(0, widget.time.length - 3),
-                ),
-              )
+                      margin: const EdgeInsets.only(left: 50, top: 45),
+                      child: Text(
+                        widget.time.substring(9, widget.time.length - 3),
+                      ),
+                    )
                   : Container(),
               Flexible(
                 child: Container(
@@ -63,17 +108,18 @@ class _MessageTileState extends State<MessageTile> {
                   decoration: BoxDecoration(
                       borderRadius: widget.sentByMe
                           ? const BorderRadius.only(
-                        topLeft: Radius.circular(18),
-                        topRight: Radius.circular(18),
-                        bottomLeft: Radius.circular(18),
-                      )
+                              topLeft: Radius.circular(18),
+                              topRight: Radius.circular(18),
+                              bottomLeft: Radius.circular(18),
+                            )
                           : const BorderRadius.only(
-                        topLeft: Radius.circular(18),
-                        topRight: Radius.circular(18),
-                        bottomRight: Radius.circular(18),
-                      ),
-                      color:
-                      widget.sentByMe ? Colors.blueAccent : Colors.grey[700]),
+                              topLeft: Radius.circular(18),
+                              topRight: Radius.circular(18),
+                              bottomRight: Radius.circular(18),
+                            ),
+                      color: widget.sentByMe
+                          ? Colors.blueAccent
+                          : Colors.grey[700]),
                   child: Column(
                     crossAxisAlignment: widget.sentByMe
                         ? CrossAxisAlignment.end
@@ -81,22 +127,21 @@ class _MessageTileState extends State<MessageTile> {
                     children: [
                       Text(
                         widget.message,
-                        style: const TextStyle(
-                            fontSize: 16, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.white),
                       )
                     ],
                   ),
                 ),
               ),
-
               widget.sentByMe
                   ? Container()
                   : Container(
-                margin: const EdgeInsets.only(right: 25, top: 45),
-                child: Text(
-                  widget.time.substring(0, widget.time.length - 3),
-                ),
-              ),
+                      margin: const EdgeInsets.only(right: 25, top: 45),
+                      child: Text(
+                        widget.time.substring(9, widget.time.length - 3),
+                      ),
+                    ),
             ],
           ),
         ),

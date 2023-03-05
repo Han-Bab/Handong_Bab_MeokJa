@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/component/time_widget.dart';
 import 'package:han_bab/controller/auth_controller.dart';
@@ -12,7 +11,6 @@ import '../../component/database_service.dart';
 import '../../controller/image_controller.dart';
 import '../../controller/search_controller.dart';
 import '../../model/search.dart';
-
 
 class AddChatRoom extends StatelessWidget {
   AddChatRoom({Key? key}) : super(key: key);
@@ -49,33 +47,107 @@ class AddChatRoom extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              DottedBorder(
-                color: Colors.grey,
-                dashPattern: const [5, 3],
-                borderType: BorderType.RRect,
-                radius: const Radius.circular(10),
+              Container(
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade400, spreadRadius: 1)
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
                 child: SizedBox(
                   width: 400,
                   height: 200,
-                  child: Obx(() => Image.network(imageController.image.value,
-                        loadingBuilder: (BuildContext? context,
-                            Widget? child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress ==
-                              null)
-                            return child!;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                  child: Obx(
+                    () => imageController.image.value
+                            .contains("hanbab_icon.png")
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                //Image.asset("assets/vector.png", scale: 2,),
+                                Text(
+                                  String.fromCharCode(
+                                      CupertinoIcons.placemark.codePoint),
+                                  style: TextStyle(
+                                    inherit: false,
+                                    color: Colors.grey[300],
+                                    fontSize: 45.0,
+                                    fontWeight: FontWeight.w100,
+                                    fontFamily:
+                                        CupertinoIcons.placemark.fontFamily,
+                                    package:
+                                        CupertinoIcons.placemark.fontPackage,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "일치하는 이미지가 없습니다",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w100,
+                                      color: Colors.grey[600]),
+                                )
+                              ],
                             ),
-                          );
-                        },
-                        fit: imageController.flag.value != 1 ? BoxFit.cover : BoxFit.fitHeight, errorBuilder:
-                            (BuildContext context, Object exception,
-                                StackTrace? stackTrace) {
-                      return Image.asset("assets/hanbab_icon.png",
-                          fit: BoxFit.fitHeight);
-                    }),
+                          )
+                        : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(imageController.image.value,
+                              loadingBuilder: (BuildContext? context,
+                                  Widget? child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child!;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.fill,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      //Image.asset("assets/vector.png", scale: 2,),
+                                      Text(
+                                        String.fromCharCode(
+                                            CupertinoIcons.placemark.codePoint),
+                                        style: TextStyle(
+                                          inherit: false,
+                                          color: Colors.grey[300],
+                                          fontSize: 45.0,
+                                          fontWeight: FontWeight.w100,
+                                          fontFamily:
+                                              CupertinoIcons.placemark.fontFamily,
+                                          package: CupertinoIcons
+                                              .placemark.fontPackage,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "가게를 검색하세요",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w100,
+                                            color: Colors.grey[600]),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
                   ),
                 ),
               ),
@@ -89,92 +161,100 @@ class AddChatRoom extends StatelessWidget {
                     Autocomplete<RestaurantName>(
                       optionsBuilder: (textEditingValue) {
                         if (textEditingValue.text != "") {
-                          return controller.countryNames.where((RestaurantName country) => country
-                              .name
-                              .toLowerCase()
-                              .contains(textEditingValue.text
-                              .toLowerCase()))
+                          return controller.countryNames
+                              .where((RestaurantName country) => country.name
+                                  .toLowerCase()
+                                  .contains(
+                                      textEditingValue.text.toLowerCase()))
                               .toList();
                         } else {
                           return controller.countryNames
-                              .where((RestaurantName country) => country
-                              .name
-                              .toLowerCase()
-                              .contains("?"))
+                              .where((RestaurantName country) =>
+                                  country.name.toLowerCase().contains("?"))
                               .toList();
                         }
                       },
-                      displayStringForOption:
-                          (RestaurantName country) => country.name,
+                      displayStringForOption: (RestaurantName country) =>
+                          country.name,
                       fieldViewBuilder: (BuildContext context,
-                          TextEditingController
-                          fieldTextEditingController,
+                          TextEditingController fieldTextEditingController,
                           FocusNode fieldFocusNode,
                           VoidCallback onFieldSubmitted) {
-                        return TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '가게명을 입력해주세요',
-                            icon: const Icon(CupertinoIcons.search, color: Colors.black,),
-                            iconColor: Colors.black,
-                            hintStyle: Theme.of(context)
-                                .inputDecorationTheme
-                                .hintStyle,
-                            contentPadding: const EdgeInsets.all(16),
-                            border: const OutlineInputBorder(
-                              borderSide:
-                              BorderSide(width: 3, color: Colors.grey),
+                        return Focus(
+                          onFocusChange: (bool hasFocus) {
+                            restaurant = fieldTextEditingController.text;
+                            imageController
+                                .searchImage(fieldTextEditingController.text);
+                          },
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '가게명을 입력해주세요',
+                              icon: const Icon(
+                                CupertinoIcons.search,
+                                color: Color(0xff717171),
+                              ),
+                              hintStyle: Theme.of(context)
+                                  .inputDecorationTheme
+                                  .hintStyle,
+                              contentPadding: const EdgeInsets.all(16),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1, color: Color(0xffC2C2C2)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black87),
+                              ),
                             ),
+                            controller: fieldTextEditingController,
+                            focusNode: fieldFocusNode,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return '가게명을 입력하세요.';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
                           ),
-                          controller: fieldTextEditingController,
-                          focusNode: fieldFocusNode,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '가게명을 입력하세요.';
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (value) async {
-                            restaurant = value;
-                            imageController.searchImage(value);
-                          },
-                          textInputAction: TextInputAction.next,
                         );
                       },
                       onSelected: (RestaurantName selection) async {
                         restaurant = selection.name;
                         imageController.searchImage(selection.name);
-                        },
+                      },
                       optionsViewBuilder: (BuildContext context,
-                          AutocompleteOnSelected<RestaurantName>
-                          onSelected,
+                          AutocompleteOnSelected<RestaurantName> onSelected,
                           Iterable<RestaurantName> country) {
                         return Align(
                           alignment: Alignment.topLeft,
                           child: Material(
                             type: MaterialType.transparency,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 30.0),
+                              padding: const EdgeInsets.only(left: 40.12),
                               child: Container(
+                                transform: Matrix4.translationValues(0.0, -3.0, 0.0),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.blueAccent,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(20)),
-                                width: MediaQuery.of(context).size.width *
-                                    0.79,
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.black87,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20))
+                                ),
+                                width:
+                                    MediaQuery.of(context).size.width * 0.745,
                                 child: ListView.builder(
                                     physics:
-                                    const NeverScrollableScrollPhysics(),
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(1.0),
                                     itemCount: country.length,
-                                    itemBuilder: (BuildContext context,
-                                        int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       final RestaurantName option =
-                                      country.elementAt(index);
+                                          country.elementAt(index);
                                       return GestureDetector(
                                         onTap: () {
                                           onSelected(option);
@@ -182,15 +262,40 @@ class AddChatRoom extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             ListTile(
-                                              title: Text(
-                                                option.name,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                    FontWeight.bold),
+                                              title: Row(
+                                                children: [
+                                                  Text(
+                                                    String.fromCharCode(
+                                                        CupertinoIcons.placemark
+                                                            .codePoint),
+                                                    style: TextStyle(
+                                                      inherit: false,
+                                                      color: Color(0xff919191),
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.w100,
+                                                      fontFamily: CupertinoIcons
+                                                          .placemark.fontFamily,
+                                                      package: CupertinoIcons
+                                                          .placemark
+                                                          .fontPackage,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    option.name,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xff919191),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Divider()
                                           ],
                                         ),
                                       );
@@ -245,16 +350,21 @@ class AddChatRoom extends StatelessWidget {
                         pickup = value;
                       },
                       decoration: InputDecoration(
-                        hintText: "예) 비전관, 오석관 등",
-                        icon: const Icon(Icons.delivery_dining, color: Colors.black,),
-                        iconColor: Colors.black,
-                        hintStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .hintStyle,
+                        hintText: "수령할 장소를 입력하세요",
+                        icon: const Icon(
+                          Icons.delivery_dining,
+                          color: Color(0xff717171),
+                        ),
+                        hintStyle:
+                            Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
                           borderSide:
-                          BorderSide(width: 3, color: Colors.grey),
+                              BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.black87),
                         ),
                       ),
                       validator: (value) {
@@ -275,16 +385,21 @@ class AddChatRoom extends StatelessWidget {
                       controller: _maxPeopleController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        hintText: "예) 2, 3",
-                        icon: const Icon(Icons.groups_rounded, color: Colors.black,),
-                        iconColor: Colors.black,
-                        hintStyle: Theme.of(context)
-                            .inputDecorationTheme
-                            .hintStyle,
+                        hintText: "최대 인원을 입력하세요",
+                        icon: const Icon(
+                          Icons.groups_rounded,
+                          color: Color(0xff717171),
+                        ),
+                        hintStyle:
+                            Theme.of(context).inputDecorationTheme.hintStyle,
                         contentPadding: const EdgeInsets.all(16),
                         border: const OutlineInputBorder(
                           borderSide:
-                          BorderSide(width: 3, color: Colors.grey),
+                              BorderSide(width: 3, color: Color(0xffC2C2C2)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.black87),
                         ),
                       ),
                       validator: (value) {
@@ -306,11 +421,12 @@ class AddChatRoom extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () {
                                   imageController.removeData();
-                                  Get.off(() => MainScreen(), transition: Transition.zoom);
+                                  Get.off(() => MainScreen(),
+                                      transition: Transition.zoom);
                                 },
                                 child: const Text("취소하기"),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)
-                            ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey)),
                           ),
                           const SizedBox(
                             width: 25,
@@ -318,30 +434,30 @@ class AddChatRoom extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () async {
-                                if(_formKey.currentState!.validate()){
+                                if (_formKey.currentState!.validate()) {
                                   var result = await FirebaseFirestore.instance
                                       .collection('user')
-                                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.uid)
                                       .get();
                                   String userName = result['userName'];
-                                  String nickName = result['userNickName'];
-                                  DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                                  DatabaseService(
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
                                       .createGroup(
-                                      userName,
-                                      nickName,
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      restaurant.toUpperCase(),
-                                      orderTimeController.orderTime.value,
-                                      pickup,
-                                      maxPeople);
-                                  Get.snackbar(
-                                      '생성완료!',
-                                      '채팅방이 생성되었습니다!',
+                                          userName,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          restaurant.toUpperCase(),
+                                          orderTimeController.orderTime.value,
+                                          pickup,
+                                          maxPeople);
+                                  Get.snackbar('생성완료!', '채팅방이 생성되었습니다!',
                                       backgroundColor: Colors.white,
-                                      snackPosition: SnackPosition.BOTTOM
-                                  );
+                                      snackPosition: SnackPosition.BOTTOM);
                                   imageController.removeData();
-                                  Get.to(() => MainScreen(), transition: Transition.zoom);
+                                  Get.to(() => MainScreen(),
+                                      transition: Transition.zoom);
                                 }
                               },
                               child: const Text("만들기"),

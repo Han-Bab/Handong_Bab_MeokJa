@@ -38,7 +38,7 @@ class DatabaseService  extends GetxService{
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    return result['userNickName'];
+    return result['userName'];
   }
 
   // getting user data
@@ -76,20 +76,38 @@ class DatabaseService  extends GetxService{
       return "sin";
     } else if (imgName == "행복한 마라탕") {
       return "hang";
+    } else if (imgName == "공차") {
+      return "gong";
     } else {
       return "no file";
     }
   }
 
+  baeMinUrl(groupName) async {
+    DocumentReference d = FirebaseFirestore.instance.collection("restaurants").doc(groupName);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['url'];
+  }
+  baeMinPhoneNumber(groupName) async {
+    DocumentReference d = FirebaseFirestore.instance.collection("restaurants").doc(groupName);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['phoneNumber'];
+  }
+
   // creating a group
-  Future createGroup(String userName, String nickName, String id, String groupName,
+  Future createGroup(String userName, String id, String groupName,
       String orderTime, String pickup, String maxPeople) async {
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
-    var imgUrl = await urlRef.getDownloadURL();
-    print("url-------------------$imgUrl");
+    var imgUrl;
+    try {
+      imgUrl = await urlRef.getDownloadURL();
+    }catch(e) {
+      var urlRef = firebaseStorage.child('hanbab_icon.png');
+      imgUrl = await urlRef.getDownloadURL();
+    }
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
-      "admin": "${id}_$nickName",
+      "admin": "${id}_$userName",
       "members": [],
       "groupId": "",
       "orderTime": orderTime,
@@ -100,14 +118,19 @@ class DatabaseService  extends GetxService{
       "date": strToday,
       "recentMessage": "",
       "recentMessageSender": "",
-      //"newPerson": false
+      "recentMessageTime": "first",
+      // "newPerson": "",
     });
     //update the members
     await groupDocumentReference.update({
-      "members": FieldValue.arrayUnion(["${uid}_$nickName"]),
+      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
       "groupId": groupDocumentReference.id,
     });
-
+    groupCollection.doc(groupDocumentReference.id).collection("messages").add({
+      "newPerson": "${uid}_$userName",
+      "inOut": "in",
+      "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+    });
     DocumentReference userDocumentReference = userCollection.doc(uid);
     return await userDocumentReference.update({
       "groups":
@@ -166,18 +189,24 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
 
     List<dynamic> groups = await documentSnapshot['groups'];
-    if (groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.contains(groupId)).isNotEmpty) {
       return true;
     } else {
       return false;
     }
   }
 
-  modifyGroupInfo(String groupId, String groupName, String orderTime,
+  modifyGroupInfo(String groupId, String prevGroupName, String groupName, String orderTime,
       String pickup, String maxPeople) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
     var urlRef = firebaseStorage.child('${getImage(groupName)}.jpg');
-    var imgUrl = await urlRef.getDownloadURL();
+    var imgUrl;
+    try {
+      imgUrl = await urlRef.getDownloadURL();
+    }catch(e) {
+      var urlRef = firebaseStorage.child('hanbab_icon.png');
+      imgUrl = await urlRef.getDownloadURL();
+    }
     await groupDocumentReference.update({
       "groupName": groupName,
       "orderTime": orderTime,
@@ -185,6 +214,17 @@ class DatabaseService  extends GetxService{
       "maxPeople": maxPeople,
       "imgUrl": imgUrl
     });
+    groupCollection.doc(groupId).collection("messages").add({
+      "newPerson": "modify",
+      "inOut": "modify",
+      "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+    });
+    groupCollection.doc(groupId).update({
+      "recentMessage": "",
+      "recentMessageSender": "",
+      "recentMessageTime": "",
+    });
+    DocumentReference userDocumentReference = userCollection.doc(uid);
   }
 
   Future groupJoin(String groupId, String userName, String groupName) async {
@@ -195,7 +235,7 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (!groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.contains(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayUnion(["${groupId}_$groupName"])
       });
@@ -206,6 +246,16 @@ class DatabaseService  extends GetxService{
           await groupDocumentReference.get();
       List<dynamic> members = await groupDocumentSnapshot['members'];
       await groupDocumentReference.update({"currPeople": "${members.length}"});
+      groupCollection.doc(groupId).collection("messages").add({
+        "newPerson": "${uid}_$userName",
+        "inOut": "in",
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+      });
+      groupCollection.doc(groupId).update({
+        "recentMessage": "",
+        "recentMessageSender": "",
+        "recentMessageTime": "",
+      });
     }
   }
 
@@ -217,12 +267,22 @@ class DatabaseService  extends GetxService{
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    if (groups.contains("${groupId}_$groupName")) {
+    if (groups.where((name) => name.contains(groupId)).isEmpty) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
       });
       await groupDocumentReference.update({
         "members": FieldValue.arrayRemove(["${uid}_$userName"]),
+      });
+      groupCollection.doc(groupId).collection("messages").add({
+        "newPerson": "${uid}_$userName",
+        "inOut": "out",
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+      });
+      groupCollection.doc(groupId).update({
+        "recentMessage": "",
+        "recentMessageSender": "",
+        "recentMessageTime": "",
       });
       DocumentSnapshot groupDocumentSnapshot =
           await groupDocumentReference.get();

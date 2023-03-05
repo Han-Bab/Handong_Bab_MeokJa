@@ -4,14 +4,17 @@ import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:han_bab/controller/chat_info_controller.dart';
 import 'package:han_bab/view/chat/message_tile.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../component/database_service.dart';
 import '../main/main_screen.dart';
-import 'package:intl/date_symbol_data_local.dart';
+
+DateTime now = DateTime.now();
+DateFormat formatter = DateFormat('yyyy-M-dd');
+String strToday = formatter.format(now);
 
 class ChatRoom extends StatefulWidget {
   const ChatRoom({Key? key}) : super(key: key);
@@ -27,14 +30,21 @@ class _ChatRoomState extends State<ChatRoom> {
   TextEditingController messageController = TextEditingController();
   String admin = "";
   String userName = "";
-  StreamController<bool> streamController = StreamController<bool>();
   final ScrollController _scrollController = ScrollController();
+  final chatInfoController = Get.put(ChatInfoController());
 
   @override
   initState() {
     getChatandAdmin();
     super.initState();
-    initializeDateFormatting("ko", null);
+    chatInfoController.setInfo(
+        restaurant.groupName,
+        restaurant.orderTime,
+        restaurant.pickup,
+        restaurant.currPeople,
+        restaurant.maxPeople,
+        restaurant.members);
+    print(chatInfoController.restaurantName.value);
   }
 
   getChatandAdmin() {
@@ -67,6 +77,38 @@ class _ChatRoomState extends State<ChatRoom> {
 
   String getId(String res) {
     return res.substring(0, res.indexOf("_"));
+  }
+
+  noBaeMin(context, groupName) {
+      DatabaseService().baeMinPhoneNumber(groupName).then((phoneNumber) {
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                contentPadding: const EdgeInsets.only(top: 10.0),
+                content: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.28,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 50,),
+                      const Text("배민에 등록되어", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
+                      const Text("있지 않은 가게입니다.", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
+                      const SizedBox(height: 10,),
+                      const Text("전화번호: ", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
+                      Text(phoneNumber, style: const TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
+                      const SizedBox(height: 30,),
+                      TextButton(onPressed: (){Get.back();}, child: const Text("확인", style: TextStyle(color: Color(0xff75B165), fontSize: 18),))
+                    ],
+                  ),
+                ),
+              );
+            });
+      });
+
   }
 
   Future<void> payModal(context) async {
@@ -167,9 +209,9 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   void modifyInfo(groupName, String orderTime, pick, people) {
-    final TextEditingController _restaurantController =
+    final TextEditingController restaurantController =
         TextEditingController(text: groupName);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     String pickup = pick;
     String maxPeople = people;
     DateTime? time = DateFormat("HH:mm").parse(orderTime);
@@ -199,11 +241,11 @@ class _ChatRoomState extends State<ChatRoom> {
                       ),
                       Expanded(
                         child: Form(
-                          key: _formKey,
+                          key: formKey,
                           child: ListView(
                             children: [
                               TextFormField(
-                                controller: _restaurantController,
+                                controller: restaurantController,
                                 decoration: InputDecoration(
                                   hintText: '가게명을 입력해주세요',
                                   iconColor: Colors.black,
@@ -244,7 +286,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                   hintStyle: Theme.of(context)
                                       .inputDecorationTheme
                                       .hintStyle,
-                                  contentPadding: EdgeInsets.all(0),
+                                  contentPadding: const EdgeInsets.all(0),
                                 ),
                                 onShowPicker: (context, currentValue) async {
                                   final time = await showTimePicker(
@@ -338,50 +380,33 @@ class _ChatRoomState extends State<ChatRoom> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
+                                      if (formKey.currentState!.validate()) {
                                         DatabaseService(
                                                 uid: FirebaseAuth
                                                     .instance.currentUser!.uid)
                                             .modifyGroupInfo(
                                                 restaurant.groupId,
-                                                _restaurantController.text,
+                                                groupName,
+                                                restaurantController.text,
                                                 DateFormat("HH:mm")
                                                     .format(time!),
                                                 pickup,
-                                                maxPeople).whenComplete(() {
+                                                maxPeople)
+                                            .whenComplete(() {
                                           Get.back();
                                           Get.back();
-                                          DatabaseService()
-                                              .getGroupName(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              print(val);
-                                              restaurant.groupName = val;
-                                            });
-                                          });
-                                          DatabaseService()
-                                              .getGroupTime(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              restaurant.orderTime = val;
-                                            });
-                                          });
-                                          DatabaseService()
-                                              .getGroupPick(restaurant.groupId)
-                                              .then((val) {
-                                            setState(() {
-                                              restaurant.pickup = val;
-                                            });
-                                          });
-
-                                          Get.snackbar(
-                                              '수정완료!',
-                                              '채팅방이 수정되었습니다!',
+                                          chatInfoController.setInfo(
+                                              restaurantController.text,
+                                              DateFormat("HH:mm").format(time!),
+                                              pickup,
+                                              restaurant.currPeople,
+                                              maxPeople,
+                                              restaurant.members);
+                                          Get.snackbar('수정완료!', '채팅방이 수정되었습니다!',
                                               backgroundColor: Colors.white,
-                                              snackPosition: SnackPosition.BOTTOM
-                                          );
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM);
                                         });
-
                                       }
                                     },
                                     child: const Text("수정하기"),
@@ -416,12 +441,42 @@ class _ChatRoomState extends State<ChatRoom> {
             color: Colors.black,
           ),
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Text(
-            restaurant.groupName,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          title: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  chatInfoController.restaurantName.value,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    DatabaseService()
+                        .baeMinUrl(chatInfoController.restaurantName.value)
+                        .then((url) {
+                      _url = Uri.parse(url);
+                      if(url == "") {
+                        return noBaeMin(context, chatInfoController.restaurantName.value);
+                      }
+                      else {
+                        return _launchUrl();
+                      }
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.cyan,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30))),
+                  child: const Text("배민"),
+                )
+              ],
             ),
           ),
           backgroundColor: Colors.white,
@@ -433,152 +488,184 @@ class _ChatRoomState extends State<ChatRoom> {
             children: [
               Expanded(
                 child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                  const ListTile(
-                    title: Text(
-                      '방 정보',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "가게이름: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.groupName}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "시간: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.orderTime}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          const Text(
-                            "픽업장소: ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "${restaurant.pickup}",
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 100, right: 100, bottom: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        modifyInfo(restaurant.groupName, restaurant.orderTime,
-                            restaurant.pickup, restaurant.maxPeople);
-                      },
-                      child: const Text("수정하기"),
-                      style: ButtonStyle(),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.grey[300],
-                    thickness: 1.0,
-                    indent: 2,
-                    endIndent: 2,
-                    height: 1,
-                  ),
-                  const ListTile(
-                    title: Text(
-                      '대화상대',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: restaurant.members!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (restaurant.members[index] == restaurant.admin) {
-                                return ListTile(
-                                    leading: Text(
-                                      "👑",
-                                      style: TextStyle(fontSize: 25),
-                                    ),
-                                    title: Text(getName(restaurant.members[index]),
-                                        style: const TextStyle(fontSize: 17)));
-                              } else {
-                                return ListTile(
-                                  leading: Text(""),
-                                  title: Text(getName(restaurant.members[index]),
-                                      style: const TextStyle(fontSize: 17)),
-                                );
-                              }
-                            }),
-                        Divider(
-                          color: Colors.grey[300],
-                          thickness: 1.0,
-                          indent: 2,
-                          endIndent: 2,
-                          height: 1,
+                      const ListTile(
+                        title: Text(
+                          '방 정보',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
                         ),
-                        ListTile(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
                           title: Row(
-                            children: const [
-                              Icon(CupertinoIcons.money_dollar_circle),
-                              SizedBox(
-                                width: 18,
+                            children: [
+                              const Text(
+                                "가게이름: ",
+                                style: TextStyle(fontSize: 15),
                               ),
-                              Text(
-                                "정산하기",
-                                style: TextStyle(fontSize: 17),
+                              Obx(
+                                () => Text(
+                                  chatInfoController.restaurantName.value,
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ],
                           ),
-                          onTap: () {
-                            payModal(context);
-                          },
                         ),
-                        Divider(
-                          color: Colors.grey[300],
-                          thickness: 1.0,
-                          indent: 2,
-                          endIndent: 2,
-                          height: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              const Text(
+                                "시간: ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Obx(
+                                () => Text(
+                                  chatInfoController.orderTime.value,
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              const Text(
+                                "픽업장소: ",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Obx(
+                                () => Text(
+                                  chatInfoController.pickUp.value,
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 100, right: 100, bottom: 10),
+                        child: getName(restaurant.admin) == userName
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  modifyInfo(
+                                      chatInfoController.restaurantName.value,
+                                      chatInfoController.orderTime.value,
+                                      chatInfoController.pickUp.value,
+                                      chatInfoController.maxPeople.value);
+                                },
+                                style: const ButtonStyle(),
+                                child: const Text("수정하기"),
+                              )
+                            : const ElevatedButton(
+                                onPressed: null,
+                                style: ButtonStyle(),
+                                child: Text("수정하기"),
+                              ),
+                      ),
+                      Divider(
+                        color: Colors.grey[300],
+                        thickness: 1.0,
+                        indent: 2,
+                        endIndent: 2,
+                        height: 1,
+                      ),
+                      const ListTile(
+                        title: Text(
+                          '대화상대',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          children: [
+                            Obx(
+                              () => ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      chatInfoController.member.value!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    if (chatInfoController
+                                            .member.value[index] ==
+                                        restaurant.admin) {
+                                      return ListTile(
+                                          leading: const Text(
+                                            "👑",
+                                            style: TextStyle(fontSize: 25),
+                                          ),
+                                          title: Text(
+                                              getName(chatInfoController
+                                                  .member.value[index]),
+                                              style: const TextStyle(
+                                                  fontSize: 17)));
+                                    } else {
+                                      return ListTile(
+                                        leading: const Text(""),
+                                        title: Text(
+                                            getName(chatInfoController
+                                                .member.value[index]),
+                                            style:
+                                                const TextStyle(fontSize: 17)),
+                                      );
+                                    }
+                                  }),
+                            ),
+                            Divider(
+                              color: Colors.grey[300],
+                              thickness: 1.0,
+                              indent: 2,
+                              endIndent: 2,
+                              height: 1,
+                            ),
+                            ListTile(
+                              title: Row(
+                                children: const [
+                                  Icon(CupertinoIcons.money_dollar_circle),
+                                  SizedBox(
+                                    width: 18,
+                                  ),
+                                  Text(
+                                    "정산하기",
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                payModal(context);
+                              },
+                            ),
+                            Divider(
+                              color: Colors.grey[300],
+                              thickness: 1.0,
+                              indent: 2,
+                              endIndent: 2,
+                              height: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
               ),
               ListTile(
                 title: Row(
@@ -601,8 +688,8 @@ class _ChatRoomState extends State<ChatRoom> {
                       barrierDismissible: false,
                       builder: (BuildContext ctx) {
                         return AlertDialog(
-                          title: Text("나가기"),
-                          content: Text("방에서 나가겠습니까?"),
+                          title: const Text("나가기"),
+                          content: const Text("방에서 나가겠습니까?"),
                           actions: [
                             TextButton(
                               onPressed: () async {
@@ -610,29 +697,34 @@ class _ChatRoomState extends State<ChatRoom> {
                                     .collection('user')
                                     .doc(FirebaseAuth.instance.currentUser!.uid)
                                     .get();
-                                String userName = result['userNickName'];
+                                String userName = result['userName'];
                                 DatabaseService(
-                                    uid: FirebaseAuth
-                                        .instance.currentUser!.uid)
-                                    .groupOut(restaurant.groupId, userName,
-                                    restaurant.groupName);
+                                        uid: FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                    .groupOut(
+                                        restaurant.groupId,
+                                        userName,
+                                        chatInfoController
+                                            .restaurantName.value);
 
                                 Get.to(() => MainScreen());
                               },
-                              child: Text("예"),
+                              child: const Text("예"),
                             ),
                             TextButton(
                               onPressed: () {
                                 Get.back();
                               },
-                              child: Text("아니오"),
+                              child: const Text("아니오"),
                             )
                           ],
                         );
                       });
                 },
               ),
-              const SizedBox(height: 10,)
+              const SizedBox(
+                height: 10,
+              )
             ],
           ),
         )),
@@ -650,7 +742,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   ),
                   elevation: 5,
                   margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
-                  child: Container(
+                  child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       child: Row(
@@ -665,23 +757,32 @@ class _ChatRoomState extends State<ChatRoom> {
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "시간: ${restaurant.orderTime}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(
+                            () => Text(
+                              "시간: ${chatInfoController.orderTime.value}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "장소: ${restaurant.pickup}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(
+                            () => Text(
+                              "장소: ${chatInfoController.pickUp.value}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "인원: [${restaurant.currPeople}/${restaurant.maxPeople}]",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Obx(
+                            () => Text(
+                              "인원: [${chatInfoController.currPeople.value}/${chatInfoController.maxPeople.value}]",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       )),
@@ -734,37 +835,13 @@ class _ChatRoomState extends State<ChatRoom> {
         ));
   }
 
-  inOut() {
-    return StreamBuilder(
-      stream: streamController.stream,
-      builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue[300],
-                ),
-                width: MediaQuery.of(context).size.width - 10,
-                height: 28,
-                child: Center(
-                    child: Text(
-                  "${getName(restaurant.members[restaurant.members.length - 1])}님이 입장하였습니다.",
-                  style: const TextStyle(color: Colors.white),
-                )),
-              )
-            : Container();
-      },
-    );
-  }
-
   bool _needsScroll = false;
 
   _scrollToEnd() async {
     if (_needsScroll) {
       _needsScroll = false;
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
     }
   }
 
@@ -779,26 +856,97 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
-                  print(restaurant.recentMessageSender);
-                  print('최근 ${restaurant.recentMessageSender} user $userName');
                   _needsScroll = true;
-                  return MessageTile(
-                      message: snapshot.data.docs[index]['message'],
-                      sender: snapshot.data.docs[index]['sender'],
-                      sentByMe: userName == snapshot.data.docs[index]['sender'],
-                      time: snapshot.data.docs[index]['time']);
+                  return Column(
+                    children: [
+                      snapshot.data.docs[index]['newPerson'] == ""
+                          ? MessageTile(
+                              message: snapshot.data.docs[index]['message'],
+                              sender: snapshot.data.docs[index]['sender'],
+                              sentByMe: userName ==
+                                  snapshot.data.docs[index]['sender'],
+                              time: snapshot.data.docs[index]['time'],
+                              recentMessageTime: snapshot.data.docs[index]
+                                  ['recentTime'],
+                              recentMessageUser: snapshot.data.docs[index]
+                                  ['recentUser'])
+                          : snapshot.data.docs[index]['inOut'] == "in"
+                              ? Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, left: 20, right: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.blue[300],
+                                  ),
+                                  child: Text(
+                                    "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하였습니다.",
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 13),
+                                  ),
+                                )
+                              : snapshot.data.docs[index]['inOut'] == "out"
+                                  ? Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 20,
+                                          right: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue[300],
+                                      ),
+                                      child: Text(
+                                        "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하였습니다.",
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 13),
+                                      ),
+                                    )
+                                  : Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 20,
+                                          right: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue[300],
+                                      ),
+                                      child: const Text(
+                                        "방 정보가 수정되었습니다.",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 13),
+                                      ),
+                                    )
+                    ],
+                  );
                 })
             : Container();
       },
     );
   }
 
-  sendMessage() {
+  sendMessage() async {
     if (messageController.text.isNotEmpty) {
+      DocumentReference d = FirebaseFirestore.instance
+          .collection("groups")
+          .doc(restaurant.groupId);
+      DocumentSnapshot documentSnapshot = await d.get();
+      var sender = documentSnapshot['recentMessageSender'];
+      var time = documentSnapshot['recentMessageTime'];
+
       Map<String, dynamic> chatMessageMap = {
         "message": messageController.text,
         "sender": userName,
-        "time": DateFormat("a h:mm:ss", "ko").format(DateTime.now()),
+        "time": DateFormat("yyyy-M-dd a h:mm:ss", "ko").format(DateTime.now()),
+        "recentTime": time,
+        "recentUser": sender,
+        "newPerson": ""
       };
       DatabaseService().sendMessage(restaurant.groupId, chatMessageMap);
       messageController.clear();
