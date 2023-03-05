@@ -45,10 +45,34 @@ class _MyAppState extends State<MyApp> {
       home: LoginPage(),
       theme: ThemeData(
         fontFamily: 'fonts',
+        primarySwatch: Colors.orange,
         brightness: Brightness.light,
-        //appBarTheme: AppBarTheme(color: Colors.orange,),
+        splashColor: Colors.orange,
+        appBarTheme: const AppBarTheme(
+          color: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange[300],
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xffF2F2F5),
+          border: InputBorder.none,
+          hintStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
         ),
       ),
 

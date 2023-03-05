@@ -22,7 +22,7 @@ class ReportBug extends StatelessWidget {
           onPressed: () {
             Get.back();
           },
-          icon: Icon(CupertinoIcons.chevron_back),
+          icon: const Icon(CupertinoIcons.chevron_back),
         ),
       ),
       body: Container(
@@ -36,7 +36,7 @@ class ReportBug extends StatelessWidget {
                 "불편하신 점이 있으신가요?",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 24,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -52,7 +52,7 @@ class ReportBug extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(bottom: 5),
               child: Text(
-                '확인 후에 빠르고 정확하게 답변 드리도록 하겠습니다',
+                '확인 후 신속 정확하게 답변 드리도록 하겠습니다 :)',
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -79,7 +79,7 @@ class ReportBug extends StatelessWidget {
                     foregroundColor: Colors.black,
                     elevation: 0,
                     side: const BorderSide(width: 0.5),
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                   ),
                   onPressed: () {
                     mypageController.sendEmail();

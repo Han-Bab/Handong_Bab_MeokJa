@@ -72,8 +72,6 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         // centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: ModalProgressHUD(
@@ -92,6 +90,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        RichText(
+                            text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '한밥',
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 23,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '을 통해 행복한 식사에\n동참해보세요',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 116, 116, 116),
+                                fontSize: 23,
+                              ),
+                            ),
+                          ],
+                        )),
+                        const SizedBox(
+                          height: 30,
+                        ),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 8.0),
                           child: Text(
@@ -396,8 +416,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     _isChecked1 = value!;
                                   });
                                 },
-                                activeColor: Colors.blue,
-                                checkColor: Colors.black,
+                                activeColor: Colors.black,
+                                checkColor: Colors.white,
                                 checkboxShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25),
                                 ),
@@ -435,8 +455,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     _isChecked2 = value!;
                                   });
                                 },
-                                activeColor: Colors.blue,
-                                checkColor: Colors.black,
+                                activeColor: Colors.black,
+                                checkColor: Colors.white,
                                 checkboxShape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25)),
                                 controlAffinity:
@@ -482,40 +502,25 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       bottomSheet: Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("취소"),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              flex: 1,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showSpinner = true;
-                  });
-                  _tryValidation();
-                  if (validation) {
-                    AuthController.instance.register(userInfo);
-                  }
-                  setState(() {
-                    _showSpinner = false;
-                  });
-                },
-                child: const Text("가입"),
-              ),
-            ),
-          ],
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+        child: SizedBox(
+          width: double.infinity,
+          height: 45,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _showSpinner = true;
+              });
+              _tryValidation();
+              if (validation) {
+                AuthController.instance.register(userInfo);
+              }
+              setState(() {
+                _showSpinner = false;
+              });
+            },
+            child: const Text("가입"),
+          ),
         ),
       ),
     );

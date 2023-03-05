@@ -92,7 +92,7 @@ class CommunityPage extends StatelessWidget {
                                                   .communityList[index].title,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),
@@ -107,7 +107,7 @@ class CommunityPage extends StatelessWidget {
                                                   .communityList[index].content,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 15,
                                               ),
                                             ),
                                           ),
@@ -125,13 +125,13 @@ class CommunityPage extends StatelessWidget {
                                                           '${communityController.communityList[index].regtime} | ${communityController.communityList[index].writer}',
                                                           style:
                                                               const TextStyle(
-                                                                  fontSize: 12),
+                                                                  fontSize: 10),
                                                         )
                                                       : Text(
                                                           '${communityController.communityList[index].regdate} | ${communityController.communityList[index].writer}',
                                                           style:
                                                               const TextStyle(
-                                                                  fontSize: 12),
+                                                                  fontSize: 10),
                                                         ),
                                                 ),
                                                 SizedBox(
@@ -142,7 +142,7 @@ class CommunityPage extends StatelessWidget {
                                                         CupertinoIcons
                                                             .heart_fill,
                                                         color: Colors.red,
-                                                        size: 18,
+                                                        size: 15,
                                                       ),
                                                       const SizedBox(
                                                         width: 5,
@@ -150,13 +150,13 @@ class CommunityPage extends StatelessWidget {
                                                       Text(
                                                           '${communityController.communityList[index].likeCount}'),
                                                       const SizedBox(
-                                                        width: 10,
+                                                        width: 8,
                                                       ),
                                                       const Icon(
                                                         CupertinoIcons
                                                             .chat_bubble_fill,
                                                         color: Colors.green,
-                                                        size: 18,
+                                                        size: 15,
                                                       ),
                                                       const SizedBox(
                                                         width: 5,
@@ -191,15 +191,20 @@ class CommunityPage extends StatelessWidget {
                               Get.off(() => AddPost());
                             },
                             style: TextButton.styleFrom(
-                              fixedSize: Size(112, 45),
-                              side: BorderSide(color: Colors.blue),
+                              fixedSize: const Size(112, 45),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              side: const BorderSide(),
                               backgroundColor: Colors.white,
                             ),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(
                                   CupertinoIcons.pencil,
-                                  color: Colors.lightBlue,
+                                  color: Colors.black,
+                                  size: 18,
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -207,7 +212,8 @@ class CommunityPage extends StatelessWidget {
                                 Text(
                                   '글 쓰기',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
