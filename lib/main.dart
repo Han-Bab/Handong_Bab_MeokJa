@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart'; //안드로이드 디자인
-import 'package:flutter/cupertino.dart'; //IOS 디자인홈 화면 함수 불러오기 불러오기
+//IOS 디자인홈 화면 함수 불러오기 불러오기
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:han_bab/view/main/main_screen.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +25,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
+    // MARK: implement initState
     super.initState();
     initialization();
   }

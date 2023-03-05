@@ -31,7 +31,7 @@ class MypageController extends GetxController {
           "죄송합니다 \u{1F625}\n\n기본 메일앱을 사용할 수 없어서\n앱에서 바로 문의메일을 전송하기\n어렵습니다.\n\n아래 명시된 이메일로 연락주시면\n친절하고 빠르게 답변해드리도록\n하겠습니다 \u{1F60A}\n";
       Get.defaultDialog(
         title: title,
-        titlePadding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+        titlePadding: EdgeInsets.fromLTRB(30, 20, 30, 50),
         content: SizedBox(
           height: 300,
           width: double.infinity,
@@ -46,14 +46,14 @@ class MypageController extends GetxController {
               const Text(
                 "lovehyungee0721@gmail.com",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               )
             ],
           ),
         ),
-        contentPadding: EdgeInsets.fromLTRB(40, 0, 40, 20),
+        contentPadding: EdgeInsets.fromLTRB(40, 0, 40, 10),
       );
     }
   }

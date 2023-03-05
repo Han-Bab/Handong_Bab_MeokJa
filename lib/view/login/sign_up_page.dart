@@ -145,7 +145,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         // 비밀번호 입력폼
                         TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty || value!.length < 6) {
+                            if (value!.isEmpty || value.length < 6) {
                               return "비밀번호는 최소 6자 이상 입력해주세요";
                             }
                             return null;
@@ -242,7 +242,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.phone,
                           validator: (value) {
-                            if (value!.isEmpty || value!.length != 13) {
+                            if (value!.isEmpty || value.length != 13) {
                               return "올바른 전화번호를 입력해주세요";
                             }
                             return null;
@@ -299,8 +299,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintStyle: const TextStyle(fontSize: 14),
                             border: InputBorder.none,
                             filled: true,
-                            fillColor: Color(0xffF2F2F5),
-                            contentPadding: EdgeInsets.all(10),
+                            fillColor: const Color(0xffF2F2F5),
+                            contentPadding: const EdgeInsets.all(10),
                             suffixIcon: Container(
                               decoration: const BoxDecoration(
                                   border: Border(
@@ -407,14 +407,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             IconButton(
                               onPressed: () {
-                                Get.to(() => AccountTerm());
+                                Get.to(() => const AccountTerm());
                               },
                               icon: const Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 size: 12,
                               ),
-                              padding: EdgeInsets.only(left: 20), // 패딩 설정
-                              constraints: BoxConstraints(),
+                              padding: const EdgeInsets.only(left: 20), // 패딩 설정
+                              constraints: const BoxConstraints(),
                             ),
                           ],
                         ),
@@ -445,14 +445,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             IconButton(
                               onPressed: () {
-                                Get.to(() => PrivacyTerm());
+                                Get.to(() => const PrivacyTerm());
                               },
                               icon: const Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 size: 12,
                               ),
-                              padding: EdgeInsets.only(left: 20), // 패딩 설정
-                              constraints: BoxConstraints(),
+                              padding: const EdgeInsets.only(left: 20), // 패딩 설정
+                              constraints: const BoxConstraints(),
                             ),
                           ],
                         ),
@@ -482,7 +482,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       bottomSheet: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
         child: Row(
           children: [
             Expanded(

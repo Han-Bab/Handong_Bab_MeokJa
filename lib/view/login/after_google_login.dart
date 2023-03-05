@@ -76,7 +76,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
             },
             child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -94,10 +94,10 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       child: OutlinedButton(
                         onPressed: null,
                         style: OutlinedButton.styleFrom(
-                            backgroundColor: Color(0xffF2F2F5),
+                            backgroundColor: const Color(0xffF2F2F5),
                             side: BorderSide.none,
-                            padding:
-                                EdgeInsets.only(top: 16, bottom: 16, left: 10),
+                            padding: const EdgeInsets.only(
+                                top: 16, bottom: 16, left: 10),
                             alignment: Alignment.centerLeft),
                         child: Text(
                           authController.authentication.currentUser!.email
@@ -121,7 +121,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       ),
                     ),
                     TextFormField(
-                      key: ValueKey(1),
+                      key: const ValueKey(1),
                       onChanged: (value) {
                         userInfo['userName'] = value;
                       },
@@ -154,10 +154,10 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       ),
                     ),
                     TextFormField(
-                      key: ValueKey(2),
+                      key: const ValueKey(2),
                       keyboardType: TextInputType.phone,
                       validator: (value) {
-                        if (value!.isEmpty || value!.length != 13) {
+                        if (value!.isEmpty || value.length != 13) {
                           return "올바른 전화번호를 입력해주세요";
                         }
                         return null;
@@ -189,7 +189,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       ),
                     ),
                     TextFormField(
-                      key: ValueKey(3),
+                      key: const ValueKey(3),
                       onChanged: (value) {
                         userInfo['userNickName'] = value;
                       },
@@ -209,7 +209,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                       },
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Color(0xffF2F2F5),
+                        fillColor: const Color(0xffF2F2F5),
                         hintText: "예 : 한동이",
                         hintStyle: const TextStyle(fontSize: 14),
                         border: InputBorder.none,
@@ -267,7 +267,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
         ),
       ),
       bottomSheet: Container(
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: Row(
           children: [
             Flexible(
@@ -277,7 +277,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                   authController.logout();
                   authController.logoutGoogle();
                 },
-                child: Text("나중에 하기"),
+                child: const Text("나중에 하기"),
               ),
             ),
             const SizedBox(
@@ -304,7 +304,7 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                     _showSpinner = false;
                   });
                 },
-                child: Text("저장하기"),
+                child: const Text("저장하기"),
               ),
             ),
           ],
