@@ -80,131 +80,235 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   noBaeMin(context, groupName) {
-      DatabaseService().baeMinPhoneNumber(groupName).then((phoneNumber) {
-        return showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                content: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.height * 0.28,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 50,),
-                      const Text("배민에 등록되어", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
-                      const Text("있지 않은 가게입니다.", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 20),),
-                      const SizedBox(height: 10,),
-                      const Text("전화번호: ", style: TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
-                      Text(phoneNumber, style: const TextStyle(color: Color(0xff3E3E3E),fontSize: 15),),
-                      const SizedBox(height: 30,),
-                      TextButton(onPressed: (){Get.back();}, child: const Text("확인", style: TextStyle(color: Color(0xff75B165), fontSize: 18),))
-                    ],
-                  ),
-                ),
-              );
-            });
-      });
-
-  }
-
-  Future<void> payModal(context) async {
-    bool visibility = false;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return Dialog(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: 380,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 70, bottom: 10),
-                  child: Column(children: [
+    DatabaseService().baeMinPhoneNumber(groupName).then((phoneNumber) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              contentPadding: const EdgeInsets.only(top: 10.0),
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                height: MediaQuery.of(context).size.height * 0.28,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    const Text(
+                      "배민에 등록되어",
+                      style: TextStyle(color: Color(0xff3E3E3E), fontSize: 20),
+                    ),
+                    const Text(
+                      "있지 않은 가게입니다.",
+                      style: TextStyle(color: Color(0xff3E3E3E), fontSize: 20),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "전화번호: ",
+                      style: TextStyle(color: Color(0xff3E3E3E), fontSize: 15),
+                    ),
                     Text(
-                      getName(restaurant.admin),
+                      phoneNumber,
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                          color: Color(0xff3E3E3E), fontSize: 15),
                     ),
                     const SizedBox(
-                      height: 5,
-                    ),
-                    const SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     TextButton(
-                        onPressed: () {},
-                        child: ElevatedButton(
-                            onPressed: () {
-                              _url = Uri.parse(
-                                  'https://qr.kakaopay.com/FTH8NL7za}');
-                              _launchUrl();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFEB03),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text(
-                                  "카카오페이 ",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  "송금",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                              ],
-                            ))),
-                    TextButton(
-                        onPressed: () {},
-                        child: ElevatedButton(
-                            onPressed: () {
-                              _url = Uri.parse('https://toss.me/김김김경록');
-                              _launchUrl();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF3268E8),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text(
-                                  "토스 ",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Text(
-                                  "송금",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ))),
-                    AnimatedOpacity(
-                        opacity: visibility ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
+                        onPressed: () {
+                          Get.back();
+                        },
                         child: const Text(
-                          "클립보드에 계좌번호가 복사되었습니다.",
-                          style: TextStyle(color: Colors.red, fontSize: 10),
+                          "확인",
+                          style:
+                              TextStyle(color: Color(0xff75B165), fontSize: 18),
                         ))
-                  ]),
+                  ],
                 ),
               ),
             );
           });
+    });
+  }
+
+  roomOut() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            contentPadding: const EdgeInsets.only(top: 20.0),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: MediaQuery.of(context).size.height * 0.28,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  const Text(
+                    "방에서 나가시겠습니까?",
+                    style: TextStyle(color: Color(0xff3E3E3E), fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text("취소", style: TextStyle(color: Color(0xffED6160), fontSize: 18),),
+                      ),
+                      const SizedBox(width: 30,),
+                      TextButton(
+                        onPressed: () async {
+                          var result = await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .get();
+                          String userName = result['userName'];
+                          DatabaseService(
+                              uid: FirebaseAuth
+                                  .instance.currentUser!.uid)
+                              .groupOut(restaurant.groupId, userName,
+                              chatInfoController.restaurantName.value);
+
+                          Get.to(() => MainScreen());
+                        },
+                        child: const Text("확인", style: TextStyle(color: Color(0xff75B165), fontSize: 18),),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<void> payModal(context) async {
+    bool visibility = false;
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            contentPadding: const EdgeInsets.only(top: 3.0),
+            content: StatefulBuilder(builder: (context, setState) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                height: MediaQuery.of(context).size.height * 0.33,
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text(
+                            "×",
+                            style: TextStyle(
+                                color: Color(0xff717171), fontSize: 40),
+                          ))
+                    ],
+                  ),
+                  Text(
+                    getName(restaurant.admin),
+                    style: const TextStyle(
+                      color: Color(0xff3E3E3E),
+                        fontSize: 23, fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _url =
+                              Uri.parse('https://qr.kakaopay.com/FTH8NL7za}');
+                          _launchUrl();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFFEB03),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "카카오페이 ",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                "송금",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _url = Uri.parse('https://toss.me/김김김경록');
+                          _launchUrl();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF3268E8),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "토스페이 ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "송금",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                  AnimatedOpacity(
+                      opacity: visibility ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 500),
+                      child: const Text(
+                        "클립보드에 계좌번호가 복사되었습니다.",
+                        style: TextStyle(color: Colors.red, fontSize: 10),
+                      ))
+                ]),
+              );
+            }),
+          );
         });
   }
 
@@ -218,14 +322,15 @@ class _ChatRoomState extends State<ChatRoom> {
 
     showDialog(
         context: context,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: 380,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            contentPadding:
+                const EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0),
+            content: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                height: MediaQuery.of(context).size.height * 0.48,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
@@ -234,10 +339,10 @@ class _ChatRoomState extends State<ChatRoom> {
                       const Text(
                         "수정하기",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.w400, fontSize: 20),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
                       Expanded(
                         child: Form(
@@ -246,20 +351,16 @@ class _ChatRoomState extends State<ChatRoom> {
                             children: [
                               TextFormField(
                                 controller: restaurantController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(bottom: 3),
+                                  border: UnderlineInputBorder(),
+                                  fillColor: Colors.white,
                                   hintText: '가게명을 입력해주세요',
                                   iconColor: Colors.black,
                                   labelText: '가게명',
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
-                                  labelStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .labelStyle,
-                                  hintStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .hintStyle,
                                 ),
-                                keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return '가게명을 입력하세요.';
@@ -268,25 +369,21 @@ class _ChatRoomState extends State<ChatRoom> {
                                 },
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 20,
                               ),
                               DateTimeField(
                                 format: DateFormat("HH:mm"),
                                 initialValue:
                                     DateFormat("HH:mm").parse(orderTime),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: '주문 예정 시간을 설정해주세요',
                                   iconColor: Colors.black,
                                   labelText: '주문 예정 시간',
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
-                                  labelStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .labelStyle,
-                                  hintStyle: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .hintStyle,
-                                  contentPadding: const EdgeInsets.all(0),
+                                  contentPadding: EdgeInsets.only(bottom: 3),
+                                  border: UnderlineInputBorder(),
+                                  fillColor: Colors.white,
                                 ),
                                 onShowPicker: (context, currentValue) async {
                                   final time = await showTimePicker(
@@ -320,7 +417,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                 },
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 20,
                               ),
                               TextFormField(
                                 onChanged: (value) {
@@ -332,6 +429,9 @@ class _ChatRoomState extends State<ChatRoom> {
                                   labelText: "수령 장소",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.only(bottom: 3),
+                                  border: UnderlineInputBorder(),
+                                  fillColor: Colors.white,
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -341,7 +441,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                 },
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 20,
                               ),
                               TextFormField(
                                 onChanged: (value) {
@@ -354,6 +454,9 @@ class _ChatRoomState extends State<ChatRoom> {
                                   labelText: "최대 인원",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.only(bottom: 3),
+                                  border: UnderlineInputBorder(),
+                                  fillColor: Colors.white,
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -363,22 +466,23 @@ class _ChatRoomState extends State<ChatRoom> {
                                 },
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 25,
                               ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  ElevatedButton(
+                                  TextButton(
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    child: const Text("돌아가기"),
+                                    child: const Text(
+                                      "취소",
+                                      style:
+                                          TextStyle(color: Color(0xffED6160)),
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  ElevatedButton(
+                                  TextButton(
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
                                         DatabaseService(
@@ -409,7 +513,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                         });
                                       }
                                     },
-                                    child: const Text("수정하기"),
+                                    child: const Text(
+                                      "수정",
+                                      style:
+                                          TextStyle(color: Color(0xff75B165)),
+                                    ),
                                   )
                                 ],
                               ),
@@ -428,7 +536,6 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          //elevation: 0,
           leading: IconButton(
             padding: EdgeInsets.zero,
             // 패딩 설정
@@ -438,9 +545,7 @@ class _ChatRoomState extends State<ChatRoom> {
               Get.back();
             },
             icon: const Icon(Icons.arrow_back),
-            color: Colors.black,
           ),
-          iconTheme: const IconThemeData(color: Colors.black),
           title: Obx(
             () => Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -448,9 +553,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 Text(
                   chatInfoController.restaurantName.value,
                   style: const TextStyle(
-                    color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
                   ),
                 ),
                 const SizedBox(
@@ -462,10 +565,10 @@ class _ChatRoomState extends State<ChatRoom> {
                         .baeMinUrl(chatInfoController.restaurantName.value)
                         .then((url) {
                       _url = Uri.parse(url);
-                      if(url == "") {
-                        return noBaeMin(context, chatInfoController.restaurantName.value);
-                      }
-                      else {
+                      if (url == "") {
+                        return noBaeMin(
+                            context, chatInfoController.restaurantName.value);
+                      } else {
                         return _launchUrl();
                       }
                     });
@@ -479,318 +582,357 @@ class _ChatRoomState extends State<ChatRoom> {
               ],
             ),
           ),
-          backgroundColor: Colors.white,
+          elevation: 0,
+          bottom: PreferredSize(
+            preferredSize: const Size(50, 50),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xffE1E1E1)),
+                  color: const Color(0xffFEFEFE)),
+              margin: const EdgeInsets.only(top: 10),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      const Icon(
+                        Icons.error_outline,
+                        color: Color(0xff75B165),
+                        size: 20,
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Obx(
+                        () => Row(
+                          children: [
+                            const Text(
+                              "시간: ",
+                              style: TextStyle(
+                                  color: Color(0xff717171), fontSize: 13),
+                            ),
+                            Text(
+                              "${chatInfoController.orderTime.value}분",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 25),
+                      Obx(
+                        () => Row(
+                          children: [
+                            const Text(
+                              "장소: ",
+                              style: TextStyle(
+                                  color: Color(0xff717171), fontSize: 13),
+                            ),
+                            Text(
+                              chatInfoController.pickUp.value,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      Obx(
+                        () => Row(
+                          children: [
+                            const Text(
+                              "인원: ",
+                              style: TextStyle(
+                                  color: Color(0xff717171), fontSize: 13),
+                            ),
+                            Text(
+                              "${chatInfoController.currPeople.value}/${chatInfoController.maxPeople.value}명",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          ),
         ),
         endDrawer: Drawer(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text(
-                          '방 정보',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              const Text(
-                                "가게이름: ",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              Obx(
-                                () => Text(
-                                  chatInfoController.restaurantName.value,
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              const Text(
-                                "시간: ",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              Obx(
-                                () => Text(
-                                  chatInfoController.orderTime.value,
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              const Text(
-                                "픽업장소: ",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              Obx(
-                                () => Text(
-                                  chatInfoController.pickUp.value,
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 100, right: 100, bottom: 10),
-                        child: getName(restaurant.admin) == userName
-                            ? ElevatedButton(
-                                onPressed: () {
-                                  modifyInfo(
-                                      chatInfoController.restaurantName.value,
-                                      chatInfoController.orderTime.value,
-                                      chatInfoController.pickUp.value,
-                                      chatInfoController.maxPeople.value);
-                                },
-                                style: const ButtonStyle(),
-                                child: const Text("수정하기"),
-                              )
-                            : const ElevatedButton(
-                                onPressed: null,
-                                style: ButtonStyle(),
-                                child: Text("수정하기"),
-                              ),
-                      ),
-                      Divider(
-                        color: Colors.grey[300],
-                        thickness: 1.0,
-                        indent: 2,
-                        endIndent: 2,
-                        height: 1,
-                      ),
-                      const ListTile(
-                        title: Text(
-                          '대화상대',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
+            child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: ListTile(
+                        title: Row(
                           children: [
+                            const Text(
+                              '방 정보',
+                              style: TextStyle(
+                                  fontSize: 23, fontWeight: FontWeight.bold),
+                            ),
+                            getName(restaurant.admin) == userName
+                                ? IconButton(
+                                    icon: const Icon(
+                                      Icons.create,
+                                      color: Colors.black,
+                                      size: 23,
+                                    ),
+                                    onPressed: () {
+                                      modifyInfo(
+                                          chatInfoController
+                                              .restaurantName.value,
+                                          chatInfoController.orderTime.value,
+                                          chatInfoController.pickUp.value,
+                                          chatInfoController.maxPeople.value);
+                                    })
+                                : const IconButton(
+                                    onPressed: null,
+                                    icon: Icon(
+                                      Icons.create,
+                                      size: 23,
+                                    ),
+                                  )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[300],
+                      thickness: 1.0,
+                      indent: 0,
+                      endIndent: 0,
+                      height: 1,
+                    ),
+                    const SizedBox(
+                      height: 13,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            const Text(
+                              "가게명: ",
+                              style: TextStyle(fontSize: 17),
+                            ),
                             Obx(
-                              () => ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      chatInfoController.member.value!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    if (chatInfoController
-                                            .member.value[index] ==
-                                        restaurant.admin) {
-                                      return ListTile(
-                                          leading: const Text(
-                                            "👑",
-                                            style: TextStyle(fontSize: 25),
-                                          ),
-                                          title: Text(
-                                              getName(chatInfoController
-                                                  .member.value[index]),
-                                              style: const TextStyle(
-                                                  fontSize: 17)));
-                                    } else {
-                                      return ListTile(
-                                        leading: const Text(""),
-                                        title: Text(
-                                            getName(chatInfoController
-                                                .member.value[index]),
-                                            style:
-                                                const TextStyle(fontSize: 17)),
-                                      );
-                                    }
-                                  }),
-                            ),
-                            Divider(
-                              color: Colors.grey[300],
-                              thickness: 1.0,
-                              indent: 2,
-                              endIndent: 2,
-                              height: 1,
-                            ),
-                            ListTile(
-                              title: Row(
-                                children: const [
-                                  Icon(CupertinoIcons.money_dollar_circle),
-                                  SizedBox(
-                                    width: 18,
-                                  ),
-                                  Text(
-                                    "정산하기",
-                                    style: TextStyle(fontSize: 17),
-                                  ),
-                                ],
+                              () => Text(
+                                chatInfoController.restaurantName.value,
+                                style: const TextStyle(fontSize: 17),
                               ),
-                              onTap: () {
-                                payModal(context);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey[300],
-                              thickness: 1.0,
-                              indent: 2,
-                              endIndent: 2,
-                              height: 1,
                             ),
                           ],
                         ),
                       ),
-                    ]),
-              ),
-              ListTile(
-                title: Row(
-                  children: const [
-                    Icon(
-                      Icons.logout,
                     ),
-                    SizedBox(
-                      width: 18,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            const Text(
+                              "시간: ",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Obx(
+                              () => Text(
+                                chatInfoController.orderTime.value,
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                    Text(
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            const Text(
+                              "픽업장소: ",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Obx(
+                              () => Text(
+                                chatInfoController.pickUp.value,
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: ListTile(
+                        title: Text(
+                          '대화상대',
+                          style: TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[300],
+                      thickness: 1.0,
+                      indent: 0,
+                      endIndent: 0,
+                      height: 1,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => ListView.builder(
+                                shrinkWrap: true,
+                                itemCount:
+                                    chatInfoController.member.value!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          String.fromCharCode(
+                                              CupertinoIcons.person.codePoint),
+                                          style: TextStyle(
+                                            inherit: false,
+                                            color: const Color(0xff717171),
+                                            fontSize: 25.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: CupertinoIcons
+                                                .person.fontFamily,
+                                            package: CupertinoIcons
+                                                .person.fontPackage,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 13,
+                                        ),
+                                        Text(
+                                            getName(chatInfoController
+                                                .member.value[index]),
+                                            style:
+                                                const TextStyle(fontSize: 17)),
+                                        const SizedBox(
+                                          width: 13,
+                                        ),
+                                        chatInfoController
+                                                    .member.value[index] ==
+                                                restaurant.admin
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 8.0,
+                                                      right: 8.0,
+                                                      top: 6.0,
+                                                      bottom: 6.0),
+                                                  child: Text(
+                                                    "방장",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container()
+                                      ],
+                                    ),
+                                  );
+                                }
+                                // }
+                                ),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          ListTile(
+                            title: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/images/coin.png",
+                                  scale: 2,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  "정산하기",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              payModal(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+            ),
+            ListTile(
+              title: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      "assets/images/out.png",
+                      scale: 2,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
                       "방 나가기",
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
                 ),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext ctx) {
-                        return AlertDialog(
-                          title: const Text("나가기"),
-                          content: const Text("방에서 나가겠습니까?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () async {
-                                var result = await FirebaseFirestore.instance
-                                    .collection('user')
-                                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                                    .get();
-                                String userName = result['userName'];
-                                DatabaseService(
-                                        uid: FirebaseAuth
-                                            .instance.currentUser!.uid)
-                                    .groupOut(
-                                        restaurant.groupId,
-                                        userName,
-                                        chatInfoController
-                                            .restaurantName.value);
-
-                                Get.to(() => MainScreen());
-                              },
-                              child: const Text("예"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: const Text("아니오"),
-                            )
-                          ],
-                        );
-                      });
-                },
               ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
-          ),
+              onTap: () {
+                roomOut();
+              },
+            ),
+            const SizedBox(
+              height: 60,
+            )
+          ],
         )),
         body: GestureDetector(
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: Column(children: [
-              Container(
-                alignment: Alignment.topCenter,
-                child: Card(
-                  color: Colors.grey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  elevation: 5,
-                  margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
-                  child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.blue[800],
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Obx(
-                            () => Text(
-                              "시간: ${chatInfoController.orderTime.value}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Obx(
-                            () => Text(
-                              "장소: ${chatInfoController.pickUp.value}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Obx(
-                            () => Text(
-                              "인원: [${chatInfoController.currPeople.value}/${chatInfoController.maxPeople.value}]",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      )),
-                ),
-              ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
+                      top: 10,
                       bottom: MediaQuery.of(context).size.height * 0.1),
                   child: chatMessages(),
                 ),
@@ -875,15 +1017,15 @@ class _ChatRoomState extends State<ChatRoom> {
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 10),
                                   padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 20, right: 20),
+                                      top: 7, bottom: 7, left: 8, right: 8),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.blue[300],
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: const Color(0xffF1F1F1),
                                   ),
                                   child: Text(
-                                    "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하였습니다.",
+                                    "${getName(snapshot.data.docs[index]['newPerson'])}님이 입장하셨습니다.",
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 13),
+                                        color: Color(0xff717171), fontSize: 12),
                                   ),
                                 )
                               : snapshot.data.docs[index]['inOut'] == "out"
@@ -900,7 +1042,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                         color: Colors.blue[300],
                                       ),
                                       child: Text(
-                                        "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하였습니다.",
+                                        "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하셨습니다.",
                                         style: const TextStyle(
                                             color: Colors.white, fontSize: 13),
                                       ),
