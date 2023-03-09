@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/comment_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
@@ -69,7 +69,7 @@ class Content extends StatelessWidget {
                   await commentController.getData();
                 },
                 child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(20, 20, 20, height * 0.1),
                     child: SingleChildScrollView(
@@ -83,7 +83,7 @@ class Content extends StatelessWidget {
                                   communityController.communityList[idx].writer,
                                   style: const TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -94,13 +94,13 @@ class Content extends StatelessWidget {
                               SizedBox(
                                 child: Text(
                                   '${communityController.communityList[idx].regdate} | ${communityController.communityList[idx].regtime}',
-                                  style: const TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 13),
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           // content 내용
                           SizedBox(
@@ -123,7 +123,7 @@ class Content extends StatelessWidget {
                                         snapshot.data.toString(),
                                         style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 24,
+                                          fontSize: 26,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       );
@@ -135,7 +135,7 @@ class Content extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 7,
                           ),
                           // CommunityContent
                           Row(
@@ -241,7 +241,8 @@ class Content extends StatelessWidget {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white70,
+                                    backgroundColor: Colors.white,
+                                    side: const BorderSide(color: Colors.black),
                                   ),
                                   child: Row(
                                     children: const [
@@ -281,39 +282,54 @@ class Content extends StatelessWidget {
             GestureDetector(
           child: SafeArea(
             child: Container(
-              height: height * 0.1,
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 24),
+              // height: height * 0.1,
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 44),
               child: GetBuilder<CommentController>(
                 builder: (commentController) {
-                  return TextFormField(
-                    controller: commentField,
-                    focusNode: _commentFocusNode,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).primaryColor,
+                  return Neumorphic(
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 5,
+                      boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(30)),
+                    ),
+                    child: TextFormField(
+                      controller: commentField,
+                      maxLines: null,
+                      scrollPhysics: const ClampingScrollPhysics(),
+                      keyboardType: TextInputType.text,
+                      focusNode: _commentFocusNode,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 25),
+                        filled: true,
+                        fillColor: Colors.white,
+                        // border: OutlineInputBorder(
+
+                        //   borderRadius: BorderRadius.circular(25),
+                        // ),
+                        hintText: "댓글을 입력하세요",
+                        hintStyle: const TextStyle(
+                            color: Colors.grey, fontSize: 14, height: 2.7),
+                        suffixIcon: CircleAvatar(
+                          backgroundColor: Colors.orange,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_upward_rounded,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              commentController.addComment(
+                                  communityController.communityList[idx].id,
+                                  idx,
+                                  commentField.text);
+                              commentField.clear();
+                            },
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(25),
+                        isDense: true,
                       ),
-                      hintText: "댓글을 입력하세요.",
-                      hintStyle: TextStyle(color: Colors.black26),
-                      suffixIcon: IconButton(
-                        icon: const Icon(
-                          Icons.send,
-                          color: Colors.blueAccent,
-                        ),
-                        onPressed: () {
-                          commentController.addComment(
-                              communityController.communityList[idx].id,
-                              idx,
-                              commentField.text);
-                          commentField.clear();
-                        },
-                      ),
-                      isDense: true,
                     ),
                   );
                 },
@@ -335,7 +351,7 @@ class Content extends StatelessWidget {
                   onPressed: () {
                     Get.off(() => EditPost(), arguments: idx);
                   },
-                  child: Text("글 수정"),
+                  child: const Text("글 수정"),
                 ),
                 CupertinoActionSheetAction(
                   onPressed: () {
@@ -347,7 +363,7 @@ class Content extends StatelessWidget {
                         colorText: Colors.white);
                     Get.off(() => MainScreen(), arguments: 1);
                   },
-                  child: Text("글 삭제"),
+                  child: const Text("글 삭제"),
                 ),
               ]
             : [
@@ -359,11 +375,11 @@ class Content extends StatelessWidget {
                         backgroundColor: Colors.red,
                         colorText: Colors.white);
                   },
-                  child: Text("신고하기"),
+                  child: const Text("신고하기"),
                 ),
               ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text("취소"),
+          child: const Text("취소"),
           onPressed: () => Get.back(),
         ),
       ),

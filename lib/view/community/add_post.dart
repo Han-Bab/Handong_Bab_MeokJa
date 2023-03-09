@@ -23,7 +23,7 @@ class AddPost extends StatelessWidget {
         title: const Text('글 쓰기'),
         elevation: 0.0,
         leading: IconButton(
-          icon: Icon(CupertinoIcons.xmark),
+          icon: const Icon(CupertinoIcons.xmark),
           onPressed: () {
             Get.off(() => MainScreen(), arguments: 1);
           },
@@ -34,11 +34,6 @@ class AddPost extends StatelessWidget {
             onPressed: () {
               print('Add Post');
               communityController.addData(title, content);
-              Get.snackbar('알림', '새 게시글을 추가하였습니다',
-                  snackPosition: SnackPosition.BOTTOM,
-                  duration: const Duration(milliseconds: 1500),
-                  colorText: Colors.white,
-                  backgroundColor: Colors.lightBlue);
               Get.off(() => MainScreen(), arguments: 1);
             },
           ),
@@ -53,9 +48,17 @@ class AddPost extends StatelessWidget {
                 title = value;
               },
               decoration: const InputDecoration(
+                filled: false,
                 hintText: '제목',
               ),
             ),
+          ),
+          const Divider(
+            // color: Color(0xffF2F2F5),
+            height: 10,
+            thickness: 2,
+            indent: 15,
+            endIndent: 15,
           ),
           Container(
             padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
@@ -67,6 +70,7 @@ class AddPost extends StatelessWidget {
               textInputAction: TextInputAction.go,
               maxLines: null,
               decoration: const InputDecoration(
+                filled: false,
                 hintText: '내용을 입력하세요.',
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,

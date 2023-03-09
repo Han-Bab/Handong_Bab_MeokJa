@@ -76,7 +76,8 @@ class CommunityPage extends StatelessWidget {
                               },
                               child: Card(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 15, 5, 5),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
@@ -191,11 +192,12 @@ class CommunityPage extends StatelessWidget {
                               Get.off(() => AddPost());
                             },
                             style: TextButton.styleFrom(
+                              elevation: 5,
                               fixedSize: const Size(112, 45),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
-                              side: const BorderSide(),
+                              side: const BorderSide(color: Colors.orange),
                               backgroundColor: Colors.white,
                             ),
                             child: Row(
@@ -203,7 +205,7 @@ class CommunityPage extends StatelessWidget {
                               children: const [
                                 Icon(
                                   CupertinoIcons.pencil,
-                                  color: Colors.black,
+                                  color: Colors.orange,
                                   size: 18,
                                 ),
                                 SizedBox(
@@ -213,7 +215,7 @@ class CommunityPage extends StatelessWidget {
                                   '글 쓰기',
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.black,
+                                      color: Colors.orange,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],

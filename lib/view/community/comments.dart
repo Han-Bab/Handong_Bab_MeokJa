@@ -24,7 +24,9 @@ class Comments extends GetView<CommentController> {
           itemCount: commentController.commentList.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              contentPadding: EdgeInsets.zero,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 3,
+              ),
               dense: true,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,9 +34,12 @@ class Comments extends GetView<CommentController> {
                   Text(
                     commentController.commentList[index].writer,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Text(
                     commentController.commentList[index].comment,
@@ -42,17 +47,19 @@ class Comments extends GetView<CommentController> {
                       fontSize: 15,
                     ),
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
                 ],
               ),
               subtitle: Text(
                 '${commentController.commentList[index].regdate} | ${commentController.commentList[index].regtime}',
-                style: const TextStyle(fontSize: 13),
+                style: const TextStyle(fontSize: 12),
               ),
               trailing: IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                onPressed: () =>
-                    iosShowBottomNotification(context, commentController.index),
+                onPressed: () => iosShowBottomNotification(context, index),
                 icon: const Icon(
                   CupertinoIcons.ellipsis_vertical,
                   size: 18,
@@ -78,7 +85,7 @@ class Comments extends GetView<CommentController> {
                     commentController.update();
                     Get.back();
                   },
-                  child: Text("삭제하기"),
+                  child: const Text("삭제하기"),
                 ),
               ]
             : [
@@ -90,11 +97,11 @@ class Comments extends GetView<CommentController> {
                         backgroundColor: Colors.red,
                         colorText: Colors.white);
                   },
-                  child: Text("신고하기"),
+                  child: const Text("신고하기"),
                 ),
               ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text("취소"),
+          child: const Text("취소"),
           onPressed: () => Get.back(),
         ),
       ),
