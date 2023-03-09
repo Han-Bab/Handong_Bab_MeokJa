@@ -28,16 +28,17 @@ class _MessageTileState extends State<MessageTile> {
     return Column(
       children: [
         widget.recentMessageTime == "first" ||
-                (widget.recentMessageTime != "first" && widget.recentMessageTime != "" &&
+                (widget.recentMessageTime != "first" &&
+                    widget.recentMessageTime != "" &&
                     widget.recentMessageTime.substring(0, 9) !=
                         widget.time.substring(0, 9))
             ? Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 20, right: 20),
+                    top: 7, bottom: 7, left: 8, right: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue[300],
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xffF1F1F1),
                 ),
                 child: Column(
                   children: [
@@ -46,8 +47,8 @@ class _MessageTileState extends State<MessageTile> {
                       children: [
                         const Icon(
                           Icons.calendar_month_outlined,
-                          size: 20,
-                          color: Colors.white70,
+                          size: 15,
+                          color: Color(0xff717171),
                         ),
                         const SizedBox(
                           width: 5,
@@ -55,7 +56,7 @@ class _MessageTileState extends State<MessageTile> {
                         Text(
                           '${widget.time.substring(0, 4)}년 ${widget.time.substring(5, 6)}월 ${widget.time.substring(7, 9)}일',
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 13),
+                              color: Color(0xff717171), fontSize: 12),
                         ),
                       ],
                     )
@@ -63,23 +64,25 @@ class _MessageTileState extends State<MessageTile> {
                 ),
               )
             : Container(),
-        widget.recentMessageUser != widget.sender ? Align(
-          alignment:
-              widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            margin: widget.sentByMe
-                ? const EdgeInsets.only(right: 25, top: 5)
-                : const EdgeInsets.only(left: 25, top: 5),
-            child: Text(
-              widget.sender.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ) : Container(),
+        widget.recentMessageUser != widget.sender
+            ? Align(
+                alignment: widget.sentByMe
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
+                child: Container(
+                  margin: widget.sentByMe
+                      ? const EdgeInsets.only(right: 25, top: 5)
+                      : const EdgeInsets.only(left: 25, top: 5),
+                  child: Text(
+                    widget.sentByMe ? "나": widget.sender.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xff3E3E3E),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
         Container(
           padding: EdgeInsets.only(
               bottom: 4,
@@ -92,9 +95,10 @@ class _MessageTileState extends State<MessageTile> {
             children: [
               widget.sentByMe
                   ? Container(
-                      margin: const EdgeInsets.only(left: 50, top: 45),
+                      margin: const EdgeInsets.only(left: 50, top: 30),
                       child: Text(
                         widget.time.substring(9, widget.time.length - 3),
+                        style: const TextStyle(fontSize: 9, color: Color(0xff717171)),
                       ),
                     )
                   : Container(),
@@ -104,22 +108,22 @@ class _MessageTileState extends State<MessageTile> {
                       ? const EdgeInsets.only(left: 5)
                       : const EdgeInsets.only(right: 5),
                   padding: const EdgeInsets.only(
-                      top: 15, bottom: 15, left: 20, right: 20),
+                      top: 10, bottom: 10, left: 15, right: 15),
                   decoration: BoxDecoration(
                       borderRadius: widget.sentByMe
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(18),
-                              topRight: Radius.circular(18),
                               bottomLeft: Radius.circular(18),
+                              bottomRight: Radius.circular(18),
                             )
                           : const BorderRadius.only(
-                              topLeft: Radius.circular(18),
                               topRight: Radius.circular(18),
                               bottomRight: Radius.circular(18),
+                              bottomLeft: Radius.circular(18),
                             ),
                       color: widget.sentByMe
-                          ? Colors.blueAccent
-                          : Colors.grey[700]),
+                          ? const Color(0xff75B165)
+                          : const Color(0xffF1F1F1)),
                   child: Column(
                     crossAxisAlignment: widget.sentByMe
                         ? CrossAxisAlignment.end
@@ -128,7 +132,7 @@ class _MessageTileState extends State<MessageTile> {
                       Text(
                         widget.message,
                         style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
+                          TextStyle(fontSize: 14, color: widget.sentByMe ? Colors.white : const Color(0xff3E3E3E)),
                       )
                     ],
                   ),
@@ -137,9 +141,10 @@ class _MessageTileState extends State<MessageTile> {
               widget.sentByMe
                   ? Container()
                   : Container(
-                      margin: const EdgeInsets.only(right: 25, top: 45),
+                      margin: const EdgeInsets.only(right: 25, top: 30),
                       child: Text(
                         widget.time.substring(9, widget.time.length - 3),
+                        style: const TextStyle(fontSize: 9, color: Color(0xff717171)),
                       ),
                     ),
             ],
