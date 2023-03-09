@@ -9,7 +9,7 @@ class CommentController extends GetxController {
   static CommentController instance = Get.find();
 
   var commentList = <CommentModel>[];
-  var boardID;
+  var boardID = '';
   int index = 0;
   final authController = Get.put(AuthController());
   final communityController = Get.put(CommunityController());
@@ -67,28 +67,20 @@ class CommentController extends GetxController {
       docRef.update({
         'commentCount': commentCount + 1,
       });
-      communityController.communityList[idx].commentCount += 1;
-      Get.snackbar("알림", "댓글을 작성하셨습니다",
-          backgroundColor: Colors.lightBlue,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1));
-
-      communityController.getData();
-      communityController.update();
       getData();
       update();
+      communityController.communityList[idx].commentCount += 1;
+      communityController.refresh();
     } catch (e) {
       Get.snackbar('에러', e.toString(), borderColor: Colors.red);
     }
   }
 
   Future<void> deleteComment(int index) async {
-    String board = communityController.communityList[index].id;
     String commentID = commentList[index].id;
     try {
       final docRef =
-          FirebaseFirestore.instance.collection('community').doc(board);
+          FirebaseFirestore.instance.collection('community').doc(boardID);
       int commentCount =
           await docRef.get().then((snapshot) => snapshot['commentCount']);
       commentCount -= 1;
@@ -97,24 +89,16 @@ class CommentController extends GetxController {
       });
       await FirebaseFirestore.instance
           .collection('community')
-          .doc(board)
+          .doc(boardID)
           .collection('comments')
           .doc(commentID)
           .delete();
-      communityController.communityList[index].commentCount -= 1;
     } catch (e) {
-      print(e);
+      Get.snackbar('에러', e.toString(), borderColor: Colors.red);
     }
-    Future.delayed(const Duration(milliseconds: 500), () {
-      getData();
-      update();
-      communityController.getData();
-      communityController.update();
-      Get.snackbar("알림", "댓글을 삭제하셨습니다",
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1));
-    });
+    getData();
+    update();
+    communityController.communityList[index].commentCount -= 1;
+    communityController.refresh();
   }
 }
