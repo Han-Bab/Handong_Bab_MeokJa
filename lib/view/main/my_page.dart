@@ -20,9 +20,9 @@ class MyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "마이페이지",
+          "내 정보",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w400,
           ),
         ),
         centerTitle: true,
@@ -32,7 +32,7 @@ class MyPage extends StatelessWidget {
           children: [
             Card(
               child: Padding(
-                padding: EdgeInsets.all(15),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Row(
@@ -57,52 +57,124 @@ class MyPage extends StatelessWidget {
                                   return Text(
                                     snapshot.data.toString(),
                                     style: const TextStyle(
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 8,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  );
+                                }
+                              },
+                              future:
+                                  authController.getUserInfo('userNickName'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (snapshot.hasError) {
+                                  print(snapshot.error.toString());
+                                  return const Text("Error");
+                                } else {
+                                  // print(snapshot.data);
+                                  return Text(
+                                    snapshot.data.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   );
                                 }
                               },
                               future: authController.getUserInfo('userName'),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: FutureBuilder(
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<dynamic> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator
-                                        .adaptive();
-                                  }
-                                  if (snapshot.hasError) {
-                                    print(snapshot.error.toString());
-                                    return const Text("Error");
-                                  } else {
-                                    // print(snapshot.data);
-                                    return Text(
-                                      snapshot.data.toString(),
-                                    );
-                                  }
-                                },
-                                future: authController.getUserInfo('userEmail'),
-                              ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (snapshot.hasError) {
+                                  print(snapshot.error.toString());
+                                  return const Text("Error");
+                                } else {
+                                  // print(snapshot.data);
+                                  return Text(
+                                    snapshot.data.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  );
+                                }
+                              },
+                              future: authController.getUserInfo('userEmail'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (snapshot.hasError) {
+                                  print(snapshot.error.toString());
+                                  return Text("Error");
+                                } else {
+                                  // print(snapshot.data);
+                                  return Text(
+                                    snapshot.data.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  );
+                                }
+                              },
+                              future: authController.getUserInfo('userPhone'),
                             ),
                           ],
                         ),
+                        // SizedBox(
+                        //   width: 28,
+                        // ),
                         Row(
                           children: [
                             Container(
                               width: 1,
-                              height: 75,
+                              height: 110,
                               color: Colors.grey[300],
                             ),
                             const SizedBox(
                               width: 20,
                             ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const SizedBox(
+                                  height: 28,
+                                  child: Text(
+                                    '연결 계좌',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
                                 GestureDetector(
                                   child: Padding(
                                     padding: const EdgeInsets.only(bottom: 7),
@@ -127,15 +199,19 @@ class MyPage extends StatelessWidget {
                                                   BorderRadius.circular(30),
                                               color: snapshot.data
                                                   ? const Color(0xFFFFEB03)
-                                                  : Colors.grey,
+                                                  : Colors.grey[300],
                                             ),
-                                            child: const Padding(
-                                              padding: EdgeInsets.only(top: 2),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 2),
                                               child: Text(
                                                 'Kakao',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontSize: 17,
+                                                  color: snapshot.data
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -173,7 +249,7 @@ class MyPage extends StatelessWidget {
                                                   BorderRadius.circular(30),
                                               color: snapshot.data
                                                   ? const Color(0xFF3268E8)
-                                                  : Colors.grey,
+                                                  : Colors.grey[300],
                                             ),
                                             child: Padding(
                                               padding: EdgeInsets.only(top: 2),
@@ -183,8 +259,8 @@ class MyPage extends StatelessWidget {
                                                 style: TextStyle(
                                                   color: snapshot.data
                                                       ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: 17,
+                                                      : Colors.white,
+                                                  fontSize: 16,
                                                   fontWeight: snapshot.data
                                                       ? FontWeight.w500
                                                       : FontWeight.w400,
@@ -209,97 +285,6 @@ class MyPage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              width: 90,
-                              child: Text(
-                                '닉네임',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator
-                                      .adaptive();
-                                }
-                                if (snapshot.hasError) {
-                                  print(snapshot.error.toString());
-                                  return const Text("Error");
-                                } else {
-                                  // print(snapshot.data);
-                                  return Text(
-                                    snapshot.data.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      letterSpacing: 3,
-                                    ),
-                                  );
-                                }
-                              },
-                              future:
-                                  authController.getUserInfo('userNickName'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              width: 95,
-                              child: Text(
-                                '전화번호',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator
-                                      .adaptive();
-                                }
-                                if (snapshot.hasError) {
-                                  print(snapshot.error.toString());
-                                  return Text("Error");
-                                } else {
-                                  // print(snapshot.data);
-                                  return Text(
-                                    snapshot.data.toString(),
-                                  );
-                                }
-                              },
-                              future: authController.getUserInfo('userPhone'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     SizedBox(
                       width: width,
                       child: ElevatedButton(
@@ -311,12 +296,18 @@ class MyPage extends StatelessWidget {
                           elevation: 0,
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
-                          side: BorderSide(color: Colors.grey),
+                          side: const BorderSide(color: Colors.orange),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        child: const Text("프로필 관리"),
+                        child: const Text(
+                          "프로필 관리",
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ],
