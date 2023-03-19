@@ -7,6 +7,7 @@ import 'package:han_bab/component/time_widget.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/order_time_button_controller.dart';
 import 'package:han_bab/view/main/main_screen.dart';
+import '../../component/customToolbarRect.dart';
 import '../../component/database_service.dart';
 import '../../controller/image_controller.dart';
 import '../../controller/search_controller.dart';
@@ -28,16 +29,11 @@ class AddChatRoom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "밥채팅 만들기",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(200),
+          child: CustomToolbarRect(
+            title: "밥채팅 만들기",
+          )),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

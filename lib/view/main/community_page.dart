@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/controller/comment_controller.dart';
 import 'package:han_bab/controller/community_controller.dart';
+import '../../component/customToolbarRect.dart';
 import '../../controller/content_controller.dart';
 import '../community/content.dart';
 import '../community/add_post.dart';
@@ -19,16 +20,11 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '음식게시판',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0, // 경계선 없애는 늒임
-      ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(200),
+          child: CustomToolbarRect(
+            title: "음식게시판",
+          )),
       body: Center(
         child: FutureBuilder(
           future: Future.delayed(const Duration(milliseconds: 500),

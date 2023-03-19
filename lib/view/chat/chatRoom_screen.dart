@@ -549,16 +549,6 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            padding: EdgeInsets.zero,
-            // 패딩 설정
-            constraints: const BoxConstraints(),
-            // constraints
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
           title: Obx(
             () => Text(
               chatInfoController.restaurantName.value,
