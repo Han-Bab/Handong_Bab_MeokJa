@@ -298,39 +298,74 @@ class Content extends StatelessWidget {
                       maxLines: null,
                       scrollPhysics: const ClampingScrollPhysics(),
                       keyboardType: TextInputType.text,
-                      focusNode: _commentFocusNode,
                       decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 25),
+                        contentPadding: const EdgeInsets.only(left: 25),
                         filled: true,
                         fillColor: Colors.white,
-                        // border: OutlineInputBorder(
-
-                        //   borderRadius: BorderRadius.circular(25),
-                        // ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                         hintText: "댓글을 입력하세요",
                         hintStyle: const TextStyle(
                             color: Colors.grey, fontSize: 14, height: 2.7),
-                        suffixIcon: CircleAvatar(
-                          backgroundColor: Colors.orange,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.arrow_upward_rounded,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
+                        suffixIcon: GestureDetector(
+                            onTap: () {
                               commentController.addComment(
                                   communityController.communityList[idx].id,
                                   idx,
                                   commentField.text);
                               commentField.clear();
                             },
-                          ),
-                        ),
+                            child: Image.asset(
+                              "assets/up.png",
+                              scale: 2,
+                            )),
                         isDense: true,
                       ),
                     ),
+                    // TextFormField(
+                    //   controller: commentField,
+                    //   maxLines: null,
+                    //   scrollPhysics: const ClampingScrollPhysics(),
+                    //   keyboardType: TextInputType.text,
+                    //   focusNode: _commentFocusNode,
+                    //   decoration: InputDecoration(
+                    //     contentPadding:
+                    //         const EdgeInsets.symmetric(horizontal: 25),
+                    //     filled: true,
+                    //     fillColor: Colors.white,
+                    //     // border: OutlineInputBorder(
+                    //
+                    //     //   borderRadius: BorderRadius.circular(25),
+                    //     // ),
+                    //     hintText: "댓글을 입력하세요",
+                    //     hintStyle: const TextStyle(
+                    //         color: Colors.grey, fontSize: 14, height: 2.7),
+                    //     suffixIcon: CircleAvatar(
+                    //       backgroundColor: Colors.orange,
+                    //       child: IconButton(
+                    //         icon: const Icon(
+                    //           Icons.arrow_upward_rounded,
+                    //           size: 25,
+                    //           color: Colors.white,
+                    //         ),
+                    //         onPressed: () {
+                    //           commentController.addComment(
+                    //               communityController.communityList[idx].id,
+                    //               idx,
+                    //               commentField.text);
+                    //           commentField.clear();
+                    //         },
+                    //       ),
+                    //     ),
+                    //     isDense: true,
+                    //   ),
+                    // ),
                   );
                 },
               ),
