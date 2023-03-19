@@ -107,7 +107,7 @@ class LoginForm extends StatelessWidget {
                       ),
                       SizedBox(
                         width: width,
-                        height: 60,
+                        height: 50,
                         child: ElevatedButton(
                           onPressed: () {
                             // 로그인 버튼 기능 구현
@@ -116,7 +116,7 @@ class LoginForm extends StatelessWidget {
                           },
                           child: const Text(
                             "로그인",
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 15),
                           ),
                         ),
                       ),
@@ -135,10 +135,10 @@ class LoginForm extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                Get.to(() => const SignUpPage(),
-                                    transition: Transition.downToUp,
-                                    duration:
-                                        const Duration(milliseconds: 800));
+                                Get.to(
+                                  () => const SignUpPage(),
+                                  transition: Transition.fade,
+                                );
                               },
                             ),
                             const VerticalDivider(
@@ -153,10 +153,10 @@ class LoginForm extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                Get.to(() => ResetPW(),
-                                    transition: Transition.downToUp,
-                                    duration:
-                                        const Duration(milliseconds: 800));
+                                Get.to(
+                                  () => ResetPW(),
+                                  transition: Transition.fadeIn,
+                                );
                               },
                             ),
                           ],

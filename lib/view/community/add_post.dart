@@ -49,6 +49,7 @@ class AddPost extends StatelessWidget {
               },
               decoration: const InputDecoration(
                 filled: false,
+                border: InputBorder.none,
                 hintText: '제목',
               ),
             ),

@@ -5,6 +5,7 @@ import 'package:han_bab/view/login/account_term.dart';
 import 'package:han_bab/view/login/privacy_term.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -35,6 +36,50 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isChecked2 = false;
   bool _visibility = false;
   bool _isClicked = false;
+  FToast fToast = FToast();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fToast.init(context);
+    super.initState();
+  }
+
+  void _showToast(String msg, IconData icon, Color backgroundColor) {
+    Widget toast = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: backgroundColor,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
+          const SizedBox(
+            width: 20.0,
+          ),
+          Text(
+            msg,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.CENTER,
+    );
+  }
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -62,6 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final authController = Get.put(AuthController());
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -101,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             TextSpan(
-                              text: '을 통해 행복한 식사에\n동참해보세요',
+                              text: '을 통해 행복한 식사에\n참여해보세요',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 116, 116, 116),
                                 fontSize: 23,
@@ -142,12 +188,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           focusNode: emailFocusNode,
                           decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Color(0xffF2F2F5),
                             hintText: "예 : example@handong.ac.kr",
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(15),
+                            contentPadding: EdgeInsets.fromLTRB(5, 15, 15, 15),
                           ),
                         ),
                         const SizedBox(
@@ -171,12 +213,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                           decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Color(0xffF2F2F5),
                             hintText: "비밀번호를 입력해주세요",
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(15),
+                            contentPadding: EdgeInsets.fromLTRB(5, 15, 15, 15),
                           ),
                           obscureText: true,
                           onSaved: (value) {
@@ -206,12 +244,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                           decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Color(0xffF2F2F5),
                             hintText: "비밀번호를 한번 더 입력해주세요",
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: EdgeInsets.fromLTRB(5, 15, 15, 15),
                           ),
                           obscureText: true,
                         ),
@@ -239,11 +273,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           decoration: const InputDecoration(
                             hintText: "이름을 입력해주세요",
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: Color(0xffF2F2F5),
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: EdgeInsets.fromLTRB(5, 15, 15, 15),
                           ),
                         ),
                         const SizedBox(
@@ -272,11 +302,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           decoration: const InputDecoration(
                             hintText: "010-0000-0000",
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: Color(0xffF2F2F5),
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: EdgeInsets.fromLTRB(5, 15, 15, 15),
                           ),
                           inputFormatters: [
                             MaskedInputFormatter("000-0000-0000")
@@ -294,37 +320,43 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                         ),
-                        TextFormField(
-                          onChanged: (value) {
-                            _isClicked = false;
-                            userInfo['userNickName'] = value;
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "닉네임을 입력해주세요";
-                            }
-                            if (value.length > 7) {
-                              return "7자 이하로 설정해주세요";
-                            }
-                            if (!_isClicked) {
-                              return '중복 확인을 해주세요';
-                            } else if (!authController.isUniqueNick.value) {
-                              return '중복된 닉네임이 존재합니다';
-                            }
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: width * 0.65,
+                              child: TextFormField(
+                                onChanged: (value) {
+                                  _isClicked = false;
+                                  userInfo['userNickName'] = value;
+                                },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "닉네임을 입력해주세요";
+                                  }
+                                  if (value.length > 7) {
+                                    return "7자 이하로 설정해주세요";
+                                  }
+                                  if (!_isClicked) {
+                                    return '중복 확인을 해주세요';
+                                  } else if (!authController
+                                      .isUniqueNick.value) {
+                                    return '중복된 닉네임이 존재합니다';
+                                  }
 
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "닉네임을 입력해주세요",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: const Color(0xffF2F2F5),
-                            contentPadding: const EdgeInsets.all(10),
-                            suffixIcon: Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(color: Colors.white))),
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "닉네임을 입력해주세요",
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(5, 15, 15, 15),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
                               child: TextButton(
                                 onPressed: () async {
                                   _isClicked = true;
@@ -343,32 +375,24 @@ class _SignUpPageState extends State<SignUpPage> {
                                               .length <=
                                           7) {
                                     if (authController.isUniqueNick.value) {
-                                      Get.snackbar(
-                                        '알림',
-                                        '사용하실 수 있는 닉네임입니다!',
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        backgroundColor: Colors.lightBlue,
-                                        colorText: Colors.white,
-                                      );
+                                      _showToast("사용하실 수 있는 닉네임입니다!",
+                                          Icons.check, Colors.green);
                                     } else {
-                                      Get.snackbar(
-                                        '알림',
-                                        '중복된 닉네임입니다!\n다시 작성해주세요',
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        backgroundColor: Colors.red,
-                                        colorText: Colors.white,
-                                      );
+                                      _showToast("이미 사용하고 있는 닉네임입니다!",
+                                          Icons.cancel_outlined, Colors.orange);
                                     }
                                   }
                                 },
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  // backgroundColor: Colors.grey[300],
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 15, 20, 15),
                                 ),
                                 child: const Text('중복'),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -519,7 +543,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 _showSpinner = false;
               });
             },
-            child: const Text("가입"),
+            child: const Text("가입하기"),
           ),
         ),
       ),

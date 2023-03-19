@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart'; //안드로이드 디자인
 //IOS 디자인홈 화면 함수 불러오기 불러오기
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/controller/auth_controller.dart';
 import 'package:han_bab/view/login/login_page.dart';
@@ -33,8 +34,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initialization() async {
-    print("initialized...");
-    await Future.delayed(const Duration(seconds: 1));
     print('go!');
     FlutterNativeSplash.remove();
   }
@@ -43,6 +42,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: LoginPage(),
+      debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.noTransition,
+      builder: FToastBuilder(),
       theme: ThemeData(
         fontFamily: 'fonts',
         primarySwatch: Colors.orange,
@@ -66,11 +68,10 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          filled: true,
-          fillColor: Color(0xffF2F2F5),
-          border: InputBorder.none,
+          filled: false,
+          border: UnderlineInputBorder(),
           hintStyle: TextStyle(
-            color: Colors.grey,
+            color: Color(0xFFC2C2C2),
             fontSize: 14,
           ),
         ),

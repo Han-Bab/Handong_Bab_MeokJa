@@ -233,11 +233,11 @@ class Content extends StatelessWidget {
                                     Get.snackbar(
                                       '알림',
                                       '좋아요를 눌렀습니다',
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      colorText: Colors.white,
-                                      backgroundColor: Colors.lightBlue,
+                                      snackPosition: SnackPosition.TOP,
+                                      colorText: Colors.orange,
+                                      backgroundColor: Colors.white,
                                       duration:
-                                          const Duration(milliseconds: 1500),
+                                          const Duration(milliseconds: 1000),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -357,9 +357,9 @@ class Content extends StatelessWidget {
                   onPressed: () {
                     contentController.deleteContent();
                     Get.snackbar('알림', '게시글을 삭제했습니다',
-                        snackPosition: SnackPosition.BOTTOM,
-                        duration: const Duration(milliseconds: 1500),
-                        backgroundColor: Colors.lightBlue,
+                        snackPosition: SnackPosition.TOP,
+                        duration: const Duration(milliseconds: 1000),
+                        backgroundColor: Colors.orange,
                         colorText: Colors.white);
                     Get.off(() => MainScreen(), arguments: 1);
                   },
@@ -370,8 +370,8 @@ class Content extends StatelessWidget {
                 CupertinoActionSheetAction(
                   onPressed: () {
                     Get.snackbar('알림', '신고가 접수되었습니다.\n감사합니다.',
-                        snackPosition: SnackPosition.BOTTOM,
-                        duration: const Duration(milliseconds: 1200),
+                        snackPosition: SnackPosition.TOP,
+                        duration: const Duration(milliseconds: 1000),
                         backgroundColor: Colors.red,
                         colorText: Colors.white);
                   },
