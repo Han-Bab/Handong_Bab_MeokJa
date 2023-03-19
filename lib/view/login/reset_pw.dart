@@ -10,6 +10,7 @@ class ResetPW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     String emailAddr = '';
 
     void tryValidation() {
@@ -66,35 +67,33 @@ class ResetPW extends StatelessWidget {
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(
-                    filled: true,
-                    fillColor: Color(0xffF2F2F5),
-                    border: InputBorder.none,
-                    hintText: '한동 이메일을 입력해주세요',
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                    ),
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    hintText: '가입한 한동 이메일 입력',
+                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+                    contentPadding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    tryValidation();
-                    authController.resetPassword(emailAddr);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(15),
-                  ),
-                  child: const Text(
-                    "재설정 메일 보내기",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
               ],
             ),
+          ),
+        ),
+      ),
+      bottomSheet: Container(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
+        width: width,
+        child: ElevatedButton(
+          onPressed: () {
+            tryValidation();
+            authController.resetPassword(emailAddr);
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(15),
+          ),
+          child: const Text(
+            "재설정 메일 보내기",
+            style: TextStyle(fontSize: 15),
           ),
         ),
       ),

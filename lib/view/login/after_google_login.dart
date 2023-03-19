@@ -235,15 +235,16 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                                 Get.snackbar(
                                   '알림',
                                   '사용하실 수 있는 닉네임입니다!',
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: Colors.lightBlue,
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.orange,
                                   colorText: Colors.white,
+                                  duration: const Duration(seconds: 1),
                                 );
                               } else {
                                 Get.snackbar(
-                                  '알림',
+                                  '경고',
                                   '중복된 닉네임입니다!\n다시 작성해주세요',
-                                  snackPosition: SnackPosition.BOTTOM,
+                                  snackPosition: SnackPosition.TOP,
                                   backgroundColor: Colors.red,
                                   colorText: Colors.white,
                                 );
@@ -296,8 +297,14 @@ class _AfterGoogleLoginState extends State<AfterGoogleLogin> {
                   _tryValidation();
                   if (_validation) {
                     authController.addInfo(userInfo);
-                    Get.snackbar('알림', '정보가 저장되었습니다.',
-                        snackPosition: SnackPosition.TOP);
+                    Get.snackbar(
+                      '알림',
+                      '정보가 저장되었습니다.',
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: Colors.orange,
+                      colorText: Colors.white,
+                      duration: const Duration(seconds: 1),
+                    );
                     Get.off(() => MainScreen());
                   }
                   setState(() {

@@ -83,9 +83,8 @@ class CommentController extends GetxController {
           FirebaseFirestore.instance.collection('community').doc(boardID);
       int commentCount =
           await docRef.get().then((snapshot) => snapshot['commentCount']);
-      commentCount -= 1;
       docRef.update({
-        'commentCount': commentCount,
+        'commentCount': commentCount - 1,
       });
       await FirebaseFirestore.instance
           .collection('community')
@@ -93,12 +92,12 @@ class CommentController extends GetxController {
           .collection('comments')
           .doc(commentID)
           .delete();
+      getData();
+      update();
+      communityController.communityList[index].commentCount -= 1;
+      communityController.refresh();
     } catch (e) {
       Get.snackbar('에러', e.toString(), borderColor: Colors.red);
     }
-    getData();
-    update();
-    communityController.communityList[index].commentCount -= 1;
-    communityController.refresh();
   }
 }

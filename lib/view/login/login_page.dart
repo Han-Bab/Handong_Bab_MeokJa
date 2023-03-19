@@ -79,15 +79,15 @@ class LoginPage extends StatelessWidget {
                     children: [
                       ButtonTheme(
                         minWidth: 100,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
+                        height: 100,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(10.0),
                               ),
                             ),
+                            backgroundColor: Colors.white,
                             side: const BorderSide(color: Colors.orange),
                             padding: const EdgeInsets.all(8),
                             elevation: 0,
@@ -95,51 +95,25 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {
                             Get.to(
                               () => LoginForm(),
-                              transition: Transition.zoom,
+                              transition: Transition.fade,
                             );
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Flexible(
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: Colors.white,
-                                  child: Image.asset(
-                                    'assets/images/hgulogo.png',
-                                    height: 25,
-                                  ),
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.white,
+                                child: Image.asset(
+                                  'assets/images/hgulogo.png',
+                                  height: 20,
                                 ),
                               ),
-                              RichText(
-                                  text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '한동 이메일',
-                                    style: TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                    text: '로 로그인하기',
-                                    style: TextStyle(
-                                      color: Colors.orange,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Flexible(
-                                child: Opacity(
-                                  opacity: 0.0,
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    child: Image.asset(
-                                      'assets/images/hgulogo.png',
-                                      height: 25,
-                                    ),
-                                  ),
+                              const Text(
+                                "한동 이메일로 로그인하기",
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 15,
                                 ),
                               ),
                             ],
@@ -152,7 +126,7 @@ class LoginPage extends StatelessWidget {
                       // 구글로그인버튼
                       ButtonTheme(
                         minWidth: 100,
-                        height: 50,
+                        height: 100,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -162,7 +136,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             side: const BorderSide(color: Colors.orange),
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(18),
                             elevation: 0,
                           ),
                           // 구글 로그인
@@ -170,37 +144,17 @@ class LoginPage extends StatelessWidget {
                             authController.signInWithGoogle();
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Flexible(
-                                child: Image.asset(
-                                  'assets/images/glogo.png',
-                                  height: 40,
-                                ),
+                              Image.asset('assets/images/googlelogo.png'),
+                              const SizedBox(
+                                width: 14,
                               ),
-                              RichText(
-                                  text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '구글',
-                                    style: TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                    text: '로 간편 로그인하기',
-                                    style: TextStyle(
-                                      color: Colors.orange,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Flexible(
-                                child: Opacity(
-                                  opacity: 0.0,
-                                  child: Image.asset('assets/images/glogo.png'),
+                              const Text(
+                                '구글로 간편 로그인하기',
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 15,
                                 ),
                               ),
                             ],
@@ -224,7 +178,7 @@ class LoginPage extends StatelessWidget {
                               onTap: () {
                                 Get.to(
                                   () => const SignUpPage(),
-                                  transition: Transition.downToUp,
+                                  transition: Transition.fadeIn,
                                 );
                               },
                             ),
@@ -242,7 +196,7 @@ class LoginPage extends StatelessWidget {
                               onTap: () {
                                 Get.to(
                                   () => ResetPW(),
-                                  transition: Transition.downToUp,
+                                  transition: Transition.fadeIn,
                                 );
                               },
                             ),

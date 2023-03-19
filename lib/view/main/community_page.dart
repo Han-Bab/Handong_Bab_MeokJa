@@ -192,7 +192,7 @@ class CommunityPage extends StatelessWidget {
                               Get.off(() => AddPost());
                             },
                             style: TextButton.styleFrom(
-                              elevation: 5,
+                              elevation: 2,
                               fixedSize: const Size(112, 45),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
