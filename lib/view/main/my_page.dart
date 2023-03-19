@@ -57,7 +57,7 @@ class MyPage extends StatelessWidget {
                                   return Text(
                                     snapshot.data.toString(),
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   );
@@ -66,35 +66,35 @@ class MyPage extends StatelessWidget {
                               future:
                                   authController.getUserInfo('userNickName'),
                             ),
+                            // const SizedBox(
+                            //   height: 10,
+                            // ),
+                            // FutureBuilder(
+                            //   builder: (BuildContext context,
+                            //       AsyncSnapshot<dynamic> snapshot) {
+                            //     if (snapshot.connectionState ==
+                            //         ConnectionState.waiting) {
+                            //       return const CircularProgressIndicator
+                            //           .adaptive();
+                            //     }
+                            //     if (snapshot.hasError) {
+                            //       print(snapshot.error.toString());
+                            //       return const Text("Error");
+                            //     } else {
+                            //       // print(snapshot.data);
+                            //       return Text(
+                            //         snapshot.data.toString(),
+                            //         style: const TextStyle(
+                            //           fontSize: 16,
+                            //           fontWeight: FontWeight.w400,
+                            //         ),
+                            //       );
+                            //     }
+                            //   },
+                            //   future: authController.getUserInfo('userName'),
+                            // ),
                             const SizedBox(
                               height: 10,
-                            ),
-                            FutureBuilder(
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator
-                                      .adaptive();
-                                }
-                                if (snapshot.hasError) {
-                                  print(snapshot.error.toString());
-                                  return const Text("Error");
-                                } else {
-                                  // print(snapshot.data);
-                                  return Text(
-                                    snapshot.data.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  );
-                                }
-                              },
-                              future: authController.getUserInfo('userName'),
-                            ),
-                            const SizedBox(
-                              height: 8,
                             ),
                             FutureBuilder(
                               builder: (BuildContext context,
@@ -121,7 +121,7 @@ class MyPage extends StatelessWidget {
                               future: authController.getUserInfo('userEmail'),
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 5,
                             ),
                             FutureBuilder(
                               builder: (BuildContext context,
@@ -139,7 +139,7 @@ class MyPage extends StatelessWidget {
                                   return Text(
                                     snapshot.data.toString(),
                                     style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   );
@@ -316,17 +316,25 @@ class MyPage extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                title: const Text(
-                  '카카오 토스 연결하기',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                leading: Container(
+                  width: 26,
+                  height: 26,
+                  child: Image.asset(
+                    'assets/images/account.png',
                   ),
                 ),
-                trailing: const Icon(
-                  Icons.attach_money_sharp,
-                  color: Colors.black87,
+                title: const Text(
+                  '계좌 연결하기',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black54,
+                  ),
                 ),
+                // trailing: const Icon(
+                //   Icons.attach_money_sharp,
+                //   color: Colors.black87,
+                // ),
                 onTap: () {
                   Get.to(() => OnboardingPage(), transition: Transition.zoom);
                 },
@@ -334,17 +342,25 @@ class MyPage extends StatelessWidget {
             ),
             Card(
               child: ListTile(
+                leading: Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    'assets/images/mail.png',
+                  ),
+                ),
                 title: const Text(
                   '고객센터',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black54,
                   ),
                 ),
-                trailing: const Icon(
-                  CupertinoIcons.ellipses_bubble,
-                  color: Colors.black87,
-                ),
+                // trailing: const Icon(
+                //   CupertinoIcons.ellipses_bubble,
+                //   color: Colors.black87,
+                // ),
                 onTap: () {
                   Get.to(() => ReportBug(), transition: Transition.rightToLeft);
                 },
@@ -352,17 +368,25 @@ class MyPage extends StatelessWidget {
             ),
             Card(
               child: ListTile(
+                leading: Container(
+                  width: 23,
+                  height: 23,
+                  child: Image.asset(
+                    'assets/images/logout.png',
+                  ),
+                ),
                 title: const Text(
                   '로그아웃',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black54,
                   ),
                 ),
-                trailing: const Icon(
-                  Icons.exit_to_app_rounded,
-                  color: Colors.black87,
-                ),
+                // trailing: const Icon(
+                //   Icons.exit_to_app_rounded,
+                //   color: Colors.black87,
+                // ),
                 onTap: () {
                   AuthController.instance.logout();
                   AuthController.instance.logoutGoogle();
