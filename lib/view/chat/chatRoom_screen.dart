@@ -156,7 +156,10 @@ class _ChatRoomState extends State<ChatRoom> {
                   ),
                   const Text(
                     "방에서 나가시겠습니까?",
-                    style: TextStyle(color: Color(0xff3E3E3E), fontSize: 20, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        color: Color(0xff3E3E3E),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(
                     height: 60,
@@ -168,9 +171,15 @@ class _ChatRoomState extends State<ChatRoom> {
                         onPressed: () {
                           Get.back();
                         },
-                        child: const Text("취소", style: TextStyle(color: Color(0xffED6160), fontSize: 18),),
+                        child: const Text(
+                          "취소",
+                          style:
+                              TextStyle(color: Color(0xffED6160), fontSize: 18),
+                        ),
                       ),
-                      const SizedBox(width: 30,),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       TextButton(
                         onPressed: () async {
                           var result = await FirebaseFirestore.instance
@@ -179,14 +188,17 @@ class _ChatRoomState extends State<ChatRoom> {
                               .get();
                           String userName = result['userName'];
                           DatabaseService(
-                              uid: FirebaseAuth
-                                  .instance.currentUser!.uid)
+                                  uid: FirebaseAuth.instance.currentUser!.uid)
                               .groupOut(restaurant.groupId, userName,
-                              chatInfoController.restaurantName.value);
+                                  chatInfoController.restaurantName.value);
 
                           Get.to(() => MainScreen());
                         },
-                        child: const Text("확인", style: TextStyle(color: Color(0xff75B165), fontSize: 18),),
+                        child: const Text(
+                          "확인",
+                          style:
+                              TextStyle(color: Color(0xff75B165), fontSize: 18),
+                        ),
                       ),
                     ],
                   )
@@ -229,8 +241,9 @@ class _ChatRoomState extends State<ChatRoom> {
                   Text(
                     getName(restaurant.admin),
                     style: const TextStyle(
-                      color: Color(0xff3E3E3E),
-                        fontSize: 23, fontWeight: FontWeight.w400),
+                        color: Color(0xff3E3E3E),
+                        fontSize: 23,
+                        fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(
                     height: 25,
@@ -547,39 +560,11 @@ class _ChatRoomState extends State<ChatRoom> {
             icon: const Icon(Icons.arrow_back),
           ),
           title: Obx(
-            () => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  chatInfoController.restaurantName.value,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    DatabaseService()
-                        .baeMinUrl(chatInfoController.restaurantName.value)
-                        .then((url) {
-                      _url = Uri.parse(url);
-                      if (url == "") {
-                        return noBaeMin(
-                            context, chatInfoController.restaurantName.value);
-                      } else {
-                        return _launchUrl();
-                      }
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyan,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30))),
-                  child: const Text("배민"),
-                )
-              ],
+            () => Text(
+              chatInfoController.restaurantName.value,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           elevation: 0,
@@ -696,13 +681,7 @@ class _ChatRoomState extends State<ChatRoom> {
                                           chatInfoController.pickUp.value,
                                           chatInfoController.maxPeople.value);
                                     })
-                                : const IconButton(
-                                    onPressed: null,
-                                    icon: Icon(
-                                      Icons.create,
-                                      size: 23,
-                                    ),
-                                  )
+                                : Container()
                           ],
                         ),
                       ),
@@ -870,6 +849,13 @@ class _ChatRoomState extends State<ChatRoom> {
                           const SizedBox(
                             height: 30,
                           ),
+                          Divider(
+                            color: Colors.grey[300],
+                            thickness: 1.0,
+                            indent: 0,
+                            endIndent: 0,
+                            height: 1,
+                          ),
                           ListTile(
                             title: Row(
                               children: [
@@ -882,7 +868,8 @@ class _ChatRoomState extends State<ChatRoom> {
                                 ),
                                 const Text(
                                   "정산하기",
-                                  style: TextStyle(fontSize: 17),
+                                  style: TextStyle(
+                                      fontSize: 17, color: Color(0xff3E3E3E)),
                                 ),
                               ],
                             ),
@@ -890,6 +877,39 @@ class _ChatRoomState extends State<ChatRoom> {
                               payModal(context);
                             },
                           ),
+                          ListTile(
+                              title: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/baemin.png",
+                                    scale: 1.8,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Text(
+                                    "배민 바로가기",
+                                    style: TextStyle(
+                                        fontSize: 17, color: Color(0xff39C0C0)),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                DatabaseService()
+                                    .baeMinUrl(
+                                        chatInfoController.restaurantName.value)
+                                    .then((url) {
+                                  _url = Uri.parse(url);
+                                  if (url == "") {
+                                    return noBaeMin(
+                                        context,
+                                        chatInfoController
+                                            .restaurantName.value);
+                                  } else {
+                                    return _launchUrl();
+                                  }
+                                });
+                              }),
                         ],
                       ),
                     ),
@@ -939,36 +959,47 @@ class _ChatRoomState extends State<ChatRoom> {
               ),
             ])),
         bottomSheet: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
+          padding: const EdgeInsets.only(bottom: 49.0, left: 24, right: 24),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.1,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 15,
+                    offset: Offset(-5, 5),
+                  ),
+                ],
+              ),
               child: TextFormField(
                 controller: messageController,
+                maxLines: null,
+                scrollPhysics: const ClampingScrollPhysics(),
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 25),
                   filled: true,
                   fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 1,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  hintText: "Send a message...",
-                  hintStyle: const TextStyle(color: Colors.black26),
-                  suffixIcon: IconButton(
-                    icon: const Icon(
-                      Icons.send,
-                      color: Colors.blueAccent,
-                    ),
-                    onPressed: () {
-                      sendMessage();
-                    },
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(25),
                   ),
+                  hintText: "메시지를 입력하세요",
+                  hintStyle: const TextStyle(
+                      color: Colors.grey, fontSize: 14, height: 2.7),
+                  suffixIcon: GestureDetector(
+                      onTap: () {
+                        sendMessage();
+                      },
+                      child: Image.asset(
+                        "assets/up.png",
+                        scale: 2,
+                      )),
                   isDense: true,
                 ),
               ),
@@ -1033,36 +1064,32 @@ class _ChatRoomState extends State<ChatRoom> {
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 10),
                                       padding: const EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 10,
-                                          left: 20,
-                                          right: 20),
+                                          top: 7, bottom: 7, left: 8, right: 8),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.blue[300],
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: const Color(0xffF1F1F1),
                                       ),
                                       child: Text(
                                         "${getName(snapshot.data.docs[index]['newPerson'])}님이 퇴장하셨습니다.",
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 13),
+                                            color: Color(0xff717171),
+                                            fontSize: 12),
                                       ),
                                     )
                                   : Container(
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 10),
                                       padding: const EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 10,
-                                          left: 20,
-                                          right: 20),
+                                          top: 7, bottom: 7, left: 8, right: 8),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.blue[300],
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: const Color(0xffF1F1F1),
                                       ),
                                       child: const Text(
                                         "방 정보가 수정되었습니다.",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 13),
+                                            color: Color(0xff717171),
+                                            fontSize: 12),
                                       ),
                                     )
                     ],

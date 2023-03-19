@@ -31,9 +31,10 @@ class TimerWidget extends GetView<OrderTimeButtonController> {
               .inputDecorationTheme
               .hintStyle,
           contentPadding: const EdgeInsets.all(16),
-          border: const OutlineInputBorder(
-            borderSide:
-            BorderSide(width: 3, color: Color(0xffC2C2C2)),
+          fillColor: Colors.transparent,
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+                width: 1, color: Color(0xffC2C2C2)),
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
