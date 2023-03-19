@@ -4,6 +4,7 @@ import 'package:han_bab/controller/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:han_bab/view/mypage/edit_profile.dart';
 import 'package:han_bab/view/mypage/report_bug.dart';
+import '../../component/customToolbarRect.dart';
 import '../mypage/onboarding_page.dart';
 
 class MyPage extends StatelessWidget {
@@ -18,15 +19,11 @@ class MyPage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "내 정보",
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(200),
+          child: CustomToolbarRect(
+            title: "내 정보",
+          )),
       body: GestureDetector(
         child: Column(
           children: [

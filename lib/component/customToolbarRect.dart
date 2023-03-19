@@ -10,13 +10,15 @@ class CustomToolbarRect extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: <Color>[
-            const Color.fromRGBO(225, 89, 89, 1).withOpacity(1),
-            const Color.fromRGBO(255, 128, 16, 1).withOpacity(1),
+            const Color(0xffF97E13).withOpacity(1),
+            const Color(0xffFDB670).withOpacity(1),
           ],
-          stops: const [
-            0.3,
-            1.0,
-          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          // stops: const [
+          //   0.5,
+          //   0.8,
+          // ]
         ),
       ),
       child: Padding(
